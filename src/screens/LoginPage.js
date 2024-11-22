@@ -2,7 +2,8 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Pressable, 
 import React, { useState } from 'react'
 import firebase from '../../config'
 import { styles } from '../../style'
-import Svg, { Path } from 'react-native-svg';
+import { SvgUri } from 'react-native-svg';
+
 
 
 const LoginPage = ({ navigation }) => {
@@ -27,18 +28,11 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Svg
-        viewBox="0 0 1080 875"
-        style={styles.svg}
-      >
-        <Path
-          d="M0 860c0 0 139.9 60.2 558.6-98 0 0 317.8-146 521.4-131V0H0z"
-          fill="#870000"
-        />
-        <Image
-           href={require('../../assets/images/google.png')}
-        />
-      </Svg>
+      <SvgUri
+        width="100%"
+        height="38%"
+        uri="https://www.btasoftware.com/images/sekil-svg.svg"
+      />
       <View style={styles.formContainer}>
         <Text style={styles.header}>Hoşgeldiniz 👋</Text>
         <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' />
