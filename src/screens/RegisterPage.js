@@ -1,25 +1,30 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
 import firebase from '../../config'
 
 const LoginPage = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [confirmation, setConfirmation] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  //firebase üzerinden e-posta ile giriş işlemi
-  async function sigIn(email, password) {
+  //firebase üzerinden e-posta ile kayıt işlemi
+  async function signUp(email, password) {
     setLoading(true);
-    try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    } finally {
-      console.log("giriş başarılı");
-      setLoading(false);
+    if (password == confirmation) {
+        try {
+            await firebase.auth().createUserWithEmailAndPassword(email, password);
+            setLoading(false);
+        } catch (error) {
+            if (error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email).") {
+              //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt yapıcak
+            }
+        } finally {
+            console.log("giriş başarılı");
+            setLoading(false);
+        }
+    }else{
+        console.log("şifreler uyuşmuyor!");
     }
   }
 
