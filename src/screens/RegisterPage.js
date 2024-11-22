@@ -1,30 +1,56 @@
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, useColorScheme } from 'react-native'
 import React, { useState } from 'react'
 import firebase from '../../config'
+import { styles } from '../../style'
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const tema = useColorScheme();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmation, setConfirmation] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [id, setId] = useState(0);
+
+  firebase.database().ref('users/').on('value', (snapshot) => {
+    setId(id + 1);
+    console.log("dinlenen veri:", snapshot,"\n yazılan veri:",id);
+  });
 
   //firebase üzerinden e-posta ile kayıt işlemi
-  async function signUp(email, password) {
+  async function signUpWithEmail(email, password) {
     setLoading(true);
     if (password == confirmation) {
-        try {
-            await firebase.auth().createUserWithEmailAndPassword(email, password);
-            setLoading(false);
-        } catch (error) {
-            if (error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email).") {
-              //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt yapıcak
-            }
-        } finally {
-            console.log("giriş başarılı");
-            setLoading(false);
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        setLoading(false);
+      } catch (error) {
+        if (error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email).") {
+          //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt yapıcak
+          signUpWithName(email, password);
         }
-    }else{
-        console.log("şifreler uyuşmuyor!");
+      } finally {
+        console.log("giriş başarılı");
+        setLoading(false);
+      }
+    } else {
+      console.log("şifreler uyuşmuyor!");
+    }
+  }
+
+  //kullanıcı adı ve şifre ile realtime database "users" başlığının altında kayıt yapıyor
+  async function signUpWithName(email, password) {
+    setLoading(true);
+    try {
+      await firebase.database().ref('users/' + id).set({
+        name: email,
+        password: password
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -32,30 +58,10 @@ const LoginPage = () => {
     <View style={styles.container}>
       <Image style={styles.banner} source={require('../../assets/images/Designer.jpeg')} />
       <View style={styles.formContainer}>
-        <Text style={styles.header}>LoginPage</Text>
+        <Text style={[styles.header, tema.text]}>LoginPage</Text>
       </View>
     </View>
   )
 }
 
-export default LoginPage
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%',
-  },
-  formContainer: {
-    padding: 10,
-    height: '100%',
-    width: '100%',
-  },
-  banner: {
-    width: '100%',
-    height: '40%',
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  }
-})
+export default RegisterPage;
