@@ -3,11 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage';
-<<<<<<< Updated upstream
 import Main from './src/screens/main';
-=======
-import ForgetPassword from './src/screens/ForgetPassword';
->>>>>>> Stashed changes
 
 const Stack = createNativeStackNavigator();
 
@@ -23,11 +19,7 @@ export default function App() {
         />
         <Stack.Screen name='login' component={LoginPage}/>
         <Stack.Screen name='register' component={RegisterPage} />
-<<<<<<< Updated upstream
         <Stack.Screen name='main' component={Main}/>
-=======
-        <Stack.Screen name='forgetpassword' component={ForgetPassword} />
->>>>>>> Stashed changes
       </Stack.Navigator>
     </NavigationContainer>
   );
