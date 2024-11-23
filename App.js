@@ -1,27 +1,23 @@
-import { Text, View } from 'react-native';
+import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// HATA VEREN ŞEREFSİZ SATIR
+import { createStackNavigator,TransitionPresets } from '@react-navigation/stack';
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage';
 import Main from './src/screens/main';
 import ForgetPassword from './src/screens/ForgetPassword';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 // Main App
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false,animation:'slide_from_bottom' }}>
-        <Stack.Screen
-          name="Login"
-          component={LoginPage}
-          options={{ title: 'Login' }}
-        />
+      <Stack.Navigator screenOptions={{ headerShown: false,...TransitionPresets.ModalSlideFromBottomIOS }}>
         <Stack.Screen name='login' component={LoginPage}/>
-        <Stack.Screen name='register' component={RegisterPage} />
+        <Stack.Screen name='register' component={RegisterPage}/>
         <Stack.Screen name='main' component={Main}/>
-        <Stack.Screen name='forgetpassword' component={ForgetPassword} />
+        <Stack.Screen name='ForgetPassword' component={ForgetPassword}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,8 +1,7 @@
 import { Text, View, TextInput, Pressable, ActivityIndicator, TouchableOpacity, Modal, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { firebase, db, ref, get, set, onValue } from '../../config'
+import { firebase, db, ref, onValue } from '../../config'
 import { styles } from '../../style'
-import { SvgUri } from 'react-native-svg';
 
 const RegisterPage = ({ navigation,route }) => {
   const [email, setEmail] = useState(null);
@@ -35,7 +34,6 @@ const RegisterPage = ({ navigation,route }) => {
           console.log("email doğrulaması gönderildi!");
           setModalVisible(true);
         });
-        navigation.navigate('login');
       } catch (error) {
         setLoading(false);
         console.log(error);

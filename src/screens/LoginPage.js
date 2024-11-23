@@ -1,8 +1,7 @@
-import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator, Alert, Modal } from 'react-native'
+import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
-import { firebase, db, ref, get, set, onValue, sendEmailVerification } from '../../config'
+import { firebase, db, ref, onValue } from '../../config'
 import { styles } from '../../style'
-import { SvgUri } from 'react-native-svg';
 import BottomModal from '../components/bottomModal';
 
 
