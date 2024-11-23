@@ -68,11 +68,11 @@ const LoginPage = ({ navigation }) => {
         <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
         <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} value={password} onChangeText={(value) => { setPassword(value) }} />
         
-        <TouchableOpacity style={styles.link}>
+        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('forgetpassword')}>
           <Text>Şifremi Unuttum</Text>
         </TouchableOpacity>
 
-        <Pressable style={[styles.button, { marginTop: 50 }]}>
+        <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </Pressable>
 
@@ -89,9 +89,6 @@ const LoginPage = ({ navigation }) => {
           <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
         </Pressable>
 
-        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row', marginTop: 20 }]} onPress={() => {navigation.navigate('register')}}>
-          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Kayıt Ol</Text>
-        </Pressable>
         <View style={styles.alt}>
           <Text>Hesabın yok mu? </Text>
           <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>

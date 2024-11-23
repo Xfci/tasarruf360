@@ -22,10 +22,6 @@ const RegisterPage = ({ navigation }) => {
     });
     return () => dinle();
   }, []);
-  firebase.database().ref('users/').on('value', (snapshot) => {
-    setId(id + 1);
-    console.log("dinlenen veri:", snapshot, "\n yazılan veri:", id);
-  });
 
   //firebase üzerinden e-posta ile kayıt işlemi
   async function signUpWithEmail(email, password, confirm) {
@@ -68,8 +64,8 @@ const RegisterPage = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size={'large'} />
+      <View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
+        <ActivityIndicator size={'large'}/>
       </View>
     )
   }
@@ -78,9 +74,13 @@ const RegisterPage = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <Text style={[styles.header, { textAlign: 'center', marginTop: 100 }]}>Üye Kayıt 🖐️</Text>
-        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' />
-        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} />
-        <TextInput style={styles.input} placeholder='şifre tekrar' secureTextEntry={true} />
+        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
+        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} value={password} onChangeText={(value) => { setPassword(value) }} />
+        <TextInput style={styles.input} placeholder='şifre onay' secureTextEntry={true} value={confirm} onChangeText={(value) => { setConfirm(value) }} />
+
+        <Pressable style={[styles.button, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
+          <Text style={styles.buttonText}>Kayıt Ol</Text>
+        </Pressable>
       </View>
     </View>
   )
