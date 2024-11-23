@@ -1,35 +1,48 @@
-import { StyleSheet, Text, View, Image, TextInput, useColorScheme, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, useColorScheme, TouchableOpacity, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { firebase, db, ref, get, set, onValue } from '../../config'
 import { styles } from '../../style'
+import { SvgUri } from 'react-native-svg';
 
-//db.ref('users/' + 0).set({ name: 'deneme', password:"1234"});
-
-const RegisterPage = () => {
+const RegisterPage = ({ navigation }) => {
   const tema = useColorScheme();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const [confirmation, setConfirmation] = useState(null);
+  const [confirm, setConfirm] = useState(null);
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState(0);
 
+  //kullanıcıların en son ki id'sini veri tabanından çeker ve 1 ekler
+  useEffect(() => {
+    const dbref = ref(db, 'users/');
+    const dinle = onValue(dbref, (snapshot) => {
+      snapshot.forEach(element => {
+        setId(parseInt(element.key) + 1);
+      });
+    });
+    return () => dinle();
+  }, []);
+
   //firebase üzerinden e-posta ile kayıt işlemi
-  async function signUpWithEmail(email, password) {
+  async function signUpWithEmail(email, password, confirm) {
     setLoading(true);
-    if (password == confirmation) {
+    if (password == confirm) {
       try {
         await firebase.auth().createUserWithEmailAndPassword(email, password);
         setLoading(false);
       } catch (error) {
-        if (error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email).") {
-          //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt yapıcak
-          signUpWithName(email, password);
-        }
-      } finally {
-        console.log("giriş başarılı");
         setLoading(false);
+        console.log(error);
+        //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt yapıcak
+        error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email)." ?
+          signUpWithName(email, password) : null
+
+        //şifre 6 karakter olmalı
+        error == "FirebaseError: Firebase: Password should be at least 6 characters (auth/weak-password)." ?
+          console.log("şifre 6 karakter olmalı") : null
       }
     } else {
+      setLoading(false);
       console.log("şifreler uyuşmuyor!");
     }
   }
@@ -46,31 +59,50 @@ const RegisterPage = () => {
     } catch (error) {
       setLoading(false);
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   }
 
-  //kullanıcı id lerini veri tabanından çeker
-  useEffect(() => {
-    const dbref = ref(db, 'users/');
-    const dinle = onValue(dbref, (snapshot) => {
-      snapshot.forEach(element => {
-        setId(parseInt(element.key) + 1);
-      });
-    });
-    return () => dinle();
-  }, []);
+  if (loading) {
+    return (
+      <View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
+        <ActivityIndicator size={'large'}/>
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
-      <Image style={styles.banner} source={require('../../assets/images/Designer.jpeg')} />
+      <SvgUri
+        width="100%"
+        height="38%"
+        uri="https://www.btasoftware.com/images/sekil-svg.svg"
+      />
       <View style={styles.formContainer}>
-        <TouchableOpacity onPress={() => { getir() }}>
-          <Text style={[styles.header, tema.text]}>RegisterPage</Text>
-        </TouchableOpacity>
+        <Text style={styles.header}>Hoşgeldiniz 👋</Text>
+        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
+        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} value={password} onChangeText={(value) => { setPassword(value) }} />
+        <TextInput style={styles.input} placeholder='şifre onay' secureTextEntry={true} value={confirm} onChangeText={(value) => { setConfirm(value) }} />
+        <Pressable style={[styles.button, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
+          <Text style={styles.buttonText}>Kayıt Ol</Text>
+        </Pressable>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          <View>
+            <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
+          </View>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+        </View>
+
+        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]}>
+          <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
+          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
+        </Pressable>
+
+        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row', marginTop: 20 }]} onPress={() => {navigation.navigate('login')}}>
+          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Giriş Yap</Text>
+        </Pressable>
       </View>
-    </View >
+    </View>
   )
 }
 
