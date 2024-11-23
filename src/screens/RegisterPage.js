@@ -22,6 +22,10 @@ const RegisterPage = ({ navigation }) => {
     });
     return () => dinle();
   }, []);
+  firebase.database().ref('users/').on('value', (snapshot) => {
+    setId(id + 1);
+    console.log("dinlenen veri:", snapshot, "\n yazılan veri:", id);
+  });
 
   //firebase üzerinden e-posta ile kayıt işlemi
   async function signUpWithEmail(email, password, confirm) {
@@ -64,43 +68,19 @@ const RegisterPage = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
-        <ActivityIndicator size={'large'}/>
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size={'large'} />
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
-      <SvgUri
-        width="100%"
-        height="38%"
-        uri="https://www.btasoftware.com/images/sekil-svg.svg"
-      />
       <View style={styles.formContainer}>
-        <Text style={styles.header}>Hoşgeldiniz 👋</Text>
-        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
-        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} value={password} onChangeText={(value) => { setPassword(value) }} />
-        <TextInput style={styles.input} placeholder='şifre onay' secureTextEntry={true} value={confirm} onChangeText={(value) => { setConfirm(value) }} />
-        <Pressable style={[styles.button, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
-          <Text style={styles.buttonText}>Kayıt Ol</Text>
-        </Pressable>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          <View>
-            <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
-          </View>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-        </View>
-
-        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]}>
-          <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
-          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
-        </Pressable>
-
-        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row', marginTop: 20 }]} onPress={() => {navigation.navigate('login')}}>
-          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Giriş Yap</Text>
-        </Pressable>
+        <Text style={[styles.header, { textAlign: 'center', marginTop: 100 }]}>Üye Kayıt 🖐️</Text>
+        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' />
+        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} />
+        <TextInput style={styles.input} placeholder='şifre tekrar' secureTextEntry={true} />
       </View>
     </View>
   )
