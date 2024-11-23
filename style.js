@@ -11,37 +11,41 @@ export const styles = StyleSheet.create({
         width: '100%',
     },
     banner: {
-        width: '100%',
-        height: '40%',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
+
     },
     header: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
-    },
-    banner: {
-        width: '100%',
-        height: '35%'
+        marginLeft: 5
     },
     formContainer: {
         height: '100%',
         width: '100%',
         padding: 20,
     },
-    header: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
     input: {
         backgroundColor: '#dbdbdb',
-        borderRadius: 50,
+        borderRadius: 20,
         padding: 15,
         width: '100%',
         maxWidth: 600,
-        marginTop: 20
+        marginTop: 20,
+        fontSize: 14,
     },
     link: {
         alignSelf: 'flex-end',
         marginTop: 10,
+    },
+    navigateLink: {
+        textDecorationLine: 'underline',
+        color: '#0089ec'
     },
     button: {
         backgroundColor: '#0089ec',
@@ -50,21 +54,26 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-        marginTop: 50
+        marginTop: 25
     },
     buttonText: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16
     },
-    otherIcon: {
-        width: '100%',
-        height: '100%',
-    },
     svg: {
         width: '100%',
-        height:'38%',
-        
+        height: '38%',
+    },
+    alt: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 40
+    },
+    banner3: {
+        width: '100%',
+        height: '40%',
+        borderBottomRightRadius: 35,
+        borderBottomLeftRadius: 30
     }
-    
 })

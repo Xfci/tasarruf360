@@ -58,27 +58,37 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <SvgUri
+      <SvgUri style={styles.banner}
         width="100%"
         height="38%"
-        uri="https://www.btasoftware.com/images/sekil-svg.svg"
+        uri="https://membaspot.com.tr/images/banner2.svg"
       />
       <View style={styles.formContainer}>
         <Text style={styles.header}>Hoşgeldiniz 👋</Text>
+<<<<<<< Updated upstream
         <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
         <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} value={password} onChangeText={(value) => { setPassword(value) }} />
         <TouchableOpacity style={styles.link}>
           <Text>Şifremi Unuttum</Text>
         </TouchableOpacity>
         <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
+=======
+        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' />
+        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} />
+        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('forgetpassword')}>
+          <Text>Şifremi Unuttum</Text>
+        </TouchableOpacity>
+        <Pressable style={[styles.button, { marginTop: 50 }]}>
+>>>>>>> Stashed changes
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </Pressable>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
+          <View style={{ flex: 1, height: 1, backgroundColor: '#858585' }} />
           <View>
-            <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
+            <Text style={{ width: 50, textAlign: 'center', color: '#858585' }}>YA DA</Text>
           </View>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          <View style={{ flex: 1, height: 1, backgroundColor: '#858585' }} />
         </View>
 
         <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]}>
@@ -86,9 +96,18 @@ const LoginPage = ({ navigation }) => {
           <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
         </Pressable>
 
+<<<<<<< Updated upstream
         <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row', marginTop: 20 }]} onPress={() => {navigation.navigate('register')}}>
           <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Kayıt Ol</Text>
         </Pressable>
+=======
+        <View style={styles.alt}>
+          <Text>Hesabın yok mu? </Text>
+          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
+            <Text style={styles.navigateLink}>Üye ol.</Text>
+          </TouchableOpacity>
+        </View>
+>>>>>>> Stashed changes
       </View>
     </View>
   )
