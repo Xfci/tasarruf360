@@ -1,5 +1,6 @@
 //app auth realtime için import
 import firebase from "firebase/compat/app"
+import {sendEmailVerification} from "firebase/auth"
 import "firebase/compat/auth";
 import "firebase/compat/database"
 import { getDatabase,ref,get,set,onValue } from "firebase/database";
@@ -23,4 +24,4 @@ if (!firebase.apps.length) {
 
 const db = getDatabase();
 
-export {firebase,db,ref,get,set,onValue};
+export {firebase,db,ref,get,set,onValue,sendEmailVerification};

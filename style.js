@@ -11,14 +11,8 @@ export const styles = StyleSheet.create({
         width: '100%',
     },
     banner: {
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 20,
-
+        width:"100%",
+        height:"38%",
     },
     header: {
         fontSize: 24,
@@ -54,7 +48,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-        marginTop: 25
+        marginTop: 25,
+        marginBottom:25,
     },
     buttonText: {
         color: 'white',
@@ -68,12 +63,9 @@ export const styles = StyleSheet.create({
     alt: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 40
     },
-    banner3: {
-        width: '100%',
-        height: '40%',
-        borderBottomRightRadius: 35,
-        borderBottomLeftRadius: 30
-    }
+    
+
+    
+
 })

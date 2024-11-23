@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View, Image, TextInput, useColorScheme, TouchableOpacity, Pressable, ScrollView, ActivityIndicator } from 'react-native'
+import { Text, View, TextInput, Pressable, ActivityIndicator, TouchableOpacity, Modal, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { firebase, db, ref, get, set, onValue } from '../../config'
 import { styles } from '../../style'
 import { SvgUri } from 'react-native-svg';
 
-const RegisterPage = ({ navigation }) => {
-  const tema = useColorScheme();
+const RegisterPage = ({ navigation,route }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirm, setConfirm] = useState(null);
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
 
   //kullanıcıların en son ki id'sini veri tabanından çeker ve 1 ekler
   useEffect(() => {
@@ -28,8 +28,14 @@ const RegisterPage = ({ navigation }) => {
     setLoading(true);
     if (password == confirm) {
       try {
-        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
         setLoading(false);
+        console.log(user.user);
+        await user.user.sendEmailVerification().then(() => {
+          console.log("email doğrulaması gönderildi!");
+          setModalVisible(true);
+        });
+        navigation.navigate('login');
       } catch (error) {
         setLoading(false);
         console.log(error);
@@ -56,6 +62,7 @@ const RegisterPage = ({ navigation }) => {
         password: password
       });
       setLoading(false);
+      navigation.navigate('login');
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -64,14 +71,35 @@ const RegisterPage = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
-        <ActivityIndicator size={'large'}/>
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size={'large'} />
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hesap aktivasyon maili e-posta adresinize gönderilmiştir. 📩 Lütfen hesabınızı aktif ediniz. </Text>
+            <Pressable
+              style={[styles.buttonModal, styles.buttonModalClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Devam Et</Text>
+            </Pressable>
+            <Image source={require('../../assets/images/email.jpeg')} style={styles.banner3} />
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.formContainer}>
         <Text style={[styles.header, { textAlign: 'center', marginTop: 100 }]}>Üye Kayıt 🖐️</Text>
         <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
@@ -81,6 +109,12 @@ const RegisterPage = ({ navigation }) => {
         <Pressable style={[styles.button, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
           <Text style={styles.buttonText}>Kayıt Ol</Text>
         </Pressable>
+        <View style={styles.alt}>
+          <Text>Zaten hesabın var mı? </Text>
+          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.goBack()}>
+            <Text style={styles.navigateLink}>Giriş yap.</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )

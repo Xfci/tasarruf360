@@ -1,15 +1,18 @@
-import { Text, View, Image, TextInput, TouchableOpacity, Pressable,ActivityIndicator } from 'react-native'
+import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator, Alert, Modal } from 'react-native'
 import React, { useState } from 'react'
-import { firebase,db, ref, get, set, onValue } from '../../config'
+import { firebase, db, ref, get, set, onValue, sendEmailVerification } from '../../config'
 import { styles } from '../../style'
 import { SvgUri } from 'react-native-svg';
-
+import BottomModal from '../components/bottomModal';
 
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+
 
   //firebase üzerinden e-posta ile giriş işlemi
   async function signInWithEmail(email, password) {
@@ -17,11 +20,16 @@ const LoginPage = ({ navigation }) => {
     try {
       const user = await firebase.auth().signInWithEmailAndPassword(email, password);
       const userData = {
-        email:user.user.email,
-        id:user.user.uid,
-        name:user.user.name
+        email: user.user.email,
+        id: user.user.uid,
+        name: user.user.name
       }
-      navigation.replace('main',{userData});
+      if (user.user.emailVerified != false) {
+        navigation.replace('main', { userData });
+      } else {
+        console.log("HATA EPOSTA ONAYLANMADI");
+        setModalVisible2(true);
+      }
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -31,7 +39,8 @@ const LoginPage = ({ navigation }) => {
     }
   }
 
-  async function signInWithName(email,password) {
+  //firebase üzerinden kullanıcı adı ile giriş işlemi
+  async function signInWithName(email, password) {
     setLoading(true);
     const dbref = ref(db, 'users/');
     const dinle = onValue(dbref, (snapshot) => {
@@ -40,7 +49,7 @@ const LoginPage = ({ navigation }) => {
         const pass = element.val().password;
         if (email == name && pass == password) {
           setLoading(false);
-          navigation.navigate('main',{email,password});
+          navigation.navigate('main', { email, password });
         }
       });
     });
@@ -48,31 +57,53 @@ const LoginPage = ({ navigation }) => {
     return () => dinle();
   }
 
+  async function resetPassword(email) {
+    if (email != null) {
+      try {
+        await firebase.auth().sendPasswordResetEmail(email);
+        setModalVisible(true)
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log("bir değer gir");
+    }
+
+  }
+
   if (loading) {
-    return(
-      <View style={[styles.container,{justifyContent:'center',alignItems:'center'}]}>
-        <ActivityIndicator size={'large'}/>
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size={'large'} />
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
-      <SvgUri style={styles.banner}
-        width="100%"
-        height="38%"
-        uri="https://membaspot.com.tr/images/banner2.svg"
+
+      <BottomModal
+        description={"Eğer kayıtlı ise şifre sıfırlama bağlantısı e-mail adresinize gönderildi 📩"}
+        image={require('../../assets/images/banner3.jpeg')}
+        visibleState={modalVisible}
+        onClose={() => setModalVisible(false)} // Modal'ı kapat
       />
+
+      <Image
+        style={styles.banner}
+        source={require('../../assets/images/banner1.png')}
+      />
+
       <View style={styles.formContainer}>
         <Text style={styles.header}>Hoşgeldiniz 👋</Text>
         <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
         <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} value={password} onChangeText={(value) => { setPassword(value) }} />
-        
-        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('forgetpassword')}>
+
+        <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
           <Text>Şifremi Unuttum</Text>
         </TouchableOpacity>
 
-        <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
+        <Pressable style={[styles.button, { marginTop: 60 }]} onPress={() => { signInWithEmail(email, password) }}>
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </Pressable>
 
