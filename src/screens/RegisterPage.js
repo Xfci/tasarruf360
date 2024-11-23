@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View, Image, TextInput, useColorScheme } from 'react-native'
-import React, { useState } from 'react'
-import firebase from '../../config'
+import { StyleSheet, Text, View, Image, TextInput, useColorScheme, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { firebase, db, ref, get, set, onValue } from '../../config'
 import { styles } from '../../style'
+
+//db.ref('users/' + 0).set({ name: 'deneme', password:"1234"});
 
 const RegisterPage = () => {
   const tema = useColorScheme();
@@ -10,11 +12,6 @@ const RegisterPage = () => {
   const [confirmation, setConfirmation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState(0);
-
-  firebase.database().ref('users/').on('value', (snapshot) => {
-    setId(id + 1);
-    console.log("dinlenen veri:", snapshot,"\n yazılan veri:",id);
-  });
 
   //firebase üzerinden e-posta ile kayıt işlemi
   async function signUpWithEmail(email, password) {
@@ -54,13 +51,26 @@ const RegisterPage = () => {
     }
   }
 
+  //kullanıcı id lerini veri tabanından çeker
+  useEffect(() => {
+    const dbref = ref(db, 'users/');
+    const dinle = onValue(dbref, (snapshot) => {
+      snapshot.forEach(element => {
+        setId(parseInt(element.key) + 1);
+      });
+    });
+    return () => dinle();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Image style={styles.banner} source={require('../../assets/images/Designer.jpeg')} />
       <View style={styles.formContainer}>
-        <Text style={[styles.header, tema.text]}>LoginPage</Text>
+        <TouchableOpacity onPress={() => { getir() }}>
+          <Text style={[styles.header, tema.text]}>RegisterPage</Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </View >
   )
 }
 

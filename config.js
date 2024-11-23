@@ -2,12 +2,13 @@
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth";
 import "firebase/compat/database"
-import { getDatabase } from "firebase/database";
+import { getDatabase,ref,get,set,onValue } from "firebase/database";
 
 //firebase url ayarları
 const firebaseConfig = {
     apiKey: "AIzaSyCkJQa2M4lXIrXxFT7WKdt_kwJvBTxPABM",
     authDomain: "tasarruf360-114b5.firebaseapp.com",
+    databaseURL: "https://tasarruf360-114b5-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "tasarruf360-114b5",
     storageBucket: "tasarruf360-114b5.firebasestorage.app",
     messagingSenderId: "273957416221",
@@ -20,5 +21,6 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
+const db = getDatabase();
 
-export default firebase;
+export {firebase,db,ref,get,set,onValue};
