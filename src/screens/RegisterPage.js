@@ -12,6 +12,7 @@ const RegisterPage = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [id, setId] = useState(0);
 
+<<<<<<< Updated upstream
   //kullanıcıların en son ki id'sini veri tabanından çeker ve 1 ekler
   useEffect(() => {
     const dbref = ref(db, 'users/');
@@ -22,6 +23,12 @@ const RegisterPage = ({ navigation }) => {
     });
     return () => dinle();
   }, []);
+=======
+  firebase.database().ref('users/').on('value', (snapshot) => {
+    setId(id + 1);
+    console.log("dinlenen veri:", snapshot, "\n yazılan veri:", id);
+  });
+>>>>>>> Stashed changes
 
   //firebase üzerinden e-posta ile kayıt işlemi
   async function signUpWithEmail(email, password, confirm) {
@@ -72,6 +79,7 @@ const RegisterPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+<<<<<<< Updated upstream
       <SvgUri
         width="100%"
         height="38%"
@@ -101,6 +109,13 @@ const RegisterPage = ({ navigation }) => {
         <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row', marginTop: 20 }]} onPress={() => {navigation.navigate('login')}}>
           <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Giriş Yap</Text>
         </Pressable>
+=======
+      <View style={styles.formContainer}>
+        <Text style={[styles.header, { textAlign: 'center', marginTop: 100 }]}>Üye Kayıt 🖐️</Text>
+        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' />
+        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} />
+        <TextInput style={styles.input} placeholder='şifre tekrar' secureTextEntry={true} />
+>>>>>>> Stashed changes
       </View>
     </View>
   )
