@@ -15,8 +15,13 @@ const LoginPage = ({ navigation }) => {
   async function signInWithEmail(email, password) {
     setLoading(true);
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      navigation.replace('main',{userCreden});
+      const user = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const userData = {
+        email:user.user.email,
+        id:user.user.uid,
+        name:user.user.name
+      }
+      navigation.replace('main',{userData});
       setLoading(false);
     } catch (error) {
       setLoading(false);
