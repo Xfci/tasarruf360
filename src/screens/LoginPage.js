@@ -4,7 +4,6 @@ import { firebase, db, ref, onValue } from '../../config'
 import { styles } from '../../style'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomModal from '../components/bottomModal';
-import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Google from "expo-auth-session/providers/google"
@@ -17,6 +16,7 @@ const LoginPage = ({ navigation }) => {
   const [modalActiveVisible, setModalActiveVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errorMessage, setErrors] = useState(""); // Hataları tutmak için state
+  const [userInfo, setUserInfo] = useState(null);
 
   WebBrowser.maybeCompleteAuthSession();
 
@@ -30,22 +30,17 @@ const LoginPage = ({ navigation }) => {
 
   //google giriş işleminde bir cevap alırsa değişkene kullanıcı bilgilerini atar
   useEffect(() => {
-    const effect = async () => {
-      handleEffect();
-    }
-    effect();
+    handleEffect();
   }, [response]);
 
   //eğer cevap var ise giriş yap ve maine git
   async function handleEffect() {
-    if (response && response.type === "success" && response.authentication) {
-      const user = await getLocalUser();
-      if (!user) {
-        getUserInfo(response.authentication.accessToken);
-      } else {
-        console.log("BURADA");
-        navigation.replace("main", { user });
-      }
+    const user = await getLocalUser();
+    if (!user) {
+      await getUserInfo(response.authentication.accessToken);
+    } else {
+      setUserInfo(user);
+      navigation.replace("main", { user });
     }
   }
 
@@ -70,12 +65,14 @@ const LoginPage = ({ navigation }) => {
       );
       const user = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
+      setUserInfo(user);
+      navigation.replace("main", { user });
     } catch (error) {
       console.log(error);
     }
   }
 
-  //firebase üzerinden e-posta ile giriş işlemi
+  //firebase üzerinden e-posta ile giriş işlemin
   async function signInWithEmail(email, password) {
     setLoading(true);
     try {

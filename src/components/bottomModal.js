@@ -1,9 +1,32 @@
 import { StyleSheet, Text, View, Modal, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReSendVerification from '../scripts/reSendVerification';
 
 const BottomModal = ({ description, image, visibleState, functionModal, email, password, onClose }) => {
     const [modalVisible, setModalVisible] = useState(visibleState);
+    const [running, setRunning] = useState(true);
+    const [time,setTime] = useState(60);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime((hesap) => {
+                if (time <= 1) {
+                    clearInterval(interval);
+                    setRunning(false);
+                }
+                return hesap - 1;
+            });
+        }, 1000);
+        // Temizlik işlemi
+        return () => clearInterval(interval);
+    }, [running]);
+
+    async function reSend() {
+        await ReSendVerification();
+        setTime(60);
+        setRunning(true);
+    }
+
     return (
         <Modal
             animationType="slide"
@@ -18,7 +41,7 @@ const BottomModal = ({ description, image, visibleState, functionModal, email, p
                 <View style={styles.modalView}>
                     <View style={styles.content}>
                         <Text style={styles.modalText}>{description}</Text>
-                        <View style={{ flexDirection: 'row', justifyContent:'center',gap:10}}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10 }}>
                             <TouchableOpacity
                                 style={[styles.buttonModal]}
                                 onPress={onClose}>
@@ -26,11 +49,12 @@ const BottomModal = ({ description, image, visibleState, functionModal, email, p
                             </TouchableOpacity>
                             {
                                 functionModal ?
-                                    <TouchableOpacity
-                                        style={styles.functionModal}
-                                        onPress={async () => await ReSendVerification().then(() => {onClose})}>
-                                        <Text style={[styles.textStyle, {color:'tomato'}]}>Tekrar Gönder</Text>
-                                    </TouchableOpacity> : null
+                                    time <= 1 ?
+                                        <TouchableOpacity
+                                            style={styles.functionModal}
+                                            onPress={() => {reSend()}}>
+                                            <Text style={[styles.textStyle, { color: 'tomato' }]}>Tekrar Gönder</Text>
+                                        </TouchableOpacity> : <View style={styles.functionModal}><Text style={[styles.textStyle, { color: 'tomato' }]}>{time}</Text></View> : null
                             }
                         </View>
                     </View>
@@ -48,10 +72,10 @@ export default BottomModal
 
 const styles = StyleSheet.create({
     //Modal
-    shadow:{
-        flex:1,
-        backgroundColor:'#000',
-        opacity:0.3,
+    shadow: {
+        flex: 1,
+        backgroundColor: '#000',
+        opacity: 0.3,
     },
     centeredView: {
         flex: 1,

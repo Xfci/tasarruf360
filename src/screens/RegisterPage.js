@@ -96,6 +96,7 @@ const RegisterPage = ({ navigation, route }) => {
         description={"Hesap aktivasyon maili e-posta adresinize gönderilmiştir 📥. Lütfen hesabınızı aktif ediniz."}
         image={require('../../assets/images/banner4.jpeg')}
         visibleState={modalVisible}
+        functionModal={true}
         onClose={() => setModalVisible(false)}
       />
 

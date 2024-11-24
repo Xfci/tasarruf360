@@ -11,6 +11,7 @@ async function ReSendVerification() {
                 console.log("eposta yeniden gönderildi"); 
             } catch (error) {
                 console.log("bir hata meydana geldi");
+                console.log(error);
             }
         }else{
             console.log("kullanıcı yok");
