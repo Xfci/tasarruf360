@@ -102,8 +102,9 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-around', // Öğeler arasındaki mesafeyi eşitler
         flexDirection: 'column'
     },
-
-
+    errorText:{
+        color:'red',
+    },
 
 
 })

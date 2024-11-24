@@ -16,8 +16,7 @@ const LoginPage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalActiveVisible, setModalActiveVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [errors, setErrors] = useState({}); // Hataları tutmak için state
-
+  const [errorMessage, setErrors] = useState(""); // Hataları tutmak için state
 
   WebBrowser.maybeCompleteAuthSession();
 
@@ -31,11 +30,15 @@ const LoginPage = ({ navigation }) => {
 
   //google giriş işleminde bir cevap alırsa değişkene kullanıcı bilgilerini atar
   useEffect(() => {
-    handleEffect();
+    const effect = async () => {
+      handleEffect();
+    }
+    effect();
   }, [response]);
 
+  //eğer cevap var ise giriş yap ve maine git
   async function handleEffect() {
-    if (response?.type === "success" && response.authentication) {
+    if (response && response.type === "success" && response.authentication) {
       const user = await getLocalUser();
       if (!user) {
         getUserInfo(response.authentication.accessToken);
@@ -46,15 +49,16 @@ const LoginPage = ({ navigation }) => {
     }
   }
 
+  //kullanıcı bilgilerini cihazın local depolamasına kaydet
   const getLocalUser = async () => {
     const data = await AsyncStorage.getItem("@user");
     if (!data) return null;
     return JSON.parse(data);
   }
 
+  //kullanıcı bilgilerini al
   const getUserInfo = async (token) => {
     if (!token) return;
-
     try {
       const response = await fetch(
         "https://www.googleapis.com/userinfo/v2/me",
@@ -81,6 +85,7 @@ const LoginPage = ({ navigation }) => {
         id: user.user.uid,
         name: user.user.name
       }
+      setErrors(null);
       if (user.user.emailVerified != false) {
         navigation.replace('main', { userData });
       } else {
@@ -90,9 +95,16 @@ const LoginPage = ({ navigation }) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
       error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email)." ?
-        signInWithName(email, password) : null
+        signInWithName(email, password)
+        :
+        error == "FirebaseError: Firebase: A non-empty password must be provided (auth/missing-password)." ?
+          setErrors('şifre veya email boş olamaz')
+          :
+          error == "FirebaseError: Firebase: The supplied auth credential is incorrect, malformed or has expired. (auth/invalid-credential)." ?
+            setErrors("Hatalı gmail veya şifre girdiniz") : setErrors("Bilinmeyen bir hata meydana geldi")
+      console.log(errorMessage);
+      console.log(error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email).");
     }
   }
 
@@ -120,10 +132,12 @@ const LoginPage = ({ navigation }) => {
         await firebase.auth().sendPasswordResetEmail(email);
         setModalVisible(true)
       } catch (error) {
+        setErrors("Geçerli bir mail adresi giriniz");
         console.log(error);
       }
     } else {
       console.log("bir değer gir");
+      setErrors("Geçerli bir mail adresi giriniz");
     }
   }
 
@@ -137,7 +151,6 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-
       <BottomModal
         description={"Eğer kayıtlı ise şifre sıfırlama bağlantısı e-mail adresinize gönderildi 📥."}
         image={require('../../assets/images/banner3.jpeg')}
@@ -196,10 +209,13 @@ const LoginPage = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
+          <View style={[styles.alt, { justifyContent: 'space-between' }]}>
+            <Text style={styles.errorText}>{errorMessage}</Text>
+            <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
+              <Text>Şifremi Unuttum</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
-            <Text>Şifremi Unuttum</Text>
-          </TouchableOpacity>
+          </View>
 
           <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
             <Text style={styles.buttonText}>Giriş Yap</Text>
@@ -231,5 +247,4 @@ const LoginPage = ({ navigation }) => {
     </View >
   )
 }
-
 export default LoginPage

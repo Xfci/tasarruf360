@@ -15,6 +15,7 @@ const RegisterPage = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
+  const [errorMessage, setErrors] = useState(""); // Hataları tutmak için state
 
 
   //kullanıcıların en son ki id'sini veri tabanından çeker ve 1 ekler
@@ -34,6 +35,7 @@ const RegisterPage = ({ navigation, route }) => {
     if (password == confirm) {
       try {
         const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        setErrors(null); //
         setLoading(false);
         console.log(user.user);
         await user.user.sendEmailVerification().then(() => {
@@ -43,17 +45,24 @@ const RegisterPage = ({ navigation, route }) => {
       } catch (error) {
         setLoading(false);
         console.log(error);
-        //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt yapıcak
+        error == "[FirebaseError: Firebase: Error (auth/invalid-email).]" ?
+          setErrors("Geçerli bir mail adresi kullanın.") : null
+        //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt gönderildi
+
         error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email)." ?
           signUpWithName(email, password) : null
 
         //şifre 6 karakter olmalı
         error == "FirebaseError: Firebase: Password should be at least 6 characters (auth/weak-password)." ?
-          console.log("şifre 6 karakter olmalı") : null
+          setErrors("Güçlü şifre kullanın.") : null
+
+          error == "FirebaseError: Firebase: The email address is already in use by another account. (auth/email-already-in-use)." ?
+          setErrors("Bu hesap zaten kullanılıyor. Giriş yapınız.") : null
+        //   aynı hesap zaten var
       }
     } else {
       setLoading(false);
-      console.log("şifreler uyuşmuyor!");
+      setErrors("Şifreler uyuşmuyor.");
     }
   }
 
@@ -144,6 +153,7 @@ const RegisterPage = ({ navigation, route }) => {
               />
             </TouchableOpacity>
           </View>
+          <Text style={styles.errorText}>{errorMessage}</Text>
 
           <Pressable style={[styles.buttonOutline, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
             <Text style={[styles.buttonText, { color: '#dead10' }]}>Kayıt Ol</Text>
@@ -156,7 +166,7 @@ const RegisterPage = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-      
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={[styles.bannerImage, { marginTop: 20 }]}>
           <Image

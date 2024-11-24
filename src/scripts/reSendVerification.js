@@ -1,18 +1,23 @@
-/*import { useState } from 'react';
-import { firebase, sendEmailVerification } from '../../config'
+import { sendEmailVerification, getAuth } from '../../config'
+
 //yeniden doğrulama gönderme
-async function ReSendVerification(email, password) {
-    const [loading,setLoading] = useState(false);
-    setLoading(true);
+async function ReSendVerification() {
+    const auth = getAuth();
     try {
-        const user = await firebase.auth().signInWithEmailAndPassword(email, password);
-        await sendEmailVerification(user.user);
-        console.log("eposta yeniden gönderildi");
-        setLoading(false);
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                await sendEmailVerification(user);
+                console.log("eposta yeniden gönderildi"); 
+            } catch (error) {
+                console.log("bir hata meydana geldi");
+            }
+        }else{
+            console.log("kullanıcı yok");
+        }
     } catch (error) {
-        setLoading(false);
         console.log(error);
     }
 }
 
-export default ReSendVerification;*/
+export default ReSendVerification;

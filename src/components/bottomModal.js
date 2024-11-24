@@ -13,6 +13,7 @@ const BottomModal = ({ description, image, visibleState, functionModal, email, p
                 Alert.alert('Modal has been closed.');
                 setModalVisible(!visibleState);
             }}>
+            <View style={styles.shadow}></View>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <View style={styles.content}>
@@ -27,7 +28,7 @@ const BottomModal = ({ description, image, visibleState, functionModal, email, p
                                 functionModal ?
                                     <TouchableOpacity
                                         style={styles.functionModal}
-                                        /*onPress={[ ReSendVerification(email, password), { onClose } ]}*/>
+                                        onPress={async () => await ReSendVerification().then(() => {onClose})}>
                                         <Text style={[styles.textStyle, {color:'tomato'}]}>Tekrar Gönder</Text>
                                     </TouchableOpacity> : null
                             }
@@ -47,17 +48,20 @@ export default BottomModal
 
 const styles = StyleSheet.create({
     //Modal
+    shadow:{
+        flex:1,
+        backgroundColor:'#000',
+        opacity:0.3,
+    },
     centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#000',
-        opacity:0.7
     },
 
     modalView: {
         width: '100%',
-        height: '50%',
+        height: '105%',
         flex: 1,
         backgroundColor: '#fff',
         position: 'absolute',
