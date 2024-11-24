@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
     container: {
         height: '100%',
         width: '100%',
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
     },
     banner: {
         width: "100%",
@@ -13,9 +13,12 @@ export const styles = StyleSheet.create({
     header: {
         fontSize: 24,
         fontWeight: '800',
-        marginLeft: 5,
         marginBottom: 10
-
+    },
+    header2: {
+        fontSize: 18,
+        fontWeight: '600',
+        marginVertical:5
     },
     link: {
         alignSelf: 'flex-end',
@@ -35,9 +38,9 @@ export const styles = StyleSheet.create({
         borderRadius: 50,
     },
     buttonOutline: {
-        backgroundColor:'#fff',
-        borderColor:'#f2bd11',
-        borderWidth:4,
+        backgroundColor: '#fff',
+        borderColor: '#f2bd11',
+        borderWidth: 4,
         width: '100%',
         height: 50,
         alignItems: 'center',
@@ -70,9 +73,9 @@ export const styles = StyleSheet.create({
         flex: 2,
         padding: 25,
         justifyContent: 'space-around',
-        borderRadius:30,
-        backgroundColor:'#fff',
-        zIndex:1
+        borderRadius: 30,
+        backgroundColor: '#fff',
+        zIndex: 1
     },
     contentBottom: {
         flex: 1,
@@ -85,7 +88,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#f1f1f1',
         borderRadius: 15,
-        padding: 15,
+        paddingHorizontal: 15,
         width: '100%',
         maxWidth: 600,
         marginBottom: 10
@@ -96,15 +99,59 @@ export const styles = StyleSheet.create({
     textInput: {
         flex: 1, // Esneklik veriyoruz, TextInput geniş alanı kaplar
         fontSize: 16,
+        paddingVertical: 15,
     },
     inputWrapper: {
         flex: 1, // Bu, input öğelerinin arasındaki alanı eşit şekilde dağıtmak için kullanılır
         justifyContent: 'space-around', // Öğeler arasındaki mesafeyi eşitler
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
-    errorText:{
-        color:'red',
+    errorText: {
+        color: 'red',
     },
+    topContainer: {
+        flex: 1,
+    },
+
+    item: {
+        flexDirection:'row',
+        backgroundColor: '#f3f3f3',
+        borderRadius:15,
+        padding: 10,
+        marginVertical:5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    itemIcon: {
+        flex:1,
+    },
+    itemContent:{
+        flex:4,
+        justifyContent:'space-around'
+    },
+
+    title: {
+        fontSize:20,
+    },
+    statusContent:{
+        borderRadius:15,
+        backgroundColor:'#f3f3f3',
+        paddingHorizontal:10,
+        paddingVertical:5
+    },
+    appContainer: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: '#fff',
+        padding:25,
+    },
+
 
 
 })
