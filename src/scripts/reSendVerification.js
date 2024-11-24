@@ -1,6 +1,8 @@
+/*import { useState } from 'react';
 import { firebase, sendEmailVerification } from '../../config'
 //yeniden doğrulama gönderme
 async function ReSendVerification(email, password) {
+    const [loading,setLoading] = useState(false);
     setLoading(true);
     try {
         const user = await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -13,4 +15,4 @@ async function ReSendVerification(email, password) {
     }
 }
 
-export default ReSendVerification;
+export default ReSendVerification;*/

@@ -1,9 +1,13 @@
 import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { firebase, db, ref, onValue } from '../../config'
 import { styles } from '../../style'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomModal from '../components/bottomModal';
+import * as AuthSession from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Google from "expo-auth-session/providers/google"
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState(null);
@@ -12,7 +16,60 @@ const LoginPage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalActiveVisible, setModalActiveVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [errors, setErrors] = useState({}); // Hataları tutmak için state
 
+
+  WebBrowser.maybeCompleteAuthSession();
+
+  //google ile giriş işlemi için id'lerin belirlenmesi 
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: "623092650592-2l1s3ih6driujjpnus112r7t92gksd5t.apps.googleusercontent.com",
+    androidClientId: "623092650592-jhd8cav0okov0gs662nf26at3adpauc8.apps.googleusercontent.com",
+    iosClientId: "623092650592-ol6sf6n1q9j8p2agsvgcsto3sk27rs87.apps.googleusercontent.com",
+    webClientId: "623092650592-jfjqka8t3t5sjm83ot0i28a96vg41cuk.apps.googleusercontent.com"
+  });
+
+  //google giriş işleminde bir cevap alırsa değişkene kullanıcı bilgilerini atar
+  useEffect(() => {
+    handleEffect();
+  }, [response]);
+
+  async function handleEffect() {
+    if (response?.type === "success" && response.authentication) {
+      const user = await getLocalUser();
+      if (!user) {
+        getUserInfo(response.authentication.accessToken);
+      } else {
+        console.log("BURADA");
+        navigation.replace("main", { user });
+      }
+    }
+  }
+
+  const getLocalUser = async () => {
+    const data = await AsyncStorage.getItem("@user");
+    if (!data) return null;
+    return JSON.parse(data);
+  }
+
+  const getUserInfo = async (token) => {
+    if (!token) return;
+
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const user = await response.json();
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   //firebase üzerinden e-posta ile giriş işlemi
   async function signInWithEmail(email, password) {
@@ -109,45 +166,45 @@ const LoginPage = ({ navigation }) => {
         style={styles.content}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
-            <Text style={styles.header}>Hoşgeldiniz 👋</Text>
+        <Text style={styles.header}>Hoşgeldiniz 👋</Text>
 
-            <View style={styles.inputWrapper}>
-              <View style={styles.inputContainer}>
-                <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
-                <TextInput
-                  onChangeText={(value) => { setEmail(value) }}
-                  style={styles.textInput}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                />
-              </View>
-              <View style={[styles.inputContainer, {marginBottom:0}]}>
-                <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
-                <TextInput
-                  onChangeText={(value) => { setPassword(value) }}
-                  style={styles.textInput}
-                  placeholder="Şifre"
-                  secureTextEntry={!passwordVisible} // Şifre görünürlüğü
-                />
-                <TouchableOpacity
-                  onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
-                >
-                  <MaterialCommunityIcons
-                    name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
-                    size={24}
-                    color="#888"
-                  />
-                </TouchableOpacity>
-              </View>
+        <View style={styles.inputWrapper}>
+          <View style={styles.inputContainer}>
+            <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+            <TextInput
+              onChangeText={(value) => { setEmail(value) }}
+              style={styles.textInput}
+              placeholder="Email"
+              keyboardType="email-address"
+            />
+          </View>
+          <View style={[styles.inputContainer, { marginBottom: 0 }]}>
+            <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
+            <TextInput
+              onChangeText={(value) => { setPassword(value) }}
+              style={styles.textInput}
+              placeholder="Şifre"
+              secureTextEntry={!passwordVisible} // Şifre görünürlüğü
+            />
+            <TouchableOpacity
+              onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
+            >
+              <MaterialCommunityIcons
+                name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
+                size={24}
+                color="#888"
+              />
+            </TouchableOpacity>
+          </View>
 
-              <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
-                <Text>Şifremi Unuttum</Text>
-              </TouchableOpacity>
+          <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
+            <Text>Şifremi Unuttum</Text>
+          </TouchableOpacity>
 
-              <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
-                <Text style={styles.buttonText}>Giriş Yap</Text>
-              </Pressable>
-            </View>
+          <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
+            <Text style={styles.buttonText}>Giriş Yap</Text>
+          </Pressable>
+        </View>
       </KeyboardAvoidingView>
 
       <View style={styles.contentBottom}>
@@ -159,7 +216,7 @@ const LoginPage = ({ navigation }) => {
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         </View>
 
-        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]}>
+        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
           <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
           <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
         </Pressable>

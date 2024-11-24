@@ -27,7 +27,7 @@ const BottomModal = ({ description, image, visibleState, functionModal, email, p
                                 functionModal ?
                                     <TouchableOpacity
                                         style={styles.functionModal}
-                                        onPress={[ ReSendVerification(email, password), { onClose } ]}>
+                                        /*onPress={[ ReSendVerification(email, password), { onClose } ]}*/>
                                         <Text style={[styles.textStyle, {color:'tomato'}]}>Tekrar Gönder</Text>
                                     </TouchableOpacity> : null
                             }
@@ -51,6 +51,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor:'#000',
+        opacity:0.7
     },
 
     modalView: {
