@@ -4,38 +4,23 @@ export const styles = StyleSheet.create({
     container: {
         height: '100%',
         width: '100%',
-    },
-    formContainer: {
-        padding: 10,
-        height: '100%',
-        width: '100%',
+        backgroundColor:'#fff'
     },
     banner: {
-        width:"100%",
-        height:"38%",
+        width: "100%",
+        height: "115%",
     },
     header: {
         fontSize: 24,
-        fontWeight: 'bold',
-        marginLeft: 5
-    },
-    formContainer: {
-        height: '100%',
-        width: '100%',
-        padding: 20,
-    },
-    input: {
-        backgroundColor: '#dbdbdb',
-        borderRadius: 20,
-        padding: 15,
-        width: '100%',
-        maxWidth: 600,
-        marginTop: 20,
-        fontSize: 14,
+        fontWeight: '800',
+        marginLeft: 5,
+        marginBottom: 10
+
     },
     link: {
         alignSelf: 'flex-end',
-        marginTop: 10,
+        marginTop: 5,
+        marginBottom: 15
     },
     navigateLink: {
         textDecorationLine: 'underline',
@@ -48,24 +33,77 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
-        marginTop: 25,
-        marginBottom:25,
+    },
+    buttonOutline: {
+        backgroundColor:'#fff',
+        borderColor:'#f2bd11',
+        borderWidth:4,
+        width: '100%',
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 50,
     },
     buttonText: {
         color: 'white',
-        fontWeight: 'bold',
-        fontSize: 16
-    },
-    svg: {
-        width: '100%',
-        height: '38%',
+        fontWeight: '800',
+        fontSize: 18
     },
     alt: {
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    
 
-    
+    bannerImage: {
+        flex: 2,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 5,
+
+        elevation: 5,
+    },
+    content: {
+        flex: 2,
+        padding: 25,
+        justifyContent: 'space-around',
+        borderRadius:30,
+        backgroundColor:'#fff',
+        zIndex:1
+    },
+    contentBottom: {
+        flex: 1,
+        paddingHorizontal: 25,
+        paddingBottom: 25,
+        justifyContent: 'space-around',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f1f1f1',
+        borderRadius: 15,
+        padding: 15,
+        width: '100%',
+        maxWidth: 600,
+        marginBottom: 10
+    },
+    icon: {
+        marginRight: 12, // İkon ile metin arasındaki boşluğu artırır
+    },
+    textInput: {
+        flex: 1, // Esneklik veriyoruz, TextInput geniş alanı kaplar
+        fontSize: 16,
+    },
+    inputWrapper: {
+        flex: 1, // Bu, input öğelerinin arasındaki alanı eşit şekilde dağıtmak için kullanılır
+        justifyContent: 'space-around', // Öğeler arasındaki mesafeyi eşitler
+        flexDirection: 'column'
+    },
+
+
+
 
 })

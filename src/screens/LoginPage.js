@@ -1,16 +1,17 @@
-import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native'
+import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import { firebase, db, ref, onValue } from '../../config'
 import { styles } from '../../style'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomModal from '../components/bottomModal';
-
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisible2, setModalVisible2] = useState(false);
+  const [modalActiveVisible, setModalActiveVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
 
   //firebase üzerinden e-posta ile giriş işlemi
@@ -27,7 +28,7 @@ const LoginPage = ({ navigation }) => {
         navigation.replace('main', { userData });
       } else {
         console.log("HATA EPOSTA ONAYLANMADI");
-        setModalVisible2(true);
+        setModalActiveVisible(true);
       }
       setLoading(false);
     } catch (error) {
@@ -67,7 +68,6 @@ const LoginPage = ({ navigation }) => {
     } else {
       console.log("bir değer gir");
     }
-
   }
 
   if (loading) {
@@ -82,30 +82,75 @@ const LoginPage = ({ navigation }) => {
     <View style={styles.container}>
 
       <BottomModal
-        description={"Eğer kayıtlı ise şifre sıfırlama bağlantısı e-mail adresinize gönderildi 📩"}
+        description={"Eğer kayıtlı ise şifre sıfırlama bağlantısı e-mail adresinize gönderildi 📥."}
         image={require('../../assets/images/banner3.jpeg')}
         visibleState={modalVisible}
-        onClose={() => setModalVisible(false)} // Modal'ı kapat
+        onClose={() => setModalVisible(false)}
       />
 
-      <Image
-        style={styles.banner}
-        source={require('../../assets/images/banner1.png')}
+      <BottomModal
+        description={"Hesabınız aktive edilmemiş ❌. Aktivasyon işlemini tamamlayıp tekrar deneyiniz."}
+        image={require('../../assets/images/banner4.jpeg')}
+        visibleState={modalActiveVisible}
+        functionModal={true}
+        onClose={() => setModalActiveVisible(false)}
       />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.bannerImage}>
+          <Image
+            style={styles.banner}
+            source={require('../../assets/images/banner1.jpg')}
+          />
+        </View>
+      </TouchableWithoutFeedback>
 
-      <View style={styles.formContainer}>
-        <Text style={styles.header}>Hoşgeldiniz 👋</Text>
-        <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' value={email} onChangeText={(value) => { setEmail(value) }} />
-        <TextInput style={styles.input} placeholder='şifre' secureTextEntry={true} value={password} onChangeText={(value) => { setPassword(value) }} />
 
-        <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
-          <Text>Şifremi Unuttum</Text>
-        </TouchableOpacity>
+      <KeyboardAvoidingView
+        style={styles.content}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
-        <Pressable style={[styles.button, { marginTop: 60 }]} onPress={() => { signInWithEmail(email, password) }}>
-          <Text style={styles.buttonText}>Giriş Yap</Text>
-        </Pressable>
+            <Text style={styles.header}>Hoşgeldiniz 👋</Text>
 
+            <View style={styles.inputWrapper}>
+              <View style={styles.inputContainer}>
+                <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+                <TextInput
+                  onChangeText={(value) => { setEmail(value) }}
+                  style={styles.textInput}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                />
+              </View>
+              <View style={[styles.inputContainer, {marginBottom:0}]}>
+                <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
+                <TextInput
+                  onChangeText={(value) => { setPassword(value) }}
+                  style={styles.textInput}
+                  placeholder="Şifre"
+                  secureTextEntry={!passwordVisible} // Şifre görünürlüğü
+                />
+                <TouchableOpacity
+                  onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
+                >
+                  <MaterialCommunityIcons
+                    name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
+                    size={24}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
+                <Text>Şifremi Unuttum</Text>
+              </TouchableOpacity>
+
+              <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
+                <Text style={styles.buttonText}>Giriş Yap</Text>
+              </Pressable>
+            </View>
+      </KeyboardAvoidingView>
+
+      <View style={styles.contentBottom}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>
@@ -126,7 +171,7 @@ const LoginPage = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </View >
   )
 }
 
