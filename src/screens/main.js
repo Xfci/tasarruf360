@@ -27,7 +27,15 @@ const Main = ({ navigation, route, userData }) => {
                 <Button title='Oturumu Kapat' onPress={async () => {
                     await AsyncStorage.removeItem("@user");
                     navigation.replace('login');
-                }}/>
+                }} />
+            </View>
+        )
+    } else {
+        return (
+            <View>
+                <Text>
+                    MAİN
+                </Text>
             </View>
         )
     }

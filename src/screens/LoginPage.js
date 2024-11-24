@@ -25,7 +25,8 @@ const LoginPage = ({ navigation }) => {
     expoClientId: "623092650592-2l1s3ih6driujjpnus112r7t92gksd5t.apps.googleusercontent.com",
     androidClientId: "623092650592-jhd8cav0okov0gs662nf26at3adpauc8.apps.googleusercontent.com",
     iosClientId: "623092650592-ol6sf6n1q9j8p2agsvgcsto3sk27rs87.apps.googleusercontent.com",
-    webClientId: "623092650592-jfjqka8t3t5sjm83ot0i28a96vg41cuk.apps.googleusercontent.com"
+    webClientId: "623092650592-jfjqka8t3t5sjm83ot0i28a96vg41cuk.apps.googleusercontent.com",
+    scopes: ["profile", "email"],
   });
 
   //google giriş işleminde bir cevap alırsa değişkene kullanıcı bilgilerini atar
@@ -40,7 +41,9 @@ const LoginPage = ({ navigation }) => {
       await getUserInfo(response.authentication.accessToken);
     } else {
       setUserInfo(user);
-      navigation.replace("main", { user });
+      requestAnimationFrame(() => {
+        navigation.replace("main", { user });
+      });
     }
   }
 
@@ -115,7 +118,7 @@ const LoginPage = ({ navigation }) => {
         const pass = element.val().password;
         if (email == name && pass == password) {
           setLoading(false);
-          navigation.navigate('main', { email, password });
+          navigation.replace('main', { email, password });
         }
       });
     });
