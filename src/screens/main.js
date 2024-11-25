@@ -22,11 +22,31 @@ const DATA = [
     },
 ];
 
+<<<<<<< Updated upstream
 const Main = ({ navigation, userData }) => {
     const [elektrik, setElektrik] = useState(0);
     const [su, setSu] = useState(0);
     const [gaz, setGaz] = useState(0);
     const path = 'userInfo/' + userData.name + '/';
+=======
+const Item = ({ title, icon, color, unit }) => (
+    <View style={styles.item}>
+        <View style={styles.itemIcon}>
+            <MaterialCommunityIcons name={icon} size={60} color={color} style={styles.icon} />
+        </View>
+        <View style={styles.itemContent}>
+            <View style={styles.itemHeaderContainer}>
+                <Text style={styles.title}>{title}</Text>
+                <View style={styles.percent}>
+                    <Text style={styles.largeText}>100</Text>
+                    <Text style={styles.smallText}>/0 {unit}</Text>
+                </View>
+            </View>
+            <ProgressBar progress={0.9} color={color}/>
+        </View>
+    </View>
+);
+>>>>>>> Stashed changes
 
     useEffect(() => {
         const dbref = ref(db, path + 'sayac/');
@@ -60,9 +80,15 @@ const Main = ({ navigation, userData }) => {
                 <Text style={styles.header}>Ana sayfa</Text>
                 <View style={styles.statusContent}>
                     <Text style={styles.header2}>Sayaç Durumları</Text>
+<<<<<<< Updated upstream
                     <Item title="Elektirik" icon="lightning-bolt" color="#f2bd11" />
                     <Item title="Su" icon="water" color='lightblue' />
                     <Item title="Doğalgaz" icon="fire" color="gray" />
+=======
+                    <Item title="Elektirik" icon="lightning-bolt" color="#f2bd11" unit="kWh"/>
+                    <Item title="Su" icon="water" color='#09d1fb' unit="L"/>
+                    <Item title="Doğalgaz" icon="fire" color="gray" unit="m³"/>
+>>>>>>> Stashed changes
                 </View>
             </View>
         </SafeAreaView>

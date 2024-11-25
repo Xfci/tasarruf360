@@ -8,6 +8,9 @@ import Main from './src/screens/main';
 import ForgetPassword from './src/screens/ForgetPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile';
+import { styles } from './style';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -20,7 +23,7 @@ export default function App() {
         <Stack.Screen name='login' component={LoginPage} />
         <Stack.Screen name='register' component={RegisterPage} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
-        <Stack.Screen name='main' component={TabScreen}/>
+        <Stack.Screen name='main' component={TabScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -29,9 +32,32 @@ export default function App() {
 function TabScreen({route}) {
   const {userData} = route.params;
   return (
+<<<<<<< Updated upstream
     <Tabs.Navigator screenOptions={{ headerShown: false}}>
       <Tabs.Screen name='Ana Sayfa' children={() => <Main userData={userData} />}/>
       <Tabs.Screen name='Profil' component={Profile}/>
+=======
+    <Tabs.Navigator
+      screenOptions={{ headerShown: false }}>
+      <Tabs.Screen name='Ana Sayfa' component={Main}
+        options={{
+          title: 'Ana sayfa',
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons name="home" size={30} color={focused ? 'black' : 'lightgray'}/>
+          ),
+          tabBarActiveTintColor:'black',
+          tabBarInactiveTintColor:'gray'
+        }} />
+      <Tabs.Screen name='Profil' component={Profile}
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons name="account" size={30} color={focused ? 'black' : 'lightgray'}/>
+          ),
+          tabBarActiveTintColor:'black',
+          tabBarInactiveTintColor:'gray'
+        }}/>
+>>>>>>> Stashed changes
     </Tabs.Navigator>
   )
 }

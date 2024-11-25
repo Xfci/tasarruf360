@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     header2: {
         fontSize: 18,
         fontWeight: '600',
-        marginVertical:5
+        marginVertical: 5
     },
     link: {
         alignSelf: 'flex-end',
@@ -114,11 +114,11 @@ export const styles = StyleSheet.create({
     },
 
     item: {
-        flexDirection:'row',
+        flexDirection: 'row',
         backgroundColor: '#f3f3f3',
-        borderRadius:15,
+        borderRadius: 15,
         padding: 10,
-        marginVertical:5,
+        marginVertical: 5,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -129,29 +129,44 @@ export const styles = StyleSheet.create({
         elevation: 5,
     },
     itemIcon: {
-        flex:1,
+        flex: 1,
     },
-    itemContent:{
-        flex:4,
-        justifyContent:'space-around'
+    itemContent: {
+        flex: 4,
+        justifyContent: 'space-around'
     },
 
     title: {
-        fontSize:20,
+        fontSize: 20,
+        fontWeight:'bold',
     },
-    statusContent:{
-        borderRadius:15,
-        backgroundColor:'#f3f3f3',
-        paddingHorizontal:10,
-        paddingVertical:5
+    statusContent: {
+        borderRadius: 15,
+        backgroundColor: '#f3f3f3',
+        paddingHorizontal: 10,
+        paddingVertical: 5
     },
     appContainer: {
         height: '100%',
         width: '100%',
         backgroundColor: '#fff',
-        padding:25,
+        padding: 25,
     },
-
-
+    itemHeaderContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    percent: {
+        flexDirection: 'row', // Yazıları yan yana yerleştirmek için
+        alignItems: 'flex-end',    
+    },
+    largeText: {
+        fontSize: 18, // Büyük metin boyutu
+        fontWeight: 'bold',
+    },
+    smallText: {
+        fontSize: 12, // Küçük metin boyutu
+        marginBottom:3
+    },
 
 })
