@@ -33,7 +33,7 @@ function TabScreen({ route }) {
   return (
     <Tabs.Navigator
       screenOptions={{ headerShown: false }}>
-      <Tabs.Screen name='Ana Sayfa' children={() => { <Main userData={userData} /> }}
+      <Tabs.Screen name='Ana Sayfa' children={() => (<Main userData={userData} />)}
         options={{
           title: 'Ana sayfa',
           tabBarIcon: ({ focused }) => (
