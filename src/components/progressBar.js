@@ -15,7 +15,7 @@ const ProgressBar = ({ progress, duration, color, triggerKey }) => {
     // Animasyonu başlat
     Animated.timing(progressAnim, {
       toValue: progress, // Hedef değer (ör. 0.7 = %70)
-      duration: duration || 2000, // Varsayılan süre 2000ms
+      duration: duration || 1000, // Varsayılan süre 2000ms
       useNativeDriver: false,
     }).start();
   }, [progress, triggerKey]); // progress veya triggerKey değiştiğinde animasyon tetiklenir
