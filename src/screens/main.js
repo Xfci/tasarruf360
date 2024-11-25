@@ -4,6 +4,8 @@ import { styles } from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../components/progressBar';
+import { firebase, db, ref, onValue } from '../../config'
+import { useEffect, useState } from 'react';
 
 const DATA = [
     {
@@ -20,20 +22,38 @@ const DATA = [
     },
 ];
 
-const Item = ({ title, icon, color }) => (
-    <View style={styles.item}>
-        <View style={styles.itemIcon}>
-            <MaterialCommunityIcons name={icon} size={60} color={color} style={styles.icon} />
-        </View>
-        <View style={styles.itemContent}>
-            <Text style={styles.title}>{title}</Text>
-            <ProgressBar progress={1} color={color} />
-        </View>
-    </View>
-);
+const Main = ({ navigation, userData }) => {
+    const [elektrik, setElektrik] = useState(0);
+    const [su, setSu] = useState(0);
+    const [gaz, setGaz] = useState(0);
+    const path = 'userInfo/' + userData.name + '/';
 
+    useEffect(() => {
+        const dbref = ref(db, path + 'sayac/');
+        const listen = onValue(dbref, (snapshot) => {
+            snapshot.forEach(element => {
+                const key = element.key;
+                const value = element.val();
+                key == "elektrik" ? setElektrik(value) : key == "su" ? setSu(value) : key == "gaz" ? setGaz(value) : null
+            });
+        });
+        return () => listen();
+    }, []);
 
-const Main = ({ navigation, route, userData }) => {
+    console.log(`\n Elektrik: ${elektrik} \n Su: ${su} \n Gaz: ${gaz}`);
+
+    const Item = ({ title, icon, color }) => (
+        <View style={styles.item}>
+            <View style={styles.itemIcon}>
+                <MaterialCommunityIcons name={icon} size={60} color={color} style={styles.icon} />
+            </View>
+            <View style={styles.itemContent}>
+                <Text style={styles.title}>{title}</Text>
+                <ProgressBar progress={1} color={color} style={{ color: { color } }} />
+            </View>
+        </View>
+    );
+
     return (
         <SafeAreaView style={styles.appContainer}>
             <View style={styles.topContainer}>
@@ -42,14 +62,13 @@ const Main = ({ navigation, route, userData }) => {
                     <Text style={styles.header2}>Sayaç Durumları</Text>
                     <Item title="Elektirik" icon="lightning-bolt" color="#f2bd11" />
                     <Item title="Su" icon="water" color='lightblue' />
-                    <Item title="Doğalgaz" icon="fire" color="gray"/>
+                    <Item title="Doğalgaz" icon="fire" color="gray" />
                 </View>
             </View>
-
         </SafeAreaView>
     )
 
-    /*const user = route.params.user;T
+    /*const user = route.params.user;
 
     if (user) {
         return (
