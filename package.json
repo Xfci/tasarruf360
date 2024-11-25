@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/tinycolor2": "^1.4.6",
     "expo-module-scripts": "^4.0.2"
   },
   "private": true

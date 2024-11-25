@@ -8,7 +8,6 @@ import Main from './src/screens/main';
 import ForgetPassword from './src/screens/ForgetPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile';
-import { styles } from './style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
@@ -29,29 +28,29 @@ export default function App() {
   );
 }
 
-function TabScreen({route}) {
-  const {userData} = route.params;
+function TabScreen({ route }) {
+  const { userData } = route.params;
   return (
     <Tabs.Navigator
       screenOptions={{ headerShown: false }}>
-      <Tabs.Screen name='Ana Sayfa' component={Main}
+      <Tabs.Screen name='Ana Sayfa' children={() => { <Main userData={userData} /> }}
         options={{
           title: 'Ana sayfa',
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons name="home" size={30} color={focused ? 'black' : 'lightgray'}/>
+            <MaterialCommunityIcons name="home" size={30} color={focused ? 'black' : 'lightgray'} />
           ),
-          tabBarActiveTintColor:'black',
-          tabBarInactiveTintColor:'gray'
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'gray'
         }} />
       <Tabs.Screen name='Profil' component={Profile}
         options={{
           title: 'Profil',
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons name="account" size={30} color={focused ? 'black' : 'lightgray'}/>
+            <MaterialCommunityIcons name="account" size={30} color={focused ? 'black' : 'lightgray'} />
           ),
-          tabBarActiveTintColor:'black',
-          tabBarInactiveTintColor:'gray'
-        }}/>
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'gray'
+        }} />
     </Tabs.Navigator>
   )
 }
