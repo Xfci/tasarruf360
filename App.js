@@ -32,11 +32,6 @@ export default function App() {
 function TabScreen({route}) {
   const {userData} = route.params;
   return (
-<<<<<<< Updated upstream
-    <Tabs.Navigator screenOptions={{ headerShown: false}}>
-      <Tabs.Screen name='Ana Sayfa' children={() => <Main userData={userData} />}/>
-      <Tabs.Screen name='Profil' component={Profile}/>
-=======
     <Tabs.Navigator
       screenOptions={{ headerShown: false }}>
       <Tabs.Screen name='Ana Sayfa' component={Main}
@@ -57,7 +52,6 @@ function TabScreen({route}) {
           tabBarActiveTintColor:'black',
           tabBarInactiveTintColor:'gray'
         }}/>
->>>>>>> Stashed changes
     </Tabs.Navigator>
   )
 }
