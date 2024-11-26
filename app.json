@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier":"com.tasarruf360.tasarruf360"
+      "bundleIdentifier": "com.tasarruf360.tasarruf360"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,8 +29,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d87ef389-34f0-4487-8e08-9c06b2e48027"
+        "projectId": "031abafd-9fe5-4c60-b766-d2db7794d023"
       }
-    }
+    },
+    "owner": "tasarruf360"
   }
 }

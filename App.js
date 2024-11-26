@@ -30,11 +30,12 @@ export default function App() {
 
 function TabScreen({ route }) {
   const { userData } = route.params;
+  const {user} = route.params;
   return (
     <Tabs.Navigator
       screenOptions={{ headerShown: false }}>
       
-      <Tabs.Screen name='Ana Sayfa' children={() => (<Main userData={userData} />)}
+      <Tabs.Screen name='Ana Sayfa' children={() => (<Main userData={userData} user={user}/>)}
         options={{
           title: 'Ana sayfa',
           tabBarIcon: ({ focused }) => (
