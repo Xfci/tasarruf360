@@ -105,16 +105,15 @@ const LoginPage = ({ navigation }) => {
 
   //firebase üzerinden kullanıcı adı ile giriş işlemi
   async function signInWithName(email, password) {
-    setLoading(true);
     const dbref = ref(db, 'users/');
     const dinle = onValue(dbref, (snapshot) => {
       snapshot.forEach(element => {
         const name = element.val().name;
         const pass = element.val().password;
-        if (email == name &&  password == pass) {
+        if (email == name && password == pass) {
           const userData = {
-            name:name,
-            password:pass
+            name: name,
+            password: pass
           }
           setLoading(false);
           navigation.replace('main', { userData });
@@ -126,6 +125,7 @@ const LoginPage = ({ navigation }) => {
   }
 
   async function resetPassword(email) {
+    setLoading(true);
     if (email != null) {
       try {
         await firebase.auth().sendPasswordResetEmail(email);
@@ -138,15 +138,10 @@ const LoginPage = ({ navigation }) => {
       console.log("bir değer gir");
       setErrors("Geçerli bir mail adresi giriniz");
     }
+    setLoading(false);
   }
 
-  if (loading) {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size={'large'} />
-      </View>
-    )
-  }
+
 
   return (
     <View style={styles.container}>
@@ -174,7 +169,7 @@ const LoginPage = ({ navigation }) => {
       </TouchableWithoutFeedback>
 
 
-      <KeyboardAvoidingView
+      <View
         style={styles.content}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
@@ -216,11 +211,19 @@ const LoginPage = ({ navigation }) => {
 
           </View>
 
-          <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
-            <Text style={styles.buttonText}>Giriş Yap</Text>
-          </Pressable>
+          {
+            loading ?
+              <View style={styles.button}>
+                <ActivityIndicator color={'#fff'}/>
+              </View> 
+              :
+              <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
+                <Text style={styles.buttonText}>Giriş Yap</Text>
+              </Pressable>
+          }
+
         </View>
-      </KeyboardAvoidingView>
+      </View>
 
       <View style={styles.contentBottom}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
@@ -231,10 +234,10 @@ const LoginPage = ({ navigation }) => {
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         </View>
 
-        <Pressable style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
           <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
           <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
-        </Pressable>
+        </TouchableOpacity>
 
         <View style={styles.alt}>
           <Text>Hesabın yok mu? </Text>

@@ -1,32 +1,38 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
 import tinycolor from 'tinycolor2';
+import PropTypes from 'prop-types';
 
-const ProgressBar = ({ progress, duration, color, triggerKey }) => {
+const ProgressBar = ({
+  progress = 0,          // Varsayılan değer: %0
+  duration = 1000,       // Varsayılan animasyon süresi: 1000ms
+  color = '#FFD700',     // Varsayılan renk: Altın sarısı
+  width = '100%',        // Varsayılan genişlik: %100
+}) => {
   const progressAnim = useRef(new Animated.Value(0)).current;
 
   // Kapalı renkler
-  const darkerColor = tinycolor(color || '#FFD700').darken(5).toString(); // Bir ton koyu
-  const darkerBorderColor = tinycolor(color || '#FFD700').darken(5).toString(); // Daha koyu sınır rengi
-  
-  const stripesCount = Math.floor(300 / 15); // 300px genişlikte 15px aralıklarla çizgi
+  const darkerColor = tinycolor(color).darken(5).toString() || '#B8860B';
+  const darkerBorderColor = tinycolor(color).darken(5).toString() || '#B8860B';
+
+  const stripesCount = Math.floor((typeof width === 'number' ? width : 300) / 15);
 
   useEffect(() => {
     // Animasyonu başlat
     Animated.timing(progressAnim, {
-      toValue: progress, // Hedef değer (ör. 0.7 = %70)
-      duration: duration || 1000, // Varsayılan süre 2000ms
+      toValue: progress,
+      duration,
       useNativeDriver: false,
     }).start();
-  }, [progress, triggerKey]); // progress veya triggerKey değiştiğinde animasyon tetiklenir
+  }, [progress]); // Sadece progress değiştiğinde tetiklenir
 
   return (
-    <View style={[styles.progressBarBackground, { borderColor: darkerBorderColor }]}>
+    <View style={[styles.progressBarBackground, { borderColor: darkerBorderColor, width }]}>
       <Animated.View
         style={[
           styles.progressBarForeground,
           {
-            backgroundColor: color || '#FFD700', // Varsayılan sarı renk
+            backgroundColor: color,
             width: progressAnim.interpolate({
               inputRange: [0, 1],
               outputRange: ['0%', '100%'],
@@ -34,14 +40,13 @@ const ProgressBar = ({ progress, duration, color, triggerKey }) => {
           },
         ]}
       >
-        {/* Paralel çizgiler */}
         <View style={styles.stripesContainer}>
           {Array.from({ length: stripesCount }).map((_, index) => (
             <View
               key={index}
               style={[
                 styles.stripe,
-                { left: index * 15, width: 10, backgroundColor: darkerColor }, // Çizgileri konumlandır
+                { left: index * 15, width: 10, backgroundColor: darkerColor },
               ]}
             />
           ))}
@@ -51,20 +56,26 @@ const ProgressBar = ({ progress, duration, color, triggerKey }) => {
   );
 };
 
+ProgressBar.propTypes = {
+  progress: PropTypes.number.isRequired,
+  duration: PropTypes.number,
+  color: PropTypes.string,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+};
+
 const styles = StyleSheet.create({
   progressBarBackground: {
-    width: '100%',
     height: 20,
     backgroundColor: '#e0e0e0',
     borderRadius: 10,
-    overflow: 'hidden', // Bu gri alanın dışında bir şey görünmemeli
-    borderWidth: 2, // Dinamik koyulaştırılmış renk ile güncellenecek
+    overflow: 'hidden',
+    borderWidth: 2,
   },
   progressBarForeground: {
     height: '100%',
     borderRadius: 8,
-    overflow: 'hidden', // Çizgilerin yalnızca sarı alanda görünmesini sağlar
-    position: 'relative', // Çizgiler için konumlandırma
+    overflow: 'hidden',
+    position: 'relative',
   },
   stripesContainer: {
     position: 'absolute',
@@ -77,7 +88,7 @@ const styles = StyleSheet.create({
   stripe: {
     position: 'absolute',
     height: '100%',
-    transform: [{ skewX: '-45deg' }], // Paralel çizgi efekti
+    transform: [{ skewX: '-45deg' }],
   },
 });
 

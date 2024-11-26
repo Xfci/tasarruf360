@@ -56,7 +56,7 @@ const RegisterPage = ({ navigation, route }) => {
         error == "FirebaseError: Firebase: Password should be at least 6 characters (auth/weak-password)." ?
           setErrors("Güçlü şifre kullanın.") : null
 
-          error == "FirebaseError: Firebase: The email address is already in use by another account. (auth/email-already-in-use)." ?
+        error == "FirebaseError: Firebase: The email address is already in use by another account. (auth/email-already-in-use)." ?
           setErrors("Bu hesap zaten kullanılıyor. Giriş yapınız.") : null
         //   aynı hesap zaten var
       }
@@ -80,14 +80,6 @@ const RegisterPage = ({ navigation, route }) => {
       setLoading(false);
       console.log(error);
     }
-  }
-
-  if (loading) {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size={'large'} />
-      </View>
-    )
   }
 
   return (
@@ -156,9 +148,17 @@ const RegisterPage = ({ navigation, route }) => {
           </View>
           <Text style={styles.errorText}>{errorMessage}</Text>
 
-          <Pressable style={[styles.buttonOutline, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
-            <Text style={[styles.buttonText, { color: '#dead10' }]}>Kayıt Ol</Text>
-          </Pressable>
+          {
+            loading ?
+              <View style={styles.buttonOutline}>
+                <ActivityIndicator color={'#fff'} />
+              </View>
+              :
+              <Pressable style={[styles.buttonOutline, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
+                <Text style={[styles.buttonText, { color: '#dead10' }]}>Kayıt Ol</Text>
+              </Pressable>
+          }
+
         </View>
         <View style={[styles.alt, { marginBottom: 20 }]}>
           <Text>Zaten hesabın var mı? </Text>

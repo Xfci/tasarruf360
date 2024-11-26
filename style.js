@@ -13,7 +13,8 @@ export const styles = StyleSheet.create({
     header: {
         fontSize: 24,
         fontWeight: '800',
-        marginBottom: 10
+        marginBottom: 10,
+        marginHorizontal: 10,
     },
     header2: {
         fontSize: 18,
@@ -109,13 +110,9 @@ export const styles = StyleSheet.create({
     errorText: {
         color: 'red',
     },
-    topContainer: {
-        flex: 1,
-    },
-
     item: {
         flexDirection: 'row',
-        backgroundColor: '#f3f3f3',
+        backgroundColor: '#fff',
         borderRadius: 15,
         padding: 10,
         marginVertical: 5,
@@ -138,19 +135,26 @@ export const styles = StyleSheet.create({
 
     title: {
         fontSize: 20,
-        fontWeight:'bold',
+        fontWeight: 'bold',
     },
     statusContent: {
         borderRadius: 15,
-        backgroundColor: '#f3f3f3',
+        backgroundColor: '#fff',
         paddingHorizontal: 10,
-        paddingVertical: 5
+        paddingVertical: 5,
+        margin: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     appContainer: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#fff',
-        padding: 25,
     },
     itemHeaderContainer: {
         flexDirection: 'row',
@@ -158,7 +162,7 @@ export const styles = StyleSheet.create({
     },
     percent: {
         flexDirection: 'row', // Yazıları yan yana yerleştirmek için
-        alignItems: 'flex-end',    
+        alignItems: 'flex-end',
     },
     largeText: {
         fontSize: 18, // Büyük metin boyutu
@@ -166,7 +170,7 @@ export const styles = StyleSheet.create({
     },
     smallText: {
         fontSize: 12, // Küçük metin boyutu
-        marginBottom:3
+        marginBottom: 3
     },
 
 })
