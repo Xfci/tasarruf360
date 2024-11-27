@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { BarChart } from 'react-native-gifted-charts';
 import { Item } from '../components/progressItem';
+import tinycolor from 'tinycolor2';
+
 
 const Main = ({ userData,user }) => {
     const [electric, setElectric] = useState(0);
@@ -58,10 +60,10 @@ const Main = ({ userData,user }) => {
                     </View>
 
                     <View style={styles.statusContent}>
-                        <Text style={styles.header2}>Özetler {usedElectric}</Text>
+                        <Text style={styles.header2}>Özetler</Text>
                         <BarChart
-                            data={[{ value: usedElectric, frontColor: '#f2bd11' }, { value: usedWater, frontColor: '#09d1fb' }, { value: usedGas, frontColor: 'gray' }]}
-                            width={200}
+                            data={[{ value: usedElectric, frontColor:  tinycolor('#f2bd11').darken(10).toString(), gradientColor:'#f2bd11', label:"Elektrik" }, { value: usedWater, frontColor: tinycolor('#09d1fb').darken(10).toString(), gradientColor:'#09d1fb' }, { value: usedGas, frontColor: tinycolor('gray').darken(10).toString(), gradientColor:'gray' }]}
+                            width={250}
                             minHeight={5}
                             barBorderRadius={3}
                             noOfSections={5}
@@ -70,7 +72,8 @@ const Main = ({ userData,user }) => {
                             xAxisLabelTextStyle={{ color: 'gray' }}
                             yAxisTextStyle={{ color: 'gray' }}
                             isAnimated
-                            animationDuration={1000}
+                            showGradient={true}
+                            spacing={50}
                         />
                     </View>
                 </ScrollView>
