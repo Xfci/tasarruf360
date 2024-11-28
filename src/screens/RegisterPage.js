@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Pressable, ActivityIndicator, TouchableOpacity, Modal, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { Text, View, TextInput, Pressable, ActivityIndicator, TouchableOpacity, Modal, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { firebase, db, ref, onValue } from '../../config'
 import { styles } from '../../style'
@@ -176,6 +176,7 @@ const RegisterPage = ({ navigation, route }) => {
           />
         </View>
       </TouchableWithoutFeedback>
+      <StatusBar barStyle = {'dark-content'}/>
     </View>
   )
 }

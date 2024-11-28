@@ -1,4 +1,4 @@
-import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { firebase, db, ref, onValue } from '../../config'
 import { styles } from '../../style'
@@ -17,6 +17,7 @@ const LoginPage = ({ navigation }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errorMessage, setErrors] = useState(""); // Hataları tutmak için state
   const [userInfo, setUserInfo] = useState(null);
+  const [state, setState] = useState(false);
 
   WebBrowser.maybeCompleteAuthSession();
 
@@ -72,6 +73,28 @@ const LoginPage = ({ navigation }) => {
     }
   }
 
+  useEffect(() => {
+    const checkUser = async () => {
+      const userData = await fetchUserData();
+      if (userData) {
+        navigation.replace('main', { userData, tur: "eposta" });
+      }
+    };
+    checkUser();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@userData');
+      if (jsonValue != null) {
+        return JSON.parse(jsonValue);
+      }
+      return null;
+    } catch (error) {
+      console.error("Kullanıcı bilgileri alınamadı:", error);
+    }
+  };
+
   //firebase üzerinden e-posta ile giriş işlemin
   async function signInWithEmail(email, password) {
     setLoading(true);
@@ -80,11 +103,13 @@ const LoginPage = ({ navigation }) => {
       const userData = {
         email: user.user.email,
         id: user.user.uid,
-        name: user.user.name
       }
       setErrors(null);
       if (user.user.emailVerified != false) {
-        navigation.replace('main', { userData });
+        const jsonValue = JSON.stringify(userData);
+        await AsyncStorage.setItem("@userData", jsonValue);
+        setState(true);
+        navigation.replace('main', { userData, tur: "eposta" });
       } else {
         console.log("HATA EPOSTA ONAYLANMADI");
         setModalActiveVisible(true);
@@ -103,6 +128,29 @@ const LoginPage = ({ navigation }) => {
     }
   }
 
+  useEffect(() => {
+    const checkUser = async () => {
+      const user = await fetchUser();
+      if (user) {
+        navigation.replace('main', { user,tur:"kullanici" });
+      }
+    };
+    checkUser();
+  }, []);
+
+  const fetchUser = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@user');
+      if (jsonValue != null) {
+        return JSON.parse(jsonValue);
+      }
+      return null;
+    } catch (error) {
+      console.error("Kullanıcı bilgileri alınamadı:", error);
+    }
+  };
+
+
   //firebase üzerinden kullanıcı adı ile giriş işlemi
   async function signInWithName(email, password) {
     const dbref = ref(db, 'users/');
@@ -110,13 +158,12 @@ const LoginPage = ({ navigation }) => {
       snapshot.forEach(element => {
         const name = element.val().name;
         const pass = element.val().password;
+        const user = name
         if (email == name && password == pass) {
-          const userData = {
-            name: name,
-            password: pass
-          }
+          const jsonValue = JSON.stringify(name);
+          AsyncStorage.setItem("@user", jsonValue);
           setLoading(false);
-          navigation.replace('main', { userData });
+          navigation.replace('main', { user,tur:"kullanici" });
         }
       });
     });
@@ -214,8 +261,8 @@ const LoginPage = ({ navigation }) => {
           {
             loading ?
               <View style={styles.button}>
-                <ActivityIndicator color={'#fff'}/>
-              </View> 
+                <ActivityIndicator color={'#fff'} />
+              </View>
               :
               <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
                 <Text style={styles.buttonText}>Giriş Yap</Text>
@@ -246,6 +293,7 @@ const LoginPage = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <StatusBar barStyle={'dark-content'} />
     </View >
   )
 }

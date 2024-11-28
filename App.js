@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 // HATA VEREN ŞEREFSİZ SATIR
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import LoginPage from './src/screens/LoginPage';
@@ -29,13 +29,13 @@ export default function App() {
 }
 
 function TabScreen({ route }) {
-  const { userData } = route.params;
-  const {user} = route.params;
+  const user = route.params;
+
   return (
     <Tabs.Navigator
       screenOptions={{ headerShown: false }}>
       
-      <Tabs.Screen name='Ana Sayfa' children={() => (<Main userData={userData} user={user}/>)}
+      <Tabs.Screen name='Ana Sayfa' children={() => (<Main user={user}/>)}
         options={{
           title: 'Ana sayfa',
           tabBarIcon: ({ focused }) => (
@@ -44,7 +44,7 @@ function TabScreen({ route }) {
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'gray'
         }} />
-      <Tabs.Screen name='Profil' component={Profile}
+      <Tabs.Screen name='Profil' children={() => (<Profile user={user}/>)}
         options={{
           title: 'Profil',
           tabBarIcon: ({ focused }) => (
