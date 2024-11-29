@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
     container: {
+        flex:1,
         height: '100%',
         width: '100%',
         backgroundColor: '#fff'
@@ -117,14 +118,9 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 10,
         marginVertical: 5,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 0,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+
+        borderColor:'#f1f1f1',
+        borderWidth:2
     },
     itemIcon: {
         flex: 1,
@@ -143,7 +139,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingHorizontal: 10,
         paddingVertical: 5,
-        margin: 10,
+        margin: 15,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

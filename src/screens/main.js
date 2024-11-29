@@ -73,8 +73,9 @@ const Main = ({ user }) => {
                 <View style={styles.statusContent}>
                     <Text style={styles.header2}>Özetler</Text>
                     <BarChart
-                        data={[{ value: usedElectric, frontColor: tinycolor('#f2bd11').darken(10).toString(), gradientColor: '#f2bd11', label: "Elektrik" }, { value: usedWater, frontColor: tinycolor('#09d1fb').darken(10).toString(), gradientColor: '#09d1fb' }, { value: usedGas, frontColor: tinycolor('gray').darken(10).toString(), gradientColor: 'gray' }]}
-                        width={250}
+                        isAnimated
+                        data={[{ value: usedElectric, frontColor: tinycolor('#f2bd11').darken(10).toString(), gradientColor: '#f2bd11', label: "Elektrik" }, { value: usedWater, frontColor: tinycolor('#09d1fb').darken(10).toString(), gradientColor: '#09d1fb', label: "Su" }, { value: usedGas, frontColor: tinycolor('gray').darken(10).toString(), gradientColor: 'gray', label: "Gaz" }]}
+                        width={270}
                         minHeight={5}
                         barBorderRadius={3}
                         noOfSections={5}
@@ -82,13 +83,12 @@ const Main = ({ user }) => {
                         xAxisThickness={0}
                         xAxisLabelTextStyle={{ color: 'gray' }}
                         yAxisTextStyle={{ color: 'gray' }}
-                        isAnimated
                         showGradient={true}
-                        spacing={50}
+                        spacing={55}
+
                     />
                 </View>
             </ScrollView>
-            <StatusBar barStyle={'dark-content'} />
         </SafeAreaView>
     )
 }

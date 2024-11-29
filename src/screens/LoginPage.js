@@ -132,7 +132,7 @@ const LoginPage = ({ navigation }) => {
     const checkUser = async () => {
       const user = await fetchUser();
       if (user) {
-        navigation.replace('main', { user,tur:"kullanici" });
+        navigation.replace('main', { user, tur: "kullanici" });
       }
     };
     checkUser();
@@ -163,7 +163,7 @@ const LoginPage = ({ navigation }) => {
           const jsonValue = JSON.stringify(name);
           AsyncStorage.setItem("@user", jsonValue);
           setLoading(false);
-          navigation.replace('main', { user,tur:"kullanici" });
+          navigation.replace('main', { user, tur: "kullanici" });
         }
       });
     });
@@ -206,94 +206,97 @@ const LoginPage = ({ navigation }) => {
         functionModal={true}
         onClose={() => setModalActiveVisible(false)}
       />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.bannerImage}>
-          <Image
-            style={styles.banner}
-            source={require('../../assets/images/banner1.jpg')}
-          />
-        </View>
-      </TouchableWithoutFeedback>
 
-
-      <View
-        style={styles.content}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
-        <Text style={styles.header}>Hoşgeldiniz 👋</Text>
-
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
-            <TextInput
-              onChangeText={(value) => { setEmail(value) }}
-              style={styles.textInput}
-              placeholder="Email"
-              keyboardType="email-address"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex:5}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.bannerImage}>
+            <Image
+              style={styles.banner}
+              source={require('../../assets/images/banner1.jpg')}
             />
           </View>
-          <View style={[styles.inputContainer, { marginBottom: 0 }]}>
-            <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
-            <TextInput
-              onChangeText={(value) => { setPassword(value) }}
-              style={styles.textInput}
-              placeholder="Şifre"
-              secureTextEntry={!passwordVisible} // Şifre görünürlüğü
-            />
-            <TouchableOpacity
-              onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
-            >
-              <MaterialCommunityIcons
-                name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
-                size={24}
-                color="#888"
+        </TouchableWithoutFeedback>
+
+
+        <View
+          style={styles.content}>
+
+          <Text style={styles.header}>Hoşgeldiniz 👋</Text>
+
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputContainer}>
+              <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+              <TextInput
+                onChangeText={(value) => { setEmail(value) }}
+                style={styles.textInput}
+                placeholder="Email"
+                keyboardType="email-address"
               />
-            </TouchableOpacity>
-          </View>
-          <View style={[styles.alt, { justifyContent: 'space-between' }]}>
-            <Text style={styles.errorText}>{errorMessage}</Text>
-            <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
-              <Text>Şifremi Unuttum</Text>
-            </TouchableOpacity>
+            </View>
+            <View style={[styles.inputContainer, { marginBottom: 0 }]}>
+              <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
+              <TextInput
+                onChangeText={(value) => { setPassword(value) }}
+                style={styles.textInput}
+                placeholder="Şifre"
+                secureTextEntry={!passwordVisible} // Şifre görünürlüğü
+              />
+              <TouchableOpacity
+                onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
+              >
+                <MaterialCommunityIcons
+                  name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
+                  size={24}
+                  color="#888"
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={[styles.alt, { justifyContent: 'space-between' }]}>
+              <Text style={styles.errorText}>{errorMessage}</Text>
+              <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
+                <Text>Şifremi Unuttum</Text>
+              </TouchableOpacity>
+
+            </View>
+
+            {
+              loading ?
+                <View style={styles.button}>
+                  <ActivityIndicator color={'#fff'} />
+                </View>
+                :
+                <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
+                  <Text style={styles.buttonText}>Giriş Yap</Text>
+                </Pressable>
+            }
 
           </View>
-
-          {
-            loading ?
-              <View style={styles.button}>
-                <ActivityIndicator color={'#fff'} />
-              </View>
-              :
-              <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
-                <Text style={styles.buttonText}>Giriş Yap</Text>
-              </Pressable>
-          }
-
         </View>
-      </View>
+        </KeyboardAvoidingView>
 
-      <View style={styles.contentBottom}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          <View>
-            <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
+        <View style={styles.contentBottom}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           </View>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-        </View>
 
-        <TouchableOpacity style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
-          <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
-          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
-        </TouchableOpacity>
-
-        <View style={styles.alt}>
-          <Text>Hesabın yok mu? </Text>
-          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
-            <Text style={styles.navigateLink}>Üye ol.</Text>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
+            <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
+            <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
           </TouchableOpacity>
+
+          <View style={styles.alt}>
+            <Text>Hesabın yok mu? </Text>
+            <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
+              <Text style={styles.navigateLink}>Üye ol.</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <StatusBar barStyle={'dark-content'} />
+        <StatusBar barStyle={'dark-content'} />
     </View >
   )
 }
