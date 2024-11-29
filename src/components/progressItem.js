@@ -5,7 +5,7 @@ import ProgressBar from '../components/progressBar';
 import { ActivityIndicator } from 'react-native-web';
 
 export const Item = ({ title, icon, color, unit, value, value2 }) => {
-    if (value != 0 || value2 != 0) {
+    if (value != 0 && value2 != 0) {
         return (
             <View style={styles.item}>
                 <View style={styles.itemIcon}>
@@ -24,8 +24,12 @@ export const Item = ({ title, icon, color, unit, value, value2 }) => {
             </View>
         )
     } else {
-        <View style={{justifyContent:'center',alignItems:'center'}}>
-            <ActivityIndicator color={'#fff'} size={'large'}/>
-        </View>
+        return(
+            <View style={styles.item}>
+                <Text>
+                    {title} İçin Veri Bulunamadı
+                </Text>
+            </View>
+        )
     }
 };

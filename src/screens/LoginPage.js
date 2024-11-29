@@ -77,6 +77,7 @@ const LoginPage = ({ navigation }) => {
     const checkUser = async () => {
       const userData = await fetchUserData();
       if (userData) {
+        console.log(userData);
         navigation.replace('main', { userData, tur: "eposta" });
       }
     };
@@ -130,8 +131,10 @@ const LoginPage = ({ navigation }) => {
 
   useEffect(() => {
     const checkUser = async () => {
-      const user = await fetchUser();
-      if (user) {
+      const kullanici = await fetchUser();
+      if (kullanici) {
+        console.log(kullanici);
+        const user = kullanici;
         navigation.replace('main', { user, tur: "kullanici" });
       }
     };
@@ -140,7 +143,7 @@ const LoginPage = ({ navigation }) => {
 
   const fetchUser = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@user');
+      const jsonValue = await AsyncStorage.getItem('@kullanici');
       if (jsonValue != null) {
         return JSON.parse(jsonValue);
       }
@@ -161,7 +164,7 @@ const LoginPage = ({ navigation }) => {
         const user = name
         if (email == name && password == pass) {
           const jsonValue = JSON.stringify(name);
-          AsyncStorage.setItem("@user", jsonValue);
+          AsyncStorage.setItem("@kullanici", jsonValue);
           setLoading(false);
           navigation.replace('main', { user, tur: "kullanici" });
         }

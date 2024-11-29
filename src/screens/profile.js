@@ -68,7 +68,7 @@ const Profile = ({ user }) => {
                 <Button
                     title='Oturumu kapat'
                     onPress={async () => {
-                        await AsyncStorage.removeItem("@user");
+                        await AsyncStorage.removeItem("@kullanici");
                         navigation.replace("login");
                     }}
                 />
