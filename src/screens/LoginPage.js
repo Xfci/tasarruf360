@@ -1,12 +1,13 @@
 import { Text, View, Image, TextInput, TouchableOpacity, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { firebase, db, ref, onValue } from '../../config'
+import { firebase, db, ref, onValue, get } from '../../config'
 import { styles } from '../../style'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomModal from '../components/bottomModal';
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Google from "expo-auth-session/providers/google"
+import { sayac } from '../scripts/userInfoScript';
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState(null);
@@ -54,6 +55,7 @@ const LoginPage = ({ navigation }) => {
 
   //kullanıcı bilgilerini al
   const getUserInfo = async (token) => {
+    var control = true;
     if (!token) return;
     try {
       const response = await fetch(
@@ -66,6 +68,18 @@ const LoginPage = ({ navigation }) => {
       );
       const user = await response.json();
       await AsyncStorage.setItem("@user", JSON.stringify(user));
+      const dbref = ref(db, 'userInfo/');
+      const snapshot = await get(dbref);
+      snapshot.forEach(element => {
+        if (user.id == element.key) {
+          control = false;
+        }
+      });
+      if (control) {
+        await firebase.database().ref('userInfo/' + user.id).set({
+          sayac
+        });
+      }
       setUserInfo(user);
       navigation.replace("main", { user });
     } catch (error) {
@@ -191,8 +205,6 @@ const LoginPage = ({ navigation }) => {
     setLoading(false);
   }
 
-
-
   return (
     <View style={styles.container}>
       <BottomModal
@@ -211,7 +223,7 @@ const LoginPage = ({ navigation }) => {
       />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex:5}}>
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 5 }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.bannerImage}>
             <Image
@@ -276,30 +288,37 @@ const LoginPage = ({ navigation }) => {
 
           </View>
         </View>
-        </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
 
-        <View style={styles.contentBottom}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-            <View>
-              <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
-            </View>
-            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+      <View style={styles.contentBottom}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          <View>
+            <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
           </View>
-
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
-            <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
-            <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
-          </TouchableOpacity>
-
-          <View style={styles.alt}>
-            <Text>Hesabın yok mu? </Text>
-            <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
-              <Text style={styles.navigateLink}>Üye ol.</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         </View>
-        <StatusBar barStyle={'dark-content'} />
+
+        <TouchableOpacity style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
+          <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
+          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
+        </TouchableOpacity>
+
+        <View style={styles.alt}>
+          <Text>Hesabın yok mu? </Text>
+          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
+            <Text style={styles.navigateLink}>Üye ol.</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.alt}>
+          <Text>Genel Led Değişkenine </Text>
+          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('global')}>
+            <Text style={styles.navigateLink}>Gitmek İçin</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <StatusBar barStyle={'dark-content'} />
     </View >
   )
 }

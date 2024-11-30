@@ -9,6 +9,7 @@ import ForgetPassword from './src/screens/ForgetPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Global from './src/screens/globalScreen';
 
 
 const Stack = createStackNavigator();
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name='register' component={RegisterPage} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
         <Stack.Screen name='main' component={TabScreen} />
+        <Stack.Screen name='global' component={Global}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,10 +1,10 @@
 import { Text, View, TextInput, Pressable, ActivityIndicator, TouchableOpacity, Modal, Image, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { firebase, db, ref, onValue } from '../../config'
+import { firebase, db, ref, onValue, get } from '../../config'
 import { styles } from '../../style'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomModal from '../components/bottomModal';
-
+import { sayac } from '../scripts/userInfoScript';
 
 const RegisterPage = ({ navigation, route }) => {
   const [email, setEmail] = useState(null);
@@ -16,7 +16,6 @@ const RegisterPage = ({ navigation, route }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
   const [errorMessage, setErrors] = useState(""); // Hataları tutmak için state
-
 
   //kullanıcıların en son ki id'sini veri tabanından çeker ve 1 ekler
   useEffect(() => {
@@ -35,13 +34,16 @@ const RegisterPage = ({ navigation, route }) => {
     if (password == confirm) {
       try {
         const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        setErrors(null); //
+        setErrors(null);
         setLoading(false);
-        console.log(user.user);
+        await firebase.database().ref('userInfo/' + user.user.uid).set({
+          sayac
+        });
         await user.user.sendEmailVerification().then(() => {
           console.log("email doğrulaması gönderildi!");
           setModalVisible(true);
         });
+        setLoading(false);
       } catch (error) {
         setLoading(false);
         console.log(error);
@@ -68,14 +70,30 @@ const RegisterPage = ({ navigation, route }) => {
 
   //kullanıcı adı ve şifre ile realtime database "users" başlığının altında kayıt yapıyor
   async function signUpWithName(email, password) {
+    var control = true;
     setLoading(true);
     try {
-      await firebase.database().ref('users/' + id).set({
-        name: email,
-        password: password
+      const dbref = ref(db, 'userInfo/');
+      const snapshot = await get(dbref);
+      snapshot.forEach(element => {
+        if (email == element.key) {
+          control = false;
+        }
       });
-      setLoading(false);
-      navigation.navigate('login');
+      if (control) {
+        await firebase.database().ref('users/' + id).set({
+          name: email,
+          password: password
+        });
+        await firebase.database().ref('userInfo/' + email).set({
+          sayac
+        });
+        setLoading(false);
+        navigation.navigate('login');
+      } else {
+        console.log("böyle bir kullanıcı zaten var");
+        setLoading(false);
+      }
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -89,7 +107,7 @@ const RegisterPage = ({ navigation, route }) => {
         image={require('../../assets/images/banner4.jpeg')}
         visibleState={modalVisible}
         functionModal={true}
-        onClose={() => setModalVisible(false)}
+        onClose={() => {setModalVisible(false),navigation.navigate('login');}}
       />
 
       <Text style={[styles.header, { textAlign: 'center', marginTop: 100 }]}>Üye Kayıt 🖐️</Text>
@@ -150,7 +168,7 @@ const RegisterPage = ({ navigation, route }) => {
 
           {
             loading ?
-              <View style={styles.buttonOutline}>
+              <View style={[styles.buttonOutline, { color: '#dead10' }]}>
                 <ActivityIndicator color={'#fff'} />
               </View>
               :
@@ -176,7 +194,7 @@ const RegisterPage = ({ navigation, route }) => {
           />
         </View>
       </TouchableWithoutFeedback>
-      <StatusBar barStyle = {'dark-content'}/>
+      <StatusBar barStyle={'dark-content'} />
     </View>
   )
 }
