@@ -34,7 +34,7 @@ const Global = () => {
     }
 
     return (
-        <View style={{ height: "100%", justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ height: "100%", justifyContent: 'center', alignItems: 'center',backgroundColor:"darkblue" }}>
             <TouchableOpacity onPress={() => { led() }} activeOpacity={0.5} style={styles.container}>
                 {
                     durum == 0 ?
@@ -56,6 +56,7 @@ const Global = () => {
             </TouchableOpacity>
             <View style={[styles.container, { marginTop: 10,flexDirection:'column' }]}>
                 <Text style={{ color: "white", fontWeight: 'bold', fontSize: 18 }}>
+                    parlaklık:
                     %{Math.floor((parlaklik / 250)*100)}
                 </Text>
                 <Slider
