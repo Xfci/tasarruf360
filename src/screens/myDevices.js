@@ -19,17 +19,29 @@ const Devices = ({ user }) => {
     const [readDurum, setReadDurum] = useState();
     const [readParlaklik, setReadParlaklik] = useState();
 
+    var id;
+
+    if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
+        id = user.user;
+    } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
+        id = user.userData.id;
+    } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
+        id = user.user.id;
+    }
+
     //cihaz mac adresi ve ismi alınır
     useEffect(() => {
         var macArray = [];
         var macIsimArray = [];
-        const dbref = ref(db, `userInfo/${user.userData.id}/myDevices/`);
+        const dbref = ref(db, `userInfo/${id}/myDevices/`);
         const listener = onValue(dbref, (snapshot) => {
             macIsimArray = [];
             macArray = [];
             snapshot.forEach(element => {
                 const key = element.key;
                 const value = element.val();
+                setMac(macArray);
+                setMacIsim(macIsimArray);
                 if (value.mac) {
                     macArray.push(value.mac);
                     macIsimArray.push(key);
@@ -86,32 +98,31 @@ const Devices = ({ user }) => {
         snapshot.forEach(element => {
             const key = element.key;
             if (controlText == key && isim) {
-                if (user.tur == "eposta") {
-                    firebase.database().ref(`userInfo/${user.userData.id}/myDevices/${isim}`).set({
-                        mac: key
-                    });
-                }
+                firebase.database().ref(`userInfo/${id}/myDevices/${isim}`).set({
+                    mac: key
+                });
             }
         });
     }
 
     const led = (i) => {
         firebase.database().ref(`espDevice/${mac[i]}/`).set({
-            ledDurum:durum[i] == 0 ? 1 :0,
-            parlaklik:parlaklik[i]
+            ledDurum: durum[i] == 0 ? 1 : 0,
+            parlaklik: parlaklik[i]
         });
     }
 
-    const parlak = (val,i) => {
+    const parlak = (val, i) => {
         firebase.database().ref(`espDevice/${mac[i]}/`).set({
-            ledDurum:durum[i],
-            parlaklik:val
+            ledDurum: durum[i],
+            parlaklik: val
         });
     }
 
     const render = (item) => {
         return (
             <>
+                {console.log(item)}
                 <Text style={styles.header}>
                     {item.item}
                 </Text>
@@ -146,7 +157,7 @@ const Devices = ({ user }) => {
                             maximumValue={255}
                             step={1}
                             value={parlaklik[item.index]}
-                            onSlidingComplete={(value) => parlak(value,item.index)}
+                            onSlidingComplete={(value) => parlak(value, item.index)}
                             minimumTrackTintColor="#1fb28a"
                             maximumTrackTintColor="white"
                             thumbTintColor="white"
@@ -158,7 +169,7 @@ const Devices = ({ user }) => {
     }
 
     return (
-        <View style = {{flex:1}}>
+        <View style={{ flex: 1 }}>
             <Text style={styles.header}>Cihazlarım</Text>
             <View>
                 <View style={[styles.inputContainer, { backgroundColor: "#FF5733" }]}>
