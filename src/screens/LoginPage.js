@@ -310,6 +310,13 @@ const LoginPage = ({ navigation }) => {
             <Text style={styles.navigateLink}>Üye ol.</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.alt}>
+          <Text>Hesabın yok mu? </Text>
+          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('modal')}>
+            <Text style={styles.navigateLink}>Üye ol.</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <StatusBar barStyle={'dark-content'} />
     </View >

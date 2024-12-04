@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { firebase, db, ref, onValue, get } from '../../config'
 import { MaterialCommunityIcons } from '@expo/vector-icons/';
 import Slider from '@react-native-community/slider';
+import React, { useRef } from "react";
+import { Modalize } from "react-native-modalize";
 
 const Devices = ({ user }) => {
     const [adress, setAdress] = useState();
@@ -13,6 +15,12 @@ const Devices = ({ user }) => {
     const [durum, setDurum] = useState();
     const [parlaklik, setParlaklik] = useState();
     const [lightData, setLightData] = useState();
+
+    const modalizeRef = useRef(null);
+
+    const openModal = () => {
+        modalizeRef.current?.open();
+    };
 
     var path;
 
@@ -27,13 +35,13 @@ const Devices = ({ user }) => {
     //////////////////////////////////////////////////////////////
     // Gösterilecek hiç cihaz verisi yok ise değişkenleri boşalt//
     //////////////////////////////////////////////////////////////
-    useEffect(()=>{
+    useEffect(() => {
         if (deviceName == "" || deviceAdress == "") {
             setDurum("");
             setParlaklik("");
             setLightData([]);
         }
-    },[deviceAdress,deviceName]);
+    }, [deviceAdress, deviceName]);
 
     ////////////////////////////////////////////////////////
     // durum ve parlaklık verilerini değişkenlere aktarır //
@@ -152,7 +160,7 @@ const Devices = ({ user }) => {
     const renderItem = ({ item }) => {
         return (
             <>
-                {}
+                { }
                 <Text style={styles.header}>
                     {item.title}
                 </Text>
@@ -225,6 +233,12 @@ const Devices = ({ user }) => {
                     onPress={() => { adressControl() }}
                 />
             </View>
+            <Button title="Open Modal" onPress={openModal} />
+            <Modalize ref={modalizeRef} snapPoint={300}>
+                <View style={Styles.modalContent}>
+                    <Text>This is a Bottom Modal</Text>
+                </View>
+            </Modalize>
             <FlatList
                 data={lightData}
                 renderItem={renderItem}
@@ -244,5 +258,12 @@ const Styles = StyleSheet.create({
         height: 125,
         width: 250,
         borderRadius: 15
-    }
+    },
+    containerA: {
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    modalContent: {
+        padding: 20,
+    },
 });
