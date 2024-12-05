@@ -234,8 +234,7 @@ const LoginPage = ({ navigation }) => {
         </TouchableWithoutFeedback>
 
 
-        <View
-          style={styles.content}>
+        <View style={styles.content}>
 
           <Text style={styles.header}>Hoşgeldiniz 👋</Text>
 
@@ -307,13 +306,6 @@ const LoginPage = ({ navigation }) => {
         <View style={styles.alt}>
           <Text>Hesabın yok mu? </Text>
           <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
-            <Text style={styles.navigateLink}>Üye ol.</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.alt}>
-          <Text>Hesabın yok mu? </Text>
-          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('modal')}>
             <Text style={styles.navigateLink}>Üye ol.</Text>
           </TouchableOpacity>
         </View>

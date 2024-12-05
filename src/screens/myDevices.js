@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, StatusBar, Keyboard } from 'react-native'
 import { styles } from '../../style';
 import { useEffect, useState } from 'react';
 import { firebase, db, ref, onValue, get } from '../../config'
@@ -6,6 +6,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons/';
 import Slider from '@react-native-community/slider';
 import React, { useRef } from "react";
 import { Modalize } from "react-native-modalize";
+import { AntDesign } from '@expo/vector-icons/';
+import { KeyboardState } from 'react-native-reanimated';
 
 const Devices = ({ user }) => {
     const [adress, setAdress] = useState();
@@ -15,10 +17,12 @@ const Devices = ({ user }) => {
     const [durum, setDurum] = useState();
     const [parlaklik, setParlaklik] = useState();
     const [lightData, setLightData] = useState();
-
     const modalizeRef = useRef(null);
 
     const openModal = () => {
+        modalizeRef.current?.open();
+    };
+    const closeModal = () => {
         modalizeRef.current?.open();
     };
 
@@ -124,9 +128,12 @@ const Devices = ({ user }) => {
             }
         });
         if (!devam) {
+            closeModal();
             createAdress();
         } else {
-            console.log("Geçerli bir cihaz gir")
+            setAdress("");
+            setName("");
+            console.log("Geçerli bir cihaz gir");
         }
     }
 
@@ -160,7 +167,6 @@ const Devices = ({ user }) => {
     const renderItem = ({ item }) => {
         return (
             <>
-                { }
                 <Text style={styles.header}>
                     {item.title}
                 </Text>
@@ -208,36 +214,39 @@ const Devices = ({ user }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <Text style={styles.header}>Cihazlarım</Text>
-            <View>
-                <View style={[styles.inputContainer, { backgroundColor: "#FF5733", height: 60 }]}>
-                    <TextInput
-                        value={adress}
-                        onChangeText={(value) => { setAdress(value) }}
-                        style={[styles.textInput, { color: "white", }]}
-                        placeholderTextColor={"white"}
-                        placeholder="Mac Adresi"
-                    />
-                </View>
-                <View style={[styles.inputContainer, { backgroundColor: "#FF5733", height: 60 }]}>
-                    <TextInput
-                        value={name}
-                        onChangeText={(value) => { setName(value) }}
-                        style={[styles.textInput, { color: "white", }]}
-                        placeholderTextColor={"white"}
-                        placeholder="Cihaz ismi"
-                    />
-                </View>
-                <Button
-                    title='cihaz ekle'
-                    onPress={() => { adressControl() }}
-                />
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingRight: 10 }}>
+                <Text style={styles.header}>Cihazlarım</Text>
+                <TouchableOpacity activeOpacity={0.5} style={{ width: 35 }} onPress={openModal}>
+                    <AntDesign name="plussquareo" size={35} color="black" />
+                </TouchableOpacity>
             </View>
-            <Button title="Open Modal" onPress={openModal} />
-            <Modalize ref={modalizeRef} snapPoint={300}>
+            <Modalize ref={modalizeRef} snapPoint={300} keyboardAvoidingBehavior="padding" adjustToContentHeight={true}>
                 <View style={Styles.modalContent}>
-                    <Text>This is a Bottom Modal</Text>
+                    <Text style={styles.header}>Cihaz Eklemek İçin;</Text>
+                    <View style={[styles.inputContainer, { backgroundColor: "#FF5733", height: 60 }]}>
+                        <TextInput
+                            value={adress}
+                            onChangeText={(value) => { setAdress(value) }}
+                            style={[styles.textInput, { color: "white"}]}
+                            placeholderTextColor={"white"}
+                            placeholder="Mac Adresi"
+                        />
+                    </View>
+                    <View style={[styles.inputContainer, { backgroundColor: "#FF5733", height: 60 }]}>
+                        <TextInput
+                            value={name}
+                            onChangeText={(value) => { setName(value) }}
+                            style={[styles.textInput, { color: "white"}]}
+                            placeholderTextColor={"white"}
+                            placeholder="Cihaz ismi"
+                        />
+                    </View>
+                    <Button
+                        title='cihaz ekle'
+                        onPress={() => { adressControl() }}
+                    />
                 </View>
+                <StatusBar barStyle={'light-content'} backgroundColor={'rgba(0, 0, 0, 0.8)'} />
             </Modalize>
             <FlatList
                 data={lightData}
@@ -259,11 +268,9 @@ const Styles = StyleSheet.create({
         width: 250,
         borderRadius: 15
     },
-    containerA: {
-        justifyContent: "center",
-        alignItems: "center",
-    },
     modalContent: {
         padding: 20,
+        justifyContent:'center',
+        alignItems:'center'
     },
 });
