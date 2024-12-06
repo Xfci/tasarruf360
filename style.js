@@ -55,6 +55,11 @@ export const styles = StyleSheet.create({
         fontWeight: '800',
         fontSize: 18
     },
+    appButtonText: {
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 16
+    },
     alt: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -134,12 +139,29 @@ export const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    deviceTitle:{
+        fontSize:16,
+        fontWeight:'500'
+    },  
+    deviceParentTitle:{
+        fontSize:13,
+        fontWeight:'300'
+    },  
+    macTitle:{
+        color:'gray',
+        fontWeight:'200'
+    },
+    emptyTitle:{
+        color:'gray',
+        textAlign:'center',
+        padding:10
+    },
     statusContent: {
         borderRadius: 15,
         backgroundColor: '#fff',
         paddingHorizontal: 10,
         paddingVertical: 5,
-        margin: 15,
+        margin: 10,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

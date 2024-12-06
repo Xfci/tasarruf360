@@ -5,6 +5,7 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage';
 import Main from './src/screens/main';
+import AddDevice from './src/screens/AddDevice';
 import ForgetPassword from './src/screens/ForgetPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile';
@@ -24,6 +25,7 @@ export default function App() {
         <Stack.Screen name='register' component={RegisterPage} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
         <Stack.Screen name='main' component={TabScreen} />
+        <Stack.Screen name='addDevice' component={AddDevice} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -49,7 +51,7 @@ function TabScreen({ route }) {
         options={{
           title: 'Cihazlarım',
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons name="account" size={30} color={focused ? 'black' : 'lightgray'} />
+            <MaterialCommunityIcons name="developer-board" size={30} color={focused ? 'black' : 'lightgray'} />
           ),
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'gray'

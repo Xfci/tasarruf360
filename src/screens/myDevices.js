@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, StatusBar, Keyboard } from 'react-native'
+import { Text, View, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, StatusBar, Keyboard, Image } from 'react-native'
 import { styles } from '../../style';
 import { useEffect, useState } from 'react';
 import { firebase, db, ref, onValue, get } from '../../config'
@@ -7,9 +7,11 @@ import Slider from '@react-native-community/slider';
 import React, { useRef } from "react";
 import { Modalize } from "react-native-modalize";
 import { AntDesign } from '@expo/vector-icons/';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardState } from 'react-native-reanimated';
 
-const Devices = ({ user }) => {
+const Devices = ({ user, navigation }) => {
     const [adress, setAdress] = useState();
     const [name, setName] = useState();
     const [deviceName, setDeviceName] = useState();
@@ -213,46 +215,65 @@ const Devices = ({ user }) => {
     };
 
     return (
-        <View style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingRight: 10 }}>
-                <Text style={styles.header}>Cihazlarım</Text>
-                <TouchableOpacity activeOpacity={0.5} style={{ width: 35 }} onPress={openModal}>
-                    <AntDesign name="plussquareo" size={35} color="black" />
-                </TouchableOpacity>
-            </View>
-            <Modalize ref={modalizeRef} snapPoint={300} keyboardAvoidingBehavior="padding" adjustToContentHeight={true}>
-                <View style={Styles.modalContent}>
-                    <Text style={styles.header}>Cihaz Eklemek İçin;</Text>
-                    <View style={[styles.inputContainer, { backgroundColor: "#FF5733", height: 60 }]}>
-                        <TextInput
-                            value={adress}
-                            onChangeText={(value) => { setAdress(value) }}
-                            style={[styles.textInput, { color: "white"}]}
-                            placeholderTextColor={"white"}
-                            placeholder="Mac Adresi"
-                        />
-                    </View>
-                    <View style={[styles.inputContainer, { backgroundColor: "#FF5733", height: 60 }]}>
-                        <TextInput
-                            value={name}
-                            onChangeText={(value) => { setName(value) }}
-                            style={[styles.textInput, { color: "white"}]}
-                            placeholderTextColor={"white"}
-                            placeholder="Cihaz ismi"
-                        />
-                    </View>
-                    <Button
-                        title='cihaz ekle'
-                        onPress={() => { adressControl() }}
-                    />
+        <SafeAreaView style={styles.appContainer}>
+            <Text style={styles.header}>Cihazlarım</Text>
+            <ScrollView>
+
+                <View style={styles.statusContent}>
+                    <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf:'center',margin:10 }}/>
+                    <TouchableOpacity style={[styles.button,{marginBottom:10}]} onPress={() => navigation.navigate('addDevice')}>
+                        <Text style={styles.appButtonText}>Cihaz Ekle</Text>
+                    </TouchableOpacity>
                 </View>
-                <StatusBar barStyle={'light-content'} backgroundColor={'rgba(0, 0, 0, 0.8)'} />
-            </Modalize>
-            <FlatList
-                data={lightData}
-                renderItem={renderItem}
-            />
-        </View>
+
+                <View style={styles.statusContent}>
+                    <Text style={[styles.header2, { color: 'green' }]}>Aktif ●</Text>
+                    <View style={styles.item}>
+                        <View style={styles.itemIcon}>
+                            <Image source={require('../../assets/images/electrical-panel.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
+                        </View>
+                        <View style={styles.itemContent}>
+                            <View style={styles.itemHeaderContainer}>
+                                <Text style={styles.deviceTitle}>Elektrik şalteri</Text>
+                                <Text style={styles.deviceParentTitle}>Mekan 1</Text>
+                            </View>
+                            <Text style={styles.macTitle}>0000:0000:0000:0000</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.item}>
+                        <View style={styles.itemIcon}>
+                            <Image source={require('../../assets/images/water-meter.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
+                        </View>
+                        <View style={styles.itemContent}>
+                            <View style={styles.itemHeaderContainer}>
+                                <Text style={styles.deviceTitle}>Su vanası</Text>
+                                <Text style={styles.deviceParentTitle}>Mekan 1</Text>
+                            </View>
+                            <Text style={styles.macTitle}>0000:0000:0000:0000</Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.item}>
+                        <View style={styles.itemIcon}>
+                            <Image source={require('../../assets/images/pressure-meter.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
+                        </View>
+                        <View style={styles.itemContent}>
+                            <View style={styles.itemHeaderContainer}>
+                                <Text style={styles.deviceTitle}>Gaz vanası</Text>
+                                <Text style={styles.deviceParentTitle}>Mekan 1</Text>
+                            </View>
+                            <Text style={styles.macTitle}>0000:0000:0000:0000</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.statusContent}>
+                    <Text style={[styles.header2, { color: '#9c0000' }]}>Pasif ⊝</Text>
+                    <Text style={styles.emptyTitle}>Pasif cihaz bulunamamıştır.</Text>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
@@ -270,7 +291,7 @@ const Styles = StyleSheet.create({
     },
     modalContent: {
         padding: 20,
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 });
