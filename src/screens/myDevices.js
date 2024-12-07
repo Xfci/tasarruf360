@@ -171,63 +171,40 @@ const Devices = ({ user }) => {
 
     const renderItem = ({ item }) => {
         return (
-            <>
-                <Text style={styles.header}>
-                    {item.title}
-                </Text>
-                <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => { led(item.mac, item.durum, item.parlaklik) }} activeOpacity={0.5} style={Styles.container}>
-                        {
-                            item.durum == 0 ?
-                                <>
-                                    <MaterialCommunityIcons name="lightbulb-off" size={60} color="white" style={{ marginRight: 10 }} />
-                                    <Text style={{ color: "white", fontWeight: 'bold', fontSize: 18 }}>
-                                        Ledi Aç
-                                    </Text>
-                                </> :
-                                item.durum == 1 ?
-                                    <>
-                                        <MaterialCommunityIcons name="lightbulb-on" size={60} color="white" style={{ marginRight: 10 }} />
-                                        <Text style={{ color: "white", fontWeight: 'bold', fontSize: 18 }}>
-                                            Ledi Kapat
-                                        </Text>
-                                    </>
-                                    : null
-                        }
-                    </TouchableOpacity>
-                    <View style={[Styles.container, { marginTop: 10, flexDirection: 'column' }]}>
-                        <Text style={{ color: "white", fontWeight: 'bold', fontSize: 18 }}>
-                            parlaklık:
-                            %{Math.floor((item.parlaklik / 255) * 100)}
-                        </Text>
-                        <Slider
-                            style={{ width: 200, height: 40 }}
-                            minimumValue={0}
-                            maximumValue={255}
-                            step={1}
-                            value={item.parlaklik}
-                            onSlidingComplete={(value) => parlak(value, item.mac, item.durum)}
-                            minimumTrackTintColor="#1fb28a"
-                            maximumTrackTintColor="white"
-                            thumbTintColor="white"
-                        />
-                    </View>
+            <View style={styles.item}>
+                <View style={styles.itemIcon}>
+                    <Image source={require('../../assets/images/lamp.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
                 </View>
-            </>
+                <View style={styles.itemContent}>
+                    <View style={styles.itemHeaderContainer}>
+                        <Text style={styles.deviceTitle}>{item.title}</Text>
+                        <Text style={styles.deviceParentTitle}>Mekan 1</Text>
+                    </View>
+                    <Text style={styles.macTitle}>{item.mac}</Text>
+                </View>
+            </View>
         )
     };
 
     return (
         <SafeAreaView style={styles.appContainer}>
             <Text style={styles.header}>Cihazlarım</Text>
-            <ScrollView>
 
-                <View style={styles.statusContent}>
-                    <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf:'center',margin:10 }}/>
-                    <TouchableOpacity style={[styles.button,{marginBottom:10}]} onPress={() => navigation.navigate('addDevice')}>
-                        <Text style={styles.appButtonText}>Cihaz Ekle</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.statusContent}>
+                <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf: 'center', margin: 10 }} />
+                <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('addDevice')}>
+                    <Text style={styles.appButtonText}>Cihaz Ekle</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.statusContent}>
+                <Text style={[styles.header2, { color: 'green' }]}>Sensörler</Text>
+                <FlatList
+                    data={lightData}
+                    renderItem={renderItem} />
+            </View>
+
+            <ScrollView>
 
                 <View style={styles.statusContent}>
                     <Text style={[styles.header2, { color: 'green' }]}>Aktif ●</Text>
