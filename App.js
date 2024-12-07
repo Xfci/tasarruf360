@@ -24,8 +24,8 @@ export default function App() {
         <Stack.Screen name='login' component={LoginPage} />
         <Stack.Screen name='register' component={RegisterPage} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
-        <Stack.Screen name='main' component={TabScreen} options={{ title: 'Ana Sayfa' }} />
-        <Stack.Screen name='addDevice' component={AddDevice} options={{ headerShown: true, title: 'Cihaz Ekle', ...TransitionPresets.ModalTransition }} />
+        <Stack.Screen name='main' component={TabScreen} />
+        <Stack.Screen name='addDevice' component={AddDevice} />
       </Stack.Navigator>
     </NavigationContainer>
   );
