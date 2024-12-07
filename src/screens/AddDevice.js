@@ -6,9 +6,9 @@ import Swiper from 'react-native-swiper'
 
 const AddDevice = ({navigation}) => {
     return (
-        <Swiper style={styles.wrapper} showsButtons={true}>
+        <Swiper style={styles.wrapper}>
             <View style={styles.slide1}>
-                <Text style={styles.text}>Hello Swiper</Text>
+                <Text style={styles.text}>Cihazınızın üstünde kırmızı ışıkğın yanıp söndüğüne emin olun.</Text>
             </View>
             <View style={styles.slide2}>
                 <Text style={styles.text}>Beautiful</Text>
