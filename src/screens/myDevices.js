@@ -10,8 +10,9 @@ import { AntDesign } from '@expo/vector-icons/';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { KeyboardState } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
 
-const Devices = ({ user, navigation }) => {
+const Devices = ({ user }) => {
     const [adress, setAdress] = useState();
     const [name, setName] = useState();
     const [deviceName, setDeviceName] = useState();
@@ -20,6 +21,8 @@ const Devices = ({ user, navigation }) => {
     const [parlaklik, setParlaklik] = useState();
     const [lightData, setLightData] = useState();
     const modalizeRef = useRef(null);
+
+    const navigation = useNavigation();
 
     const openModal = () => {
         modalizeRef.current?.open();
