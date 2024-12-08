@@ -8,7 +8,7 @@ import React, { useRef } from "react";
 import { Modalize } from "react-native-modalize";
 import { AntDesign } from '@expo/vector-icons/';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
+import { DrawerLayoutAndroid, ScrollView } from 'react-native-gesture-handler';
 import { KeyboardState } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
@@ -20,6 +20,7 @@ const Devices = ({ user }) => {
     const [durum, setDurum] = useState();
     const [parlaklik, setParlaklik] = useState();
     const [lightData, setLightData] = useState();
+    const [sayac, setSayac] = useState();
     const modalizeRef = useRef(null);
 
     const navigation = useNavigation();
@@ -34,12 +35,28 @@ const Devices = ({ user }) => {
     var path;
 
     if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
-        path = `userInfo/${user.user}/myDevices/`;
+        path = `userInfo/${user.user}/`;
     } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
-        path = `userInfo/${user.userData.id}/myDevices/`;
+        path = `userInfo/${user.userData.id}/`;
     } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
-        path = `userInfo/${user.user.id}/myDevices/`;
+        path = `userInfo/${user.user.id}/`;
     }
+
+    useEffect(() => {
+        const dbref = ref(db, `${path}/sayac`);
+        const listener = onValue(dbref, (snapshot) => {
+            var data = [];
+            snapshot.forEach(element => {
+                const key = element.key;
+                const value = element.val();
+                if (value.state == true) {
+                    data.push({ title: key == "electric" ? "Elektrik şalteri" : key == "water" ? "Su vanası" : key == "gas" ? "Gaz vanası" : null, mac: value.mac });
+                }
+            });
+            setSayac(data);
+        });
+        return () => listener();
+    }, []);
 
     //////////////////////////////////////////////////////////////
     // Gösterilecek hiç cihaz verisi yok ise değişkenleri boşalt//
@@ -103,7 +120,7 @@ const Devices = ({ user }) => {
     // Kayıtlı olan cihaz bilgilerini kullanıcının hesabından çeker//
     /////////////////////////////////////////////////////////////////
     useEffect(() => {
-        const dbref = ref(db, path);
+        const dbref = ref(db, `${path}/myDevices/`);
         const listener = onValue(dbref, (snapshot) => {
             var deviceNameArray = [];
             var deviceAdressArray = [];
@@ -124,7 +141,7 @@ const Devices = ({ user }) => {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async function adressControl() {
         var devam = false;
-        const dbref = ref(db, path);
+        const dbref = ref(db, `${path}/myDevices/`);
         const snapshot = await get(dbref);
         snapshot.forEach(element => {
             const value = element.val();
@@ -148,7 +165,7 @@ const Devices = ({ user }) => {
         snapshot.forEach(element => {
             const key = element.key;
             if (adress == key && name) {
-                firebase.database().ref(`${path}/${name}`).set({
+                firebase.database().ref(`${path}/myDevices/${name}`).set({
                     mac: key
                 });
             }
@@ -169,51 +186,44 @@ const Devices = ({ user }) => {
         });
     }
 
-    const renderItem = ({ item }) => {
+    const renderLightItem = ({ item }) => {
         return (
-            <>
-                <Text style={styles.header}>
-                    {item.title}
-                </Text>
-                <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => { led(item.mac, item.durum, item.parlaklik) }} activeOpacity={0.5} style={Styles.container}>
-                        {
-                            item.durum == 0 ?
-                                <>
-                                    <MaterialCommunityIcons name="lightbulb-off" size={60} color="white" style={{ marginRight: 10 }} />
-                                    <Text style={{ color: "white", fontWeight: 'bold', fontSize: 18 }}>
-                                        Ledi Aç
-                                    </Text>
-                                </> :
-                                item.durum == 1 ?
-                                    <>
-                                        <MaterialCommunityIcons name="lightbulb-on" size={60} color="white" style={{ marginRight: 10 }} />
-                                        <Text style={{ color: "white", fontWeight: 'bold', fontSize: 18 }}>
-                                            Ledi Kapat
-                                        </Text>
-                                    </>
-                                    : null
-                        }
-                    </TouchableOpacity>
-                    <View style={[Styles.container, { marginTop: 10, flexDirection: 'column' }]}>
-                        <Text style={{ color: "white", fontWeight: 'bold', fontSize: 18 }}>
-                            parlaklık:
-                            %{Math.floor((item.parlaklik / 255) * 100)}
-                        </Text>
-                        <Slider
-                            style={{ width: 200, height: 40 }}
-                            minimumValue={0}
-                            maximumValue={255}
-                            step={1}
-                            value={item.parlaklik}
-                            onSlidingComplete={(value) => parlak(value, item.mac, item.durum)}
-                            minimumTrackTintColor="#1fb28a"
-                            maximumTrackTintColor="white"
-                            thumbTintColor="white"
-                        />
-                    </View>
+            <View style={styles.item}>
+                <View style={styles.itemIcon}>
+                    <Image source={require('../../assets/images/lamp.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
                 </View>
-            </>
+                <View style={styles.itemContent}>
+                    <View style={styles.itemHeaderContainer}>
+                        <Text style={styles.deviceTitle}>{item.title}</Text>
+                        <Text style={styles.deviceParentTitle}>Mekan 1</Text>
+                    </View>
+                    <Text style={styles.macTitle}>{item.mac}</Text>
+                </View>
+            </View>
+        )
+    };
+
+    const renderSayacItem = ({ item }) => {
+        return (
+            <View style={styles.item}>
+                <View style={styles.itemIcon}>
+                    {
+                        item.title == "Elektrik şalteri" ?
+                            <Image source={require('../../assets/images/electrical-panel.png')} style={{ height: 50, width: 50, marginRight: 15 }} /> :
+                            item.title == "Su vanası" ?
+                                <Image source={require('../../assets/images/water-meter.png')} style={{ height: 50, width: 50, marginRight: 15 }} /> :
+                                item.title == "Gaz vanası" ?
+                                    <Image source={require('../../assets/images/pressure-meter.png')} style={{ height: 50, width: 50, marginRight: 15 }} /> : null
+                    }
+                </View>
+                <View style={styles.itemContent}>
+                    <View style={styles.itemHeaderContainer}>
+                        <Text style={styles.deviceTitle}>{item.title}</Text>
+                        <Text style={styles.deviceParentTitle}>Mekan 1</Text>
+                    </View>
+                    <Text style={styles.macTitle}>{item.mac}</Text>
+                </View>
+            </View>
         )
     };
 
@@ -223,52 +233,24 @@ const Devices = ({ user }) => {
             <ScrollView>
 
                 <View style={styles.statusContent}>
-                    <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf:'center',margin:10 }}/>
-                    <TouchableOpacity style={[styles.button,{marginBottom:10}]} onPress={() => navigation.navigate('addDevice')}>
+                    <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf: 'center', margin: 10 }} />
+                    <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('addDevice')}>
                         <Text style={styles.appButtonText}>Cihaz Ekle</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.statusContent}>
                     <Text style={[styles.header2, { color: 'green' }]}>Aktif ●</Text>
-                    <View style={styles.item}>
-                        <View style={styles.itemIcon}>
-                            <Image source={require('../../assets/images/electrical-panel.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
-                        </View>
-                        <View style={styles.itemContent}>
-                            <View style={styles.itemHeaderContainer}>
-                                <Text style={styles.deviceTitle}>Elektrik şalteri</Text>
-                                <Text style={styles.deviceParentTitle}>Mekan 1</Text>
-                            </View>
-                            <Text style={styles.macTitle}>0000:0000:0000:0000</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.item}>
-                        <View style={styles.itemIcon}>
-                            <Image source={require('../../assets/images/water-meter.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
-                        </View>
-                        <View style={styles.itemContent}>
-                            <View style={styles.itemHeaderContainer}>
-                                <Text style={styles.deviceTitle}>Su vanası</Text>
-                                <Text style={styles.deviceParentTitle}>Mekan 1</Text>
-                            </View>
-                            <Text style={styles.macTitle}>0000:0000:0000:0000</Text>
-                        </View>
-                    </View>
-
-                    <View style={styles.item}>
-                        <View style={styles.itemIcon}>
-                            <Image source={require('../../assets/images/pressure-meter.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
-                        </View>
-                        <View style={styles.itemContent}>
-                            <View style={styles.itemHeaderContainer}>
-                                <Text style={styles.deviceTitle}>Gaz vanası</Text>
-                                <Text style={styles.deviceParentTitle}>Mekan 1</Text>
-                            </View>
-                            <Text style={styles.macTitle}>0000:0000:0000:0000</Text>
-                        </View>
-                    </View>
+                    <FlatList
+                        data={sayac}
+                        renderItem={renderSayacItem}
+                        scrollEnabled={false}
+                    />
+                    <FlatList
+                        data={lightData}
+                        renderItem={renderLightItem}
+                        scrollEnabled={false}
+                    />
                 </View>
 
                 <View style={styles.statusContent}>
