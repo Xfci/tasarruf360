@@ -12,6 +12,8 @@ import { DrawerLayoutAndroid, ScrollView } from 'react-native-gesture-handler';
 import { KeyboardState } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
+export var path;
+
 const Devices = ({ user }) => {
     const [adress, setAdress] = useState();
     const [name, setName] = useState();
@@ -32,7 +34,7 @@ const Devices = ({ user }) => {
         modalizeRef.current?.open();
     };
 
-    var path;
+
 
     if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
         path = `userInfo/${user.user}/`;
@@ -135,42 +137,6 @@ const Devices = ({ user }) => {
         });
         return () => listener();
     }, []);
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // kullanıcının girdiği mac adresini veri tabanında bulunan esp cihazlarının mac adresiyle karşılaştırır ve kullanıcının cihazlarının bulunduğu klasöre ekler//
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function adressControl() {
-        var devam = false;
-        const dbref = ref(db, `${path}/myDevices/`);
-        const snapshot = await get(dbref);
-        snapshot.forEach(element => {
-            const value = element.val();
-            if (name == element.key || adress == value.mac) {
-                devam = true;
-            }
-        });
-        if (!devam) {
-            closeModal();
-            createAdress();
-        } else {
-            setAdress("");
-            setName("");
-            console.log("Geçerli bir cihaz gir");
-        }
-    }
-
-    async function createAdress() {
-        const dbref = ref(db, 'espDevice/');
-        const snapshot = await get(dbref);
-        snapshot.forEach(element => {
-            const key = element.key;
-            if (adress == key && name) {
-                firebase.database().ref(`${path}/myDevices/${name}`).set({
-                    mac: key
-                });
-            }
-        });
-    }
 
     const led = (i, d, p) => {
         firebase.database().ref(`espDevice/${i}/`).set({
