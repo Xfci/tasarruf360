@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TextInput,TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { firebase, db, ref, get } from '../../../config'
 import { useNavigation } from '@react-navigation/native';
 import { path } from '../myDevices';
 
@@ -40,8 +39,6 @@ export default function Step2() {
             if (adress == key && name) {
                 firebase.database().ref(`${path}/myDevices/${name}`).set({
                     mac: key
-                }).then(()=>{
-                    navigation.navigate('step3');
                 });
             }
         });
@@ -57,10 +54,10 @@ export default function Step2() {
                 <TextInput style={styles.textInput} placeholder='00:00:00:00:00:00' value={adress} onChangeText={(value) => setAdress(value)} />
             </View>
             <TouchableOpacity style={[styles.button,{backgroundColor:'green',marginBottom:10}]}>
-                <Text style={styles.buttonText}>Galeriden seç</Text>
+                <Text style={styles.buttonText}>Fotoğraf Çek</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button,{backgroundColor:'blue',marginBottom:10}]}>
-                <Text style={styles.buttonText}>Fotoğraf çek</Text>
+            <TouchableOpacity style={[styles.button,{backgroundColor:'green',marginBottom:10}]}>
+                <Text style={styles.buttonText}>Galeriden seç</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => adressControl()}>
                 <Text style={styles.buttonText}>Devam</Text>
