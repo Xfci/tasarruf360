@@ -39,7 +39,9 @@ export default function Step2() {
             if (adress == key && name) {
                 firebase.database().ref(`${path}/myDevices/${name}`).set({
                     mac: key
-                });
+                }).then(()=>{
+                    navigation.navigate('step3');
+                })
             }
         });
     }
