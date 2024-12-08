@@ -1,62 +1,55 @@
-import React, { Component } from 'react'
-import { AppRegistry, StyleSheet, Text, View,Image,StatusBar } from 'react-native'
+import React, { Component, useState, useRef } from 'react'
+import { AppRegistry, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
+import Step1 from './steps/step1'
+import Step2 from './steps/step2'
 
-import Swiper from 'react-native-swiper'
 
-
-const AddDevice = ({navigation}) => {
+const AddDevice = () => {
+    const navigation = useNavigation();
+    const animation = useRef(null);
+    
     return (
-        <Swiper style={styles.wrapper}>
-            <View style={styles.slide1}>
-                <Image source={require('../../assets/images/led.gif')} style={{height:200,width:300,flex:3}}/>
-                <Text style={styles.text}>Cihazın üzerindeki kırmızı ışığın yanıp söndüğüne emin oldun.</Text>
-                <Text style={styles.description}>Yanıp sönmüyorsa reset tuşuna uzun süre basılı tutun.</Text>
-            </View>
-            <View style={styles.slide1}>
-                <Image source={require('../../assets/images/led.gif')} style={{height:200,width:300,flex:3}}/>
-                <Text style={styles.text}>Cihazın üzerindeki kırmızı ışığın yanıp söndüğüne emin oldun.</Text>
-                <Text style={styles.description}>Yanıp sönmüyorsa reset tuşuna uzun süre basılı tutun.</Text>
-            </View>
-            <View style={styles.slide1}>
-                <Image source={require('../../assets/images/led.gif')} style={{height:200,width:300,flex:3}}/>
-                <Text style={styles.text}>Cihazın üzerindeki kırmızı ışığın yanıp söndüğüne emin oldun.</Text>
-                <Text style={styles.description}>Yanıp sönmüyorsa reset tuşuna uzun süre basılı tutun.</Text>
-            </View>
-        </Swiper>
-        
+        <View style={styles.container}>
+            <Text style={styles.text}>Cihaz eklemek için bu yönergeleri takip ediniz.</Text>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('step1')}>
+                <Text style={styles.buttonText}>Devam</Text>
+            </TouchableOpacity>
+        </View>
     )
 }
 
 
 const styles = StyleSheet.create({
-    wrapper: {},
-    slide1: {
+    container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    slide2: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    slide3: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        padding:20,
     },
     text: {
-        color: '#000',
+        color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
-        textAlign:'center',
-        flex:3
+        textAlign: 'center',
+        flex: 3
     },
     description: {
         color: 'gray',
         fontSize: 10,
-        textAlign:'center',
-        flex:1
+        textAlign: 'center',
+        flex: 1
+    },
+    button: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#f2bd11',
+        borderRadius: 35,
+        justifyContent: 'center'
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold'
     }
 })
 

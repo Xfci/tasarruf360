@@ -172,6 +172,14 @@ export const styles = StyleSheet.create({
         elevation: 5,
     },
     appContainer: {
+        maxWidth:1000,
+        alignSelf:'center',
+        height: '100%',
+        width: '100%',
+    },
+    webAppContainer: {
+        maxWidth:1000,
+        alignSelf:'end',
         height: '100%',
         width: '100%',
     },

@@ -11,6 +11,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Devices from './src/screens/myDevices';
+import step1 from './src/screens/steps/step1';
+import step2 from './src/screens/steps/step2';
+import step3 from './src/screens/steps/step3';
+import webview from './src/screens/steps/webview';
 
 
 const Stack = createStackNavigator();
@@ -25,7 +29,11 @@ export default function App() {
         <Stack.Screen name='register' component={RegisterPage} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
         <Stack.Screen name='main' component={TabScreen} options={{ title: 'Ana Sayfa' }} />
-        <Stack.Screen name='addDevice' component={AddDevice} options={{ headerShown: true, title: 'Cihaz Ekle', ...TransitionPresets.ModalTransition }} />
+        <Stack.Screen name='addDevice' component={AddDevice} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
+        <Stack.Screen name='step1' component={step1} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
+        <Stack.Screen name='step2' component={step2} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
+        <Stack.Screen name='step3' component={step3} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
+        <Stack.Screen name='webview' component={webview} options={{ headerShown: true, headerLeft:null, title: 'Bağlan', ...TransitionPresets.ModalTransition }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

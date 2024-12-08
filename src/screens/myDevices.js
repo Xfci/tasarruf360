@@ -234,7 +234,7 @@ const Devices = ({ user }) => {
 
                 <View style={styles.statusContent}>
                     <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf: 'center', margin: 10 }} />
-                    <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('addDevice')}>
+                    <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('step1')}>
                         <Text style={styles.appButtonText}>Cihaz Ekle</Text>
                     </TouchableOpacity>
                 </View>

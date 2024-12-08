@@ -85,7 +85,6 @@ const Main = ({ user }) => {
                         yAxisTextStyle={{ color: 'gray' }}
                         showGradient={true}
                         spacing={55}
-
                     />
                 </View>
             </ScrollView>
