@@ -1,16 +1,29 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useRef, useEffect } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
+
 
 export default function Step1() {
     const navigation = useNavigation();
+    const animation = useRef(null);
 
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <MaterialCommunityIcons name="monitor-shimmer" size={100} />
-                <Text style={styles.text}>Cihazın üzerindeki ekrandaki adımları takip edin cihazının internet bağlantısını gerçekleştirin.</Text>
+                <LottieView
+                    autoPlay
+                    ref={animation}
+                    style={{
+                        width: 200,
+                        height: 200,
+                        margin: 20
+                    }}
+                    // Find more Lottie files at https://lottiefiles.com/featured
+                    source={require('../../../assets/images/step1.json')}
+                />                <Text style={styles.text}>Cihazın üzerindeki ekrandaki adımları takip edin cihazının internet bağlantısını gerçekleştirin.</Text>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('step2')}>
@@ -27,10 +40,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 20
     },
-    content:{
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
+    content: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     text: {
         fontSize: 16,

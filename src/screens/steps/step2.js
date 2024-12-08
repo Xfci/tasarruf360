@@ -57,7 +57,7 @@ export default function Step2() {
                 <TouchableOpacity style={[styles.button, { backgroundColor: 'green', marginBottom: 10 }]}>
                     <Text style={styles.buttonText}>Fotoğraf Çek</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: 'blue', marginBottom: 10 }]}>
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#0089ec', marginBottom: 10 }]}>
                     <Text style={styles.buttonText}>Galeriden seç</Text>
                 </TouchableOpacity>
             </View>
