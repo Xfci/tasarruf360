@@ -1,24 +1,32 @@
 import React, { Component } from 'react'
-import { AppRegistry, StyleSheet, Text, View } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View,Image,StatusBar } from 'react-native'
 
 import Swiper from 'react-native-swiper'
 
 
 const AddDevice = ({navigation}) => {
     return (
-        <Swiper style={styles.wrapper} showsButtons={true}>
+        <Swiper style={styles.wrapper}>
             <View style={styles.slide1}>
-                <Text style={styles.text}>Hello Swiper</Text>
+                <Image source={require('../../assets/images/led.gif')} style={{height:200,width:300,flex:3}}/>
+                <Text style={styles.text}>Cihazın üzerindeki kırmızı ışığın yanıp söndüğüne emin oldun.</Text>
+                <Text style={styles.description}>Yanıp sönmüyorsa reset tuşuna uzun süre basılı tutun.</Text>
             </View>
-            <View style={styles.slide2}>
-                <Text style={styles.text}>Beautiful</Text>
+            <View style={styles.slide1}>
+                <Image source={require('../../assets/images/led.gif')} style={{height:200,width:300,flex:3}}/>
+                <Text style={styles.text}>Cihazın üzerindeki kırmızı ışığın yanıp söndüğüne emin oldun.</Text>
+                <Text style={styles.description}>Yanıp sönmüyorsa reset tuşuna uzun süre basılı tutun.</Text>
             </View>
-            <View style={styles.slide3}>
-                <Text style={styles.text}>And simple</Text>
+            <View style={styles.slide1}>
+                <Image source={require('../../assets/images/led.gif')} style={{height:200,width:300,flex:3}}/>
+                <Text style={styles.text}>Cihazın üzerindeki kırmızı ışığın yanıp söndüğüne emin oldun.</Text>
+                <Text style={styles.description}>Yanıp sönmüyorsa reset tuşuna uzun süre basılı tutun.</Text>
             </View>
         </Swiper>
+        
     )
 }
+
 
 const styles = StyleSheet.create({
     wrapper: {},
@@ -26,24 +34,29 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#9DD6EB'
     },
     slide2: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#97CAE5'
     },
     slide3: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#92BBD9'
     },
     text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold'
+        color: '#000',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign:'center',
+        flex:3
+    },
+    description: {
+        color: 'gray',
+        fontSize: 10,
+        textAlign:'center',
+        flex:1
     }
 })
 
