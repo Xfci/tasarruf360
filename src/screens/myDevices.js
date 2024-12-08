@@ -1,7 +1,7 @@
 import { Text, View, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, StatusBar, Keyboard, Image } from 'react-native'
 import { styles } from '../../style';
 import { useEffect, useState } from 'react';
-import { firebase, db, ref, onValue, get } from '../../config'
+import { firebase, db, ref, onValue} from '../../config'
 import { MaterialCommunityIcons } from '@expo/vector-icons/';
 import Slider from '@react-native-community/slider';
 import React, { useRef } from "react";

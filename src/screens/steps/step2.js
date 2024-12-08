@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, TextInput,TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { firebase, db, ref, get } from '../../../config'
 import { useNavigation } from '@react-navigation/native';
 import { path } from '../myDevices';
 
@@ -52,13 +52,13 @@ export default function Step2() {
                 <TextInput style={styles.textInput} placeholder='Cihazım' value={name} onChangeText={(value) => setName(value)} />
                 <Text>MAC adresi</Text>
                 <TextInput style={styles.textInput} placeholder='00:00:00:00:00:00' value={adress} onChangeText={(value) => setAdress(value)} />
+                <TouchableOpacity style={[styles.button, { backgroundColor: 'green', marginBottom: 10 }]}>
+                    <Text style={styles.buttonText}>Fotoğraf Çek</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, { backgroundColor: 'blue', marginBottom: 10 }]}>
+                    <Text style={styles.buttonText}>Galeriden seç</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={[styles.button,{backgroundColor:'green',marginBottom:10}]}>
-                <Text style={styles.buttonText}>Fotoğraf Çek</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button,{backgroundColor:'green',marginBottom:10}]}>
-                <Text style={styles.buttonText}>Galeriden seç</Text>
-            </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => adressControl()}>
                 <Text style={styles.buttonText}>Devam</Text>
             </TouchableOpacity>
@@ -69,7 +69,7 @@ export default function Step2() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding:20
+        padding: 20
     },
     text: {
         fontSize: 16,
