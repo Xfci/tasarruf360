@@ -115,7 +115,6 @@ const RegisterPage = ({ navigation, route }) => {
         style={[styles.content]}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
-
         <View style={styles.inputWrapper}>
           <View style={styles.inputContainer}>
             <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />

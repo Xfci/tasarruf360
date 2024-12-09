@@ -19,7 +19,6 @@ export default function Step1() {
                     style={{
                         width: 200,
                         height: 200,
-                        margin: 20
                     }}
                     source={require('../../../assets/images/step1.json')}
                 />
@@ -36,8 +35,6 @@ export default function Step1() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         padding: 20
     },
     content: {

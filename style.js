@@ -123,7 +123,6 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 10,
         marginVertical: 5,
-
         borderColor:'#f1f1f1',
         borderWidth:2
     },

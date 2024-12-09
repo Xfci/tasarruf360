@@ -235,9 +235,8 @@ const LoginPage = ({ navigation }) => {
 
 
         <View style={styles.content}>
-
           <Text style={styles.header}>Hoşgeldiniz 👋</Text>
-
+          
           <View style={styles.inputWrapper}>
             <View style={styles.inputContainer}>
               <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
