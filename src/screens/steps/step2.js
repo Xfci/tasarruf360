@@ -1,13 +1,53 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { firebase, db, ref, get } from '../../../config'
 import { useNavigation } from '@react-navigation/native';
 import { path } from '../myDevices';
+import * as ImagePicker from 'expo-image-picker';
+import TextRecognition from '@react-native-ml-kit/text-recognition';
+import {Entypo} from '@expo/vector-icons/';
 
 export default function Step2() {
     const [name, setName] = useState();
-    const [adress, setAdress] = useState();
+    const [adress, setAdress] = useState(null);
     const navigation = useNavigation();
+    const [photo, setPhoto] = useState(null);
+
+    const pickImage = async () => {
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert('Kamera izni gerekiyor!');
+            return;
+        }
+        const result = await ImagePicker.launchCameraAsync();
+        if (!result.canceled) {
+            setPhoto(result.assets[0]);
+        }
+    };
+
+    useEffect(() => {
+        if (photo) {
+            const handleTextRecognition = async (photo) => {
+                try {
+                    const result = await TextRecognition.recognize(photo.uri);
+                    if (result.text.includes("mac:")) {
+                        const macRegex = /mac:\s*(.*)/;
+                        const match = result.text.match(macRegex);
+                        setAdress(match[1]);
+                        if (adress == null) {
+                            console.log("işlem başarısız." , match);
+                        }
+                    }
+                } catch (error) {
+                    console.log('OCR Hatası:', error);
+                    Alert.alert('OCR hatası:', 'Detayları görmek için konsola bakın.');
+                }
+            };
+            handleTextRecognition(photo);
+        }
+    }, [photo])
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // kullanıcının girdiği mac adresini veri tabanında bulunan esp cihazlarının mac adresiyle karşılaştırır ve kullanıcının cihazlarının bulunduğu klasöre ekler//
@@ -39,7 +79,7 @@ export default function Step2() {
             if (adress == key && name) {
                 firebase.database().ref(`${path}/myDevices/${name}`).set({
                     mac: key
-                }).then(()=>{
+                }).then(() => {
                     navigation.navigate('step3');
                 })
             }
@@ -54,11 +94,11 @@ export default function Step2() {
                 <TextInput style={styles.textInput} placeholder='Cihazım' value={name} onChangeText={(value) => setName(value)} />
                 <Text>MAC adresi</Text>
                 <TextInput style={styles.textInput} placeholder='00:00:00:00:00:00' value={adress} onChangeText={(value) => setAdress(value)} />
-                <TouchableOpacity style={[styles.button, { backgroundColor: 'green', marginBottom: 10 }]}>
-                    <Text style={styles.buttonText}>Fotoğraf Çek</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: '#0089ec', marginBottom: 10 }]}>
-                    <Text style={styles.buttonText}>Galeriden seç</Text>
+                <TouchableOpacity style = {{backgroundColor:'#f2bd11',flexDirection:'row',width: '99%',justifyContent:'space-around',alignItems:'center',borderRadius:35,height:50}} onPress={() => { pickImage() }}>
+                    <Text style={styles.buttonText}>
+                        Adresi kamera ile algıla
+                    </Text>
+                    <Entypo name="camera" size={30} color="white" />
                 </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.button} onPress={() => adressControl()}>

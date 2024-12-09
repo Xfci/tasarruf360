@@ -21,9 +21,9 @@ export default function Step1() {
                         height: 200,
                         margin: 20
                     }}
-                    // Find more Lottie files at https://lottiefiles.com/featured
                     source={require('../../../assets/images/step1.json')}
-                />                <Text style={styles.text}>Cihazın üzerindeki ekrandaki adımları takip edin cihazının internet bağlantısını gerçekleştirin.</Text>
+                />
+                <Text style={styles.text}>Cihazın üzerindeki ekrandaki adımları takip edin cihazının internet bağlantısını gerçekleştirin.</Text>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('step2')}>

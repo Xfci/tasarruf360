@@ -1,7 +1,7 @@
 import { Text, View, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, StatusBar, Keyboard, Image } from 'react-native'
 import { styles } from '../../style';
 import { useEffect, useState } from 'react';
-import { firebase, db, ref, onValue} from '../../config'
+import { firebase, db, ref, onValue } from '../../config'
 import { MaterialCommunityIcons } from '@expo/vector-icons/';
 import Slider from '@react-native-community/slider';
 import React, { useRef } from "react";
@@ -35,13 +35,14 @@ const Devices = ({ user }) => {
     };
 
 
-
-    if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
-        path = `userInfo/${user.user}/`;
-    } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
-        path = `userInfo/${user.userData.id}/`;
-    } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
-        path = `userInfo/${user.user.id}/`;
+    if (!path) {
+        if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
+            path = `userInfo/${user.user}/`;
+        } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
+            path = `userInfo/${user.userData.id}/`;
+        } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
+            path = `userInfo/${user.user.id}/`;
+        }
     }
 
     useEffect(() => {

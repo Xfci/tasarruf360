@@ -1,4 +1,4 @@
-import { Text, View, StatusBar,Button } from 'react-native'
+import { Text, View, StatusBar, Button } from 'react-native'
 import { styles } from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { db, ref, onValue } from '../../config'
@@ -24,17 +24,19 @@ const Main = ({ user }) => {
     const [wateState, setWaterState] = useState();
     const [gasState, setGasState] = useState();
 
-    if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
-        path = 'userInfo/' + user.user + '/';
-        type = "kullanici"
-    } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
-        path = 'userInfo/' + user.userData.id + '/';
-        type = "eposta"
-    } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
-        path = 'userInfo/' + user.user.id + '/';
-        type = "google"
+    if (!path) {
+        if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
+            path = 'userInfo/' + user.user + '/';
+            type = "kullanici"
+        } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
+            path = 'userInfo/' + user.userData.id + '/';
+            type = "eposta"
+        } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
+            path = 'userInfo/' + user.user.id + '/';
+            type = "google"
+        }
     }
-    
+
     useEffect(() => {
         const dbref = ref(db, path + 'sayac/');
         const listen = onValue(dbref, (snapshot) => {
@@ -88,7 +90,7 @@ const Main = ({ user }) => {
                     />
                 </View>
             </ScrollView>
-            <StatusBar barStyle = {'dark-content'}/>
+            <StatusBar barStyle={'dark-content'} />
         </SafeAreaView>
     )
 }

@@ -71,9 +71,7 @@
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
 
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Fotoğraflarınıza erişim izni gerekli</string>
     <key>NSCameraUsageDescription</key>
-    <string>Fotoğraf çekmek için kameranızı kullanmak istiyoruz.</string>
+    <string>Kamera izni gereklidir.</string>
   </dict>
 </plist>

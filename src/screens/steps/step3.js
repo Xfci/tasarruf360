@@ -15,7 +15,7 @@ export default function Step3() {
     const goSettings = async () => {
         if (Platform.OS === 'android') {
             // Android cihazlarda Wi-Fi ayarlarına gitme
-            await await Linking.sendIntent('android.settings.WIFI_SETTINGS');
+            await Linking.sendIntent('android.settings.WIFI_SETTINGS');
         } else if (Platform.OS === 'ios') {
             // iOS cihazlarında Wi-Fi ayarlarına gitme
             await Linking.openURL('App-Prefs:root');
