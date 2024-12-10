@@ -21,6 +21,8 @@ const Devices = ({ user }) => {
     const [deviceAdress, setDeviceAdress] = useState();
     const [durum, setDurum] = useState();
     const [parlaklik, setParlaklik] = useState();
+    const [SSID, setSSID] = useState();
+    const [state, setState] = useState();
     const [lightData, setLightData] = useState();
     const [sayac, setSayac] = useState();
     const modalizeRef = useRef(null);
@@ -53,7 +55,7 @@ const Devices = ({ user }) => {
                 const key = element.key;
                 const value = element.val();
                 if (value.state == true) {
-                    data.push({ title: key == "electric" ? "Elektrik şalteri" : key == "water" ? "Su vanası" : key == "gas" ? "Gaz vanası" : null, mac: value.mac });
+                    data.push({ title: key == "electric" ? "Elektrik şalteri" : key == "water" ? "Su vanası" : key == "gas" ? "Gaz vanası" : null, mac: value.mac,state:value.state,ssid:value.SSID });
                 }
             });
             setSayac(data);
@@ -81,14 +83,20 @@ const Devices = ({ user }) => {
             const listener = onValue(dbref, (snapshot) => {
                 let durum = [];
                 let parlaklik = [];
+                let state = [];
+                let SSID = [];
                 snapshot.forEach(element => {
                     const key = element.key;
                     const value = element.val();
                     if (control(key) == true) {
                         durum.push(value.ledDurum);
                         parlaklik.push(value.parlaklik);
+                        SSID.push(value.SSID);
+                        state.push(value.state);
                         setParlaklik(parlaklik);
                         setDurum(durum);
+                        setSSID(SSID);
+                        setState(state);
                     }
                 });
             });
@@ -113,7 +121,7 @@ const Devices = ({ user }) => {
         if (deviceAdress && deviceName && durum && parlaklik) {
             var data = [];
             for (let i = 0; i < deviceName.length; i++) {
-                data.push({ title: deviceName[i], mac: deviceAdress[i], durum: durum[i], parlaklik: parlaklik[i] });
+                data.push({ title: deviceName[i], mac: deviceAdress[i], durum: durum[i], parlaklik: parlaklik[i],SSID:SSID[i],state:state[i] });
                 setLightData(data);
             }
         }
@@ -139,23 +147,21 @@ const Devices = ({ user }) => {
         return () => listener();
     }, []);
 
-    const led = (i, d, p) => {
-        firebase.database().ref(`espDevice/${i}/`).set({
-            ledDurum: d == 0 ? 1 : 0,
-            parlaklik: p
-        });
-    }
-
-    const parlak = (val, i, d) => {
-        firebase.database().ref(`espDevice/${i}/`).set({
-            ledDurum: d,
-            parlaklik: val
-        });
-    }
-
     const renderLightItem = ({ item }) => {
+
+        function git() {
+            const data = {
+                title:item.title,
+                SSID:item.SSID,
+                mac:item.mac,
+                state:item.state,
+                tur:"ışık"
+            }
+            navigation.navigate('device',data);
+        }
+
         return (
-            <View style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={() => git()}>
                 <View style={styles.itemIcon}>
                     <Image source={require('../../assets/images/lamp.png')} style={{ height: 50, width: 50, marginRight: 15 }} />
                 </View>
@@ -166,13 +172,24 @@ const Devices = ({ user }) => {
                     </View>
                     <Text style={styles.macTitle}>{item.mac}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     };
 
     const renderSayacItem = ({ item }) => {
+        function git() {
+            const data = {
+                title:item.title,
+                SSID:item.ssid,
+                mac:item.mac,
+                state:item.state,
+                tur:"sayac"
+            }
+            console.log(item);
+            navigation.navigate('device',data);
+        }
         return (
-            <View style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={() => git(item)}>
                 <View style={styles.itemIcon}>
                     {
                         item.title == "Elektrik şalteri" ?
@@ -190,7 +207,7 @@ const Devices = ({ user }) => {
                     </View>
                     <Text style={styles.macTitle}>{item.mac}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     };
 
@@ -201,7 +218,7 @@ const Devices = ({ user }) => {
 
                 <View style={styles.statusContent}>
                     <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf: 'center', margin: 10 }} />
-                    <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('device')}>
+                    <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('addDevice')}>
                         <Text style={styles.appButtonText}>Cihaz Ekle</Text>
                     </TouchableOpacity>
                 </View>

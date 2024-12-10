@@ -1,14 +1,19 @@
 import { StyleSheet, Text, View, Image, ScrollView, Switch, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, AlertIOS } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list'
+import Slider from '@react-native-community/slider';
+import { firebase, db, ref, onValue } from '../../config'
 
-export default function Device() {
+export default function Device({ route }) {
     const navigation = useNavigation();
     const [isEnabled, setIsEnabled] = useState(false);
-    const [selected, setSelected] = React.useState("");
+    const [selected, setSelected] = useState("");
+    const [durum, setDurum] = useState();
+    const [parlaklik, setParlaklik] = useState();
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const data = route.params;
 
     const mekanlar = [
         { key: '1', value: 'Mekan 1', disabled: true },
@@ -21,7 +26,7 @@ export default function Device() {
     ]
 
 
-    const createTwoButtonAlert = () =>
+    const createTwoButtonAlert = () => {
         Alert.alert('CİHAZA BAĞLANIN', 'Cihazın üzerindeki reset tuşunu basılı tutun ve ekranda MAC adresinin yazdığına emin olun.', [
             { text: 'RESETLEDİM', onPress: () => navigation.navigate('webview') },
             {
@@ -29,9 +34,10 @@ export default function Device() {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'destructive',
             },
-        ]);
+        ])
+    };
 
-    const closeAlert = () =>
+    const closeAlert = () => {
         Alert.alert('Emin Misin?', 'Cihazı sildikten sonra tekrar kullanmak için resetlemen gerekir.', [
             {
                 text: 'iptal',
@@ -39,24 +45,58 @@ export default function Device() {
                 style: 'destructive',
             },
             { text: 'Evet', onPress: () => deleteDevice() },
-        ]);
+        ])
+    };
+
+    const deleteDevice = async () => {
+        await firebase.database().ref(`espDevice/${data.mac}/`).remove();
+        navigation.navigate('main');
+    };
+
+    useEffect(() => {
+        if (data.tur == "ışık") {
+            const dbref = ref(db, `espDevice/${data.mac}`);
+            const listener = onValue(dbref, (snapshot) => {
+                const value = snapshot.val();
+                setDurum(value.ledDurum);
+                setParlaklik(value.parlaklik);
+            });
+            return () => listener();
+        }
+    }, []);
+
+    const led = () => {
+        firebase.database().ref(`espDevice/${data.mac}/`).set({
+            ledDurum: durum == 0 ? 1 : 0,
+            parlaklik: parlaklik,
+            state: data.state,
+            SSID: data.SSID
+        });
+    }
+
+    const parlak = (val) => {
+        firebase.database().ref(`espDevice/${data.mac}/`).set({
+            ledDurum: durum,
+            parlaklik: val,
+            state: data.state,
+            SSID: data.SSID
+        });
+    }
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
-
             <ScrollView>
-
                 <View style={styles.header}>
                     <TouchableOpacity style={{ alignSelf: 'flex-start', marginLeft: 10 }} onPress={() => navigation.goBack()}>
                         <MaterialCommunityIcons name="close" size={40} />
                     </TouchableOpacity>
                     <Image source={require('../../assets/images/electrical-panel.png')} style={{ height: 120, width: 120 }} />
-                    <Text style={styles.headerTitle}>Cihazın ismi</Text>
-                    <Text style={styles.macTitle}>Mekan 1 - Cihaz Türü</Text>
-                    <Text style={styles.macTitle}>00:00:00:00:00:00</Text>
-                    <Text style={[styles.header2, { color: 'green', fontSize: '16' }]}>Aktif ●</Text>
+                    <Text style={styles.headerTitle}>{data.title}</Text>
+                    <Text style={styles.macTitle}>Mekan 1 - {data.tur}</Text>
+                    <Text style={styles.macTitle}>{data.mac}</Text>
+                    <Text style={[styles.header2, { color: 'green', fontSize: 16 }]}>{data.state ? "Aktif ●" : "Pasif ⊝"}</Text>
                 </View>
 
                 <View style={styles.content}>
@@ -71,17 +111,62 @@ export default function Device() {
                                 value={isEnabled}
                             />
                         </View>
-                        <View style={styles.wrapper}>
-                            <Text style={styles.text}>Harcanılan</Text>
-                            <Text>2020 kw</Text>
-                        </View>
-                        <View style={styles.wrapper}>
-                            <Text style={styles.text}>İstenen</Text>
-                            <View style={styles.textInput}>
-                                <TextInput placeholder='1000' />
-                                <Text>kw</Text>
-                            </View>
-                        </View>
+                        {
+                            data.tur == "ışık" ?
+                                <>
+                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                        <TouchableOpacity onPress={() => { led() }} activeOpacity={0.5} >
+                                            {
+                                                durum == 0 ?
+                                                    <>
+                                                        <MaterialCommunityIcons name="lightbulb-off" size={60} color="black" />
+                                                        <Text style={{ color: "black", fontWeight: 'bold', fontSize: 18 }}>
+                                                            Ledi Aç
+                                                        </Text>
+                                                    </> :
+                                                    durum == 1 ?
+                                                        <>
+                                                            <MaterialCommunityIcons name="lightbulb-on" size={60} color="black" />
+                                                            <Text style={{ color: "black", fontWeight: 'bold', fontSize: 18 }}>
+                                                                Ledi Kapat
+                                                            </Text>
+                                                        </>
+                                                        : null
+                                            }
+                                        </TouchableOpacity>
+                                        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                                            <Text style={{ color: "black", fontWeight: 'bold', fontSize: 18 }}>
+                                                parlaklık:
+                                                %{Math.floor((parlaklik / 255) * 100)}
+                                            </Text>
+                                            <Slider
+                                                style={{ width: 200, height: 40 }}
+                                                minimumValue={0}
+                                                maximumValue={255}
+                                                step={1}
+                                                value={parlaklik}
+                                                onSlidingComplete={(value) => parlak(value)}
+                                                minimumTrackTintColor="#1fb28a"
+                                                maximumTrackTintColor="black"
+                                                thumbTintColor="black"
+                                            />
+                                        </View>
+                                    </View>
+                                </>
+                                : <>
+                                    <View style={styles.wrapper}>
+                                        <Text style={styles.text}>Harcanılan</Text>
+                                        <Text>2020 kw</Text>
+                                    </View>
+                                    <View style={styles.wrapper}>
+                                        <Text style={styles.text}>İstenen</Text>
+                                        <View style={styles.textInput}>
+                                            <TextInput placeholder='1000' />
+                                            <Text>kw</Text>
+                                        </View>
+                                    </View>
+                                </>
+                        }
                     </View>
                     <View style={styles.contentBlock}>
                         <View style={[styles.wrapper, { justifyContent: 'center' }]}>
@@ -93,7 +178,7 @@ export default function Device() {
                             <Text style={styles.text}>Bağlantı</Text>
                             <View style={styles.wrapperNone}>
                                 <View style={{ flex: 1 }}>
-                                    <Text>TurkTelekom_ZT79GF_2.4GHz </Text>
+                                    <Text>{data.SSID}</Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <TouchableOpacity style={styles.button} onPress={createTwoButtonAlert}>
@@ -109,7 +194,7 @@ export default function Device() {
                         <View style={styles.wrapperAlt}>
                             <Text style={styles.text}>İsim Değiştir</Text>
                             <View style={[styles.textInput, { marginTop: 5, width: '100%', paddingLeft: 20 }]}>
-                                <TextInput placeholder='Cihazım' />
+                                <TextInput placeholder={data.title} />
                             </View>
                         </View>
                         <View style={styles.wrapperAlt}>
@@ -127,7 +212,7 @@ export default function Device() {
                     </View>
                 </View>
             </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     )
 }
 
@@ -139,8 +224,8 @@ const styles = StyleSheet.create({
         gap: 4,
         height: 350,
         backgroundColor: '#f2bd11',
-        borderBottomLeftRadius: '40%',
-        borderBottomRightRadius: '40%',
+        borderBottomLeftRadius: '20%',
+        borderBottomRightRadius: '20%',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
