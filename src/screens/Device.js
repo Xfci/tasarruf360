@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list'
 import Slider from '@react-native-community/slider';
 import { firebase, db, ref, onValue } from '../../config'
+import { path } from '../screens/myDevices';
 
 export default function Device({ route }) {
     const navigation = useNavigation();
@@ -13,7 +14,23 @@ export default function Device({ route }) {
     const [durum, setDurum] = useState();
     const [parlaklik, setParlaklik] = useState();
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-    const data = route.params;
+    var data = route.params;
+
+    useEffect(() => {
+        if (data.tur == "ışık") {
+            const dbref = ref(db, `espDevice/${data.mac}`);
+            const listener = onValue(dbref, (snapshot) => {
+                const value = snapshot.val();
+                try {
+                    setDurum(value.ledDurum);
+                    setParlaklik(value.parlaklik);
+                } catch (error) {
+                    
+                }
+            });
+            return () => listener();
+        }
+    }, []);
 
     const mekanlar = [
         { key: '1', value: 'Mekan 1', disabled: true },
@@ -24,7 +41,6 @@ export default function Device({ route }) {
         { key: '6', value: 'Oda 2' },
         { key: '7', value: 'Oda 3' },
     ]
-
 
     const createTwoButtonAlert = () => {
         Alert.alert('CİHAZA BAĞLANIN', 'Cihazın üzerindeki reset tuşunu basılı tutun ve ekranda MAC adresinin yazdığına emin olun.', [
@@ -50,20 +66,9 @@ export default function Device({ route }) {
 
     const deleteDevice = async () => {
         await firebase.database().ref(`espDevice/${data.mac}/`).remove();
-        navigation.navigate('main');
+        await firebase.database().ref(`${path}myDevices/${data.title}`).remove();
+        navigation.goBack();
     };
-
-    useEffect(() => {
-        if (data.tur == "ışık") {
-            const dbref = ref(db, `espDevice/${data.mac}`);
-            const listener = onValue(dbref, (snapshot) => {
-                const value = snapshot.val();
-                setDurum(value.ledDurum);
-                setParlaklik(value.parlaklik);
-            });
-            return () => listener();
-        }
-    }, []);
 
     const led = () => {
         firebase.database().ref(`espDevice/${data.mac}/`).set({

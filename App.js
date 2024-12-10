@@ -5,7 +5,6 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 import LoginPage from './src/screens/LoginPage';
 import RegisterPage from './src/screens/RegisterPage';
 import Main from './src/screens/main';
-import AddDevice from './src/screens/AddDevice';
 import ForgetPassword from './src/screens/ForgetPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile';
@@ -29,7 +28,6 @@ export default function App() {
         <Stack.Screen name='register' component={RegisterPage} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
         <Stack.Screen name='main' component={TabScreen} options={{ title: 'Ana Sayfa' }} />
-        <Stack.Screen name='addDevice' component={AddDevice} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step1' component={step1} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step2' component={step2} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step3' component={step3} options={{ headerShown: true, headerLeft: null, title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />

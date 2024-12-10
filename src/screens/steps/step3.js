@@ -1,53 +1,131 @@
-import { StyleSheet, Text, View, TouchableOpacity, Platform, Linking } from 'react-native'
-import React from 'react'
-import { useRef } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import { firebase, db, ref, get } from '../../../config'
+import { useNavigation } from '@react-navigation/native';
+import { path } from '../myDevices';
+import * as ImagePicker from 'expo-image-picker';
+import TextRecognition from '@react-native-ml-kit/text-recognition';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import LottieView from 'lottie-react-native';
 
 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
-
-export default function Step3() {
+export default function Step2() {
+    const [name, setName] = useState();
+    const [adress, setAdress] = useState(null);
     const navigation = useNavigation();
+    const [photo, setPhoto] = useState(null);
     const animation = useRef(null);
 
-
-    const goSettings = async () => {
-        if (Platform.OS === 'android') {
-            // Android cihazlarda Wi-Fi ayarlarına gitme
-            await Linking.sendIntent('android.settings.WIFI_SETTINGS');
-        } else if (Platform.OS === 'ios') {
-            // iOS cihazlarında Wi-Fi ayarlarına gitme
-            await Linking.openURL('App-Prefs:root');
+    const pickImage = async () => {
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert('Kamera izni gerekiyor!');
+            return;
+        }
+        const result = await ImagePicker.launchCameraAsync();
+        if (!result.canceled) {
+            setPhoto(result.assets[0]);
         }
     };
+
+    useEffect(() => {
+        if (photo) {
+            const handleTextRecognition = async (photo) => {
+                try {
+                    const result = await TextRecognition.recognize(photo.uri);
+                    if (result.text.includes("mac:")) {
+                        const macRegex = /mac:\s*(.*)/;
+                        const match = result.text.match(macRegex);
+                        setAdress(match[1]);
+                        if (adress == null) {
+                            console.log("işlem başarısız.", match);
+                        }
+                    }
+                } catch (error) {
+                    console.log('OCR Hatası:', error);
+                    Alert.alert('OCR hatası:', 'Detayları görmek için konsola bakın.');
+                }
+            };
+            handleTextRecognition(photo);
+        }
+    }, [photo])
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // kullanıcının girdiği mac adresini veri tabanında bulunan esp cihazlarının mac adresiyle karşılaştırır ve kullanıcının cihazlarının bulunduğu klasöre ekler//
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function adressControl() {
+        var devam = false;
+        const dbref = ref(db, `${path}/myDevices/`);
+        const snapshot = await get(dbref);
+        snapshot.forEach(element => {
+            const value = element.val();
+            if (name == element.key || adress == value.mac) {
+                devam = true;
+            }
+        });
+        if (!devam) {
+            createAdress();
+        } else {
+            setAdress("");
+            setName("");
+            console.log("Geçerli bir cihaz gir");
+        }
+    }
+
+    async function createAdress() {
+        const dbref = ref(db, 'espDevice/');
+        const snapshot = await get(dbref);
+        snapshot.forEach(element => {
+            const key = element.key;
+            if (adress == key && name) {
+                firebase.database().ref(`${path}/myDevices/${name}`).set({
+                    mac: key
+                }).then(() => {
+                    navigation.navigate('main');
+                })
+            }
+        });
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <LottieView
+                <Text style={styles.text}>Cihazınıza bir isim verin ve ekranda yazan MAC adresini girin.</Text>         
+            </View>
+
+            <View style={styles.inputs}>
+                <Text>Cihaz ismi</Text>
+                <View style={styles.inputContainer}>
+                    <TextInput style={styles.textInput} placeholder='Cihazım' value={name} onChangeText={(value) => setName(value)} />
+                </View>
+                <Text>MAC adresi</Text>
+
+                <View style={styles.inputContainer}>
+                    <TextInput style={styles.textInput} placeholder='00:00:00:00:00:00' value={adress} onChangeText={(value) => setAdress(value)} />
+                    <TouchableOpacity onPress={() => { pickImage() }}>
+                        <MaterialCommunityIcons name="camera-enhance-outline" size={30} color="#B0B0B0" />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={[styles.content, {justifyContent: 'flex-end'}]}>
+            <LottieView
                     autoPlay
                     ref={animation}
                     style={{
-                        width: 200,
-                        height: 200,
+                        width: '100%',
+                        height: 250,
                         margin: 20
                     }}
                     // Find more Lottie files at https://lottiefiles.com/featured
-                    source={require('../../../assets/images/wifi.json')}
-                />
-                <Text style={styles.text}>İnternete bağlanmak için önce cihaza bağlanmanız gerekir. Cihaz üzerindeki Wi-Fi adresine bağlanın ve devam edin. Bağlantı tamamlandıktan sonra adımları bitirin.</Text>
-                <TouchableOpacity onPress={goSettings} >
-                    <Text style={styles.link}>Ayarlara Git.</Text>
-                </TouchableOpacity>
+                    source={require('../../../assets/images/device.json')}
+                />  
             </View>
 
-            <TouchableOpacity style={styles.buttonWifi} onPress={() => navigation.navigate('webview')}>
-                <MaterialCommunityIcons name="wifi" size={24} color="#fff" style={{ marginRight: 10 }} />
-                <Text style={styles.buttonText}>Bağlantı Paneli</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('main')}>
-                <Text style={styles.buttonText}>Bitti</Text>
+            <TouchableOpacity style={styles.button} onPress={() => adressControl()}>
+                <Text style={styles.buttonText}>Devam</Text>
             </TouchableOpacity>
         </View>
     )
@@ -56,8 +134,6 @@ export default function Step3() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         padding: 20
     },
     content: {
@@ -70,27 +146,31 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
     },
-    link: {
-        color: '#0000EE',
-        margin: 40
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 15,
+        paddingHorizontal: 15,
+        width: '100%',
+        maxWidth: 600,
+        marginBottom: 10
+    },
+    textInput: {
+        flex: 1, // Esneklik veriyoruz, TextInput geniş alanı kaplar
+        fontSize: 16,
+        paddingVertical: 15,
+    },
+    inputs: {
+        flex: 2,
+        gap: 10,
     },
     button: {
         width: '100%',
         height: 50,
         backgroundColor: '#f2bd11',
         borderRadius: 35,
-        justifyContent: 'center',
-    },
-    buttonWifi: {
-        width: '100%',
-        height: 50,
-        backgroundColor: '#0089ec',
-        borderRadius: 35,
-        justifyContent: 'center',
-        marginBottom: 20,
-        flexDirection:'row',
-        alignItems:'center'
-        
+        justifyContent: 'center'
     },
     buttonText: {
         color: '#fff',
