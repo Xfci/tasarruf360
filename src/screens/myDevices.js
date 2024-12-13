@@ -215,7 +215,6 @@ const Devices = ({ user }) => {
         <SafeAreaView style={styles.appContainer}>
             <Text style={styles.header}>Cihazlarım</Text>
             <ScrollView>
-
                 <View style={styles.statusContent}>
                     <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf: 'center', margin: 10 }} />
                     <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('step1')}>
@@ -247,20 +246,3 @@ const Devices = ({ user }) => {
 }
 
 export default Devices;
-
-const Styles = StyleSheet.create({
-    container: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 125,
-        width: 250,
-        borderRadius: 15
-    },
-    modalContent: {
-        padding: 20,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-});

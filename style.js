@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
         flex:1,
         height: '100%',
         width: '100%',
-        backgroundColor: '#fff'
     },
     banner: {
         width: "100%",
@@ -198,5 +197,12 @@ export const styles = StyleSheet.create({
         fontSize: 12, // Küçük metin boyutu
         marginBottom: 3
     },
-
+    porfileContainer:{
+        flex:1,
+        backgroundColor:'#0089ec',
+        borderEndEndRadius:50,
+    },  
+    profileContent:{
+        flex:1,
+    }
 });
