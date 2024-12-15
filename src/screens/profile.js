@@ -12,11 +12,11 @@ const Profile = ({ user }) => {
 
     const selectImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
-          if (response.assets && response.assets.length > 0) {
-            setImageUri(response.assets[0].uri);
-          }
+            if (response.assets && response.assets.length > 0) {
+                setImageUri(response.assets[0].uri);
+            }
         });
-      };    
+    };
 
     if (type == "google") {
         return (
@@ -71,14 +71,17 @@ const Profile = ({ user }) => {
         return (
             <View style={styles.container}>
                 <View style={styles.porfileContainer}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', borderWidth: 2, borderColor: "black", padding: 20, marginBottom: 10, borderRadius: 15 }}>
-                        <EvilIcons style={{ width: 100, height: 100, borderRadius: 100 }} name="user" size={100} color="black" />
+                    <View style={styles.part}>
+                        <Image style={{width:150,height:150,borderRadius:100}} source={{uri:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}></Image>
+                    </View>
+                    <View style={styles.part}>
                         <View style={{ flexDirection: "column", justifyContent: "space-around" }}>
                             <Text>
                                 Kullanıcı Adı : {user.user}
                             </Text>
-                        </View>
-                    </View>                </View>
+                        </View>                    
+                    </View>
+                </View>
 
                 <View style={styles.profileContent}>
                     <Button

@@ -201,8 +201,15 @@ export const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'#0089ec',
         borderEndEndRadius:50,
+        flexDirection:'row',
+        padding:10,
+        justifyContent:'center',
+        alignItems:'center'
     },  
     profileContent:{
+        flex:2,
+    },
+    part:{
         flex:1,
     }
 });
