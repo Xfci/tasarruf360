@@ -22,7 +22,11 @@ export default function Step2() {
             alert('Kamera izni gerekiyor!');
             return;
         }
-        const result = await ImagePicker.launchCameraAsync();
+        const result = await ImagePicker.launchCameraAsync({
+            ediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 1,
+        });
         if (!result.canceled) {
             setPhoto(result.assets[0]);
         }
@@ -92,7 +96,7 @@ export default function Step2() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.text}>Cihazınıza bir isim verin ve ekranda yazan MAC adresini girin.</Text>         
+                <Text style={styles.text}>Cihazınıza bir isim verin ve ekranda yazan MAC adresini girin.</Text>
             </View>
 
             <View style={styles.inputs}>
@@ -110,8 +114,8 @@ export default function Step2() {
                 </View>
             </View>
 
-            <View style={[styles.content, {justifyContent: 'flex-end'}]}>
-            <LottieView
+            <View style={[styles.content, { justifyContent: 'flex-end' }]}>
+                <LottieView
                     autoPlay
                     ref={animation}
                     style={{
@@ -121,7 +125,7 @@ export default function Step2() {
                     }}
                     // Find more Lottie files at https://lottiefiles.com/featured
                     source={require('../../../assets/images/device.json')}
-                />  
+                />
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => adressControl()}>
