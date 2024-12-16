@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { firebase, db, ref, get } from '../../../config'
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +16,25 @@ export default function Step2() {
     const [photo, setPhoto] = useState(null);
     const animation = useRef(null);
 
-    const pickImage = async () => {
+    const showAlert = () => {
+        Alert.alert(
+            "Fotoğrafınızı Seçin", // Başlık
+            "Bir işlem seçin:", // Mesaj
+            [
+                {
+                    text: "Fotoğraf çekmek", // 1. seçenek
+                    onPress: () => pickImageWithPhoto()
+                },
+                {
+                    text: "Galeriden seçmek", // 2. seçenek
+                    onPress: () => pickImageWithGallery()
+                }
+            ],
+            { cancelable: false } // İptal edilemez
+        );
+    };
+
+    const pickImageWithPhoto = async () => {
         const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
         if (!permissionResult.granted) {
             alert('Kamera izni gerekiyor!');
@@ -24,6 +42,22 @@ export default function Step2() {
         }
         const result = await ImagePicker.launchCameraAsync({
             ediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 1,
+        });
+        if (!result.canceled) {
+            setPhoto(result.assets[0]);
+        }
+    };
+
+    const pickImageWithGallery = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert('Kamera izni gerekiyor!');
+            return;
+        }
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
             allowsEditing: true,
             quality: 1,
         });
@@ -41,9 +75,6 @@ export default function Step2() {
                         const macRegex = /mac:\s*(.*)/;
                         const match = result.text.match(macRegex);
                         setAdress(match[1]);
-                        if (adress == null) {
-                            console.log("işlem başarısız.", match);
-                        }
                     }
                 } catch (error) {
                     console.log('OCR Hatası:', error);
@@ -52,9 +83,7 @@ export default function Step2() {
             };
             handleTextRecognition(photo);
         }
-    }, [photo])
-
-
+    }, [photo]);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // kullanıcının girdiği mac adresini veri tabanında bulunan esp cihazlarının mac adresiyle karşılaştırır ve kullanıcının cihazlarının bulunduğu klasöre ekler//
@@ -108,7 +137,7 @@ export default function Step2() {
 
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.textInput} placeholder='00:00:00:00:00:00' value={adress} onChangeText={(value) => setAdress(value)} />
-                    <TouchableOpacity onPress={() => { pickImage() }}>
+                    <TouchableOpacity onPress={() => { showAlert() }}>
                         <MaterialCommunityIcons name="camera-enhance-outline" size={30} color="#B0B0B0" />
                     </TouchableOpacity>
                 </View>
