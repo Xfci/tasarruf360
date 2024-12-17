@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     header: {
         fontSize: 24,
         fontWeight: '800',
-        marginBottom: 10,
+        marginBottom: 30,
         marginHorizontal: 10,
         marginTop:10
     },
@@ -24,7 +24,6 @@ export const styles = StyleSheet.create({
     },
     link: {
         alignSelf: 'flex-end',
-        marginTop: 5,
         marginBottom: 15
     },
     navigateLink: {
@@ -38,6 +37,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
+
     },
     buttonOutline: {
         backgroundColor: '#fff',
@@ -77,18 +77,19 @@ export const styles = StyleSheet.create({
         elevation: 5,
     },
     content: {
-        flex: 2,
-        padding: 25,
+        flex: 3,
+        paddingHorizontal: 25,
+        paddingTop:25,
         justifyContent: 'space-around',
-        borderRadius: 30,
         backgroundColor: '#fff',
         zIndex: 1
     },
     contentBottom: {
-        flex: 1,
+        flex: 1.5,
         paddingHorizontal: 25,
         paddingBottom: 25,
         justifyContent: 'space-around',
+        backgroundColor:'#fff',
     },
     inputContainer: {
         flexDirection: 'row',
@@ -98,7 +99,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 15,
         width: '100%',
         maxWidth: 600,
-        marginBottom: 10
+        marginBottom: 30,
     },
     icon: {
         marginRight: 12, // İkon ile metin arasındaki boşluğu artırır
@@ -110,7 +111,7 @@ export const styles = StyleSheet.create({
     },
     inputWrapper: {
         flex: 1, // Bu, input öğelerinin arasındaki alanı eşit şekilde dağıtmak için kullanılır
-        justifyContent: 'space-around', // Öğeler arasındaki mesafeyi eşitler
+        justifyContent: 'space-between', // Öğeler arasındaki mesafeyi eşitler
         flexDirection: 'column',
     },
     errorText: {

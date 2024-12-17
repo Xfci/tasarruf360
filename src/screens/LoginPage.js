@@ -8,6 +8,8 @@ import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Google from "expo-auth-session/providers/google"
 import { sayac } from '../scripts/userInfoScript';
+import { SvgUri } from 'react-native-svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState(null);
@@ -206,7 +208,7 @@ const LoginPage = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: '#b2e7f9' }]}>
       <BottomModal
         description={"Eğer kayıtlı ise şifre sıfırlama bağlantısı e-mail adresinize gönderildi 📥."}
         image={require('../../assets/images/banner3.jpeg')}
@@ -226,53 +228,57 @@ const LoginPage = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 5 }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.bannerImage}>
-            <Image
-              style={styles.banner}
-              source={require('../../assets/images/banner1.jpg')}
+            <SvgUri
+              width="100%"
+              height="100%"
+              uri="https://www.btasoftware.com/images/banner1.svg"
             />
+
           </View>
         </TouchableWithoutFeedback>
 
 
-        <View style={styles.content}>
+        <View style={[styles.content,{borderTopLeftRadius: 30, borderTopRightRadius: 30}]}>
           <Text style={styles.header}>Hoşgeldiniz 👋</Text>
-          
+
           <View style={styles.inputWrapper}>
-            <View style={styles.inputContainer}>
-              <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
-              <TextInput
-                onChangeText={(value) => { setEmail(value) }}
-                style={styles.textInput}
-                placeholder="Email"
-                keyboardType="email-address"
-              />
-            </View>
-            <View style={[styles.inputContainer, { marginBottom: 0 }]}>
-              <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
-              <TextInput
-                onChangeText={(value) => { setPassword(value) }}
-                style={styles.textInput}
-                placeholder="Şifre"
-                secureTextEntry={!passwordVisible} // Şifre görünürlüğü
-              />
-              <TouchableOpacity
-                onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
-              >
-                <MaterialCommunityIcons
-                  name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
-                  size={24}
-                  color="#888"
+            <View>
+              <View style={styles.inputContainer}>
+                <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+                <TextInput
+                  onChangeText={(value) => { setEmail(value) }}
+                  style={styles.textInput}
+                  placeholder="Email"
+                  keyboardType="email-address"
                 />
-              </TouchableOpacity>
+              </View>
+              <View>
+                <View style={[styles.inputContainer, { marginBottom: 10 }]}>
+                  <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
+                  <TextInput
+                    onChangeText={(value) => { setPassword(value) }}
+                    style={styles.textInput}
+                    placeholder="Şifre"
+                    secureTextEntry={!passwordVisible} // Şifre görünürlüğü
+                  />
+                  <TouchableOpacity
+                    onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
+                  >
+                    <MaterialCommunityIcons
+                      name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
+                      size={24}
+                      color="#888"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={[styles.alt, { justifyContent: 'space-between' }]}>
+                  <Text style={styles.errorText}>{errorMessage}</Text>
+                  <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
+                    <Text>Şifremi Unuttum</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-            <View style={[styles.alt, { justifyContent: 'space-between' }]}>
-              <Text style={styles.errorText}>{errorMessage}</Text>
-              <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
-                <Text>Şifremi Unuttum</Text>
-              </TouchableOpacity>
-
-            </View>
-
             {
               loading ?
                 <View style={styles.button}>
@@ -283,7 +289,6 @@ const LoginPage = ({ navigation }) => {
                   <Text style={styles.buttonText}>Giriş Yap</Text>
                 </Pressable>
             }
-
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -310,7 +315,7 @@ const LoginPage = ({ navigation }) => {
         </View>
       </View>
       <StatusBar barStyle={'dark-content'} />
-    </View >
+    </SafeAreaView >
   )
 }
 export default LoginPage

@@ -5,6 +5,8 @@ import { styles } from '../../style'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import BottomModal from '../components/bottomModal';
 import { sayac } from '../scripts/userInfoScript';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SvgUri } from 'react-native-svg';
 
 const RegisterPage = ({ navigation, route }) => {
   const [email, setEmail] = useState(null);
@@ -101,21 +103,22 @@ const RegisterPage = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: '#ffd02c' }]}>
       <BottomModal
         description={"Hesap aktivasyon maili e-posta adresinize gönderilmiştir 📥. Lütfen hesabınızı aktif ediniz."}
         image={require('../../assets/images/banner4.jpeg')}
         visibleState={modalVisible}
         functionModal={true}
-        onClose={() => {setModalVisible(false),navigation.navigate('login');}}
+        onClose={() => { setModalVisible(false), navigation.navigate('login'); }}
       />
+      <View style={{ backgroundColor: '#fff', flex: 1, justifyContent: 'center' }}>
+        <Text style={[styles.header, { textAlign: 'center' }]}>Üye Kayıt 🖐️</Text>
+      </View>
 
-      <Text style={[styles.header, { textAlign: 'center', marginTop: 100 }]}>Üye Kayıt 🖐️</Text>
-      <KeyboardAvoidingView
-        style={[styles.content]}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
+      <View
+        style={[styles.content, { borderBottomRightRadius: 30, borderBottomLeftRadius: 30, paddingBottom: 25 }]}>
         <View style={styles.inputWrapper}>
+
           <View style={styles.inputContainer}>
             <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
             <TextInput
@@ -175,26 +178,26 @@ const RegisterPage = ({ navigation, route }) => {
                 <Text style={[styles.buttonText, { color: '#dead10' }]}>Kayıt Ol</Text>
               </Pressable>
           }
-
+          <View style={[styles.alt]}>
+            <Text>Zaten hesabın var mı? </Text>
+            <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.goBack()}>
+              <Text style={styles.navigateLink}>Giriş yap.</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={[styles.alt, { marginBottom: 20 }]}>
-          <Text>Zaten hesabın var mı? </Text>
-          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.goBack()}>
-            <Text style={styles.navigateLink}>Giriş yap.</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+      </View>
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[styles.bannerImage, { marginTop: 20 }]}>
-          <Image
-            style={[styles.banner, { bottom: 50 }]}
-            source={require('../../assets/images/banner2.jpg')}
+        <View style={[styles.bannerImage]}>
+          <SvgUri
+            width="100%"
+            height="100%"
+            uri="https://www.btasoftware.com/images/banner2.svg"
           />
         </View>
       </TouchableWithoutFeedback>
       <StatusBar barStyle={'dark-content'} />
-    </View>
+    </SafeAreaView>
   )
 }
 
