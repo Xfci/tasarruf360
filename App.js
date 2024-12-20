@@ -9,6 +9,7 @@ import ForgetPassword from './src/screens/ForgetPassword';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Places from './src/screens/Places';
 import Devices from './src/screens/myDevices';
 import step1 from './src/screens/steps/step1';
 import step2 from './src/screens/steps/step2';
@@ -31,8 +32,8 @@ export default function App() {
         <Stack.Screen name='step1' component={step1} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step2' component={step2} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step3' component={step3} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
-        <Stack.Screen name='webview' component={webview} options={{ headerShown: true, headerBackTitle: "", headerTintColor:'black', title: 'Bağlan', ...TransitionPresets.ModalTransition }} />
-        <Stack.Screen name='device' component={device} options={{ headerShown: false, headerBackTitle: "", headerTintColor:'black', headerShadowVisible:false, title: 'Cihazım', ...TransitionPresets.SlideFromRightIOS }} />
+        <Stack.Screen name='webview' component={webview} options={{ headerShown: true, headerBackTitle: "", headerTintColor: 'black', title: 'Bağlan', ...TransitionPresets.ModalTransition }} />
+        <Stack.Screen name='device' component={device} options={{ headerShown: false, headerBackTitle: "", headerTintColor: 'black', headerShadowVisible: false, title: 'Cihazım', ...TransitionPresets.SlideFromRightIOS }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -47,9 +48,18 @@ function TabScreen({ route }) {
 
       <Tabs.Screen name='Ana Sayfa' children={() => (<Main user={user} />)}
         options={{
-          title: 'Ana sayfa',
+          title: 'Gösterge',
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons name="home" size={30} color={focused ? 'black' : 'lightgray'} />
+            <MaterialCommunityIcons name="chart-box" size={30} color={focused ? 'black' : 'lightgray'} />
+          ),
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'gray'
+        }} />
+      <Tabs.Screen name='Places' children={() => (<Places user={user} />)}
+        options={{
+          title: 'Mekanlar',
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons name="home-automation" size={30} color={focused ? 'black' : 'lightgray'} />
           ),
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'gray'
@@ -65,9 +75,9 @@ function TabScreen({ route }) {
         }} />
       <Tabs.Screen name='Profil' children={() => (<Profile user={user} />)}
         options={{
-          title: 'Profil',
+          title: 'Ayarlar',
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons name="account" size={30} color={focused ? 'black' : 'lightgray'} />
+            <MaterialCommunityIcons name="cog" size={30} color={focused ? 'black' : 'lightgray'} />
           ),
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'gray'

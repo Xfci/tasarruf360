@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     header: {
         fontSize: 24,
         fontWeight: '800',
-        marginBottom: 30,
+        marginBottom: 10,
         marginHorizontal: 10,
         marginTop:10
     },
@@ -73,7 +73,6 @@ export const styles = StyleSheet.create({
         },
         shadowOpacity: 0.15,
         shadowRadius: 5,
-
         elevation: 5,
     },
     content: {
@@ -173,7 +172,7 @@ export const styles = StyleSheet.create({
     appContainer: {
         maxWidth:1000,
         alignSelf:'center',
-        height: '100%',
+        height: '105%',
         width: '100%',
     },
     webAppContainer: {
@@ -202,15 +201,62 @@ export const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'#0089ec',
         borderEndEndRadius:50,
-        flexDirection:'row',
-        padding:10,
-        justifyContent:'center',
-        alignItems:'center'
+        paddingHorizontal:10,
+        alignItems:'center',
+        flexDirection:'row'
     },  
     profileContent:{
-        flex:2,
+        paddingTop:20,
+        flex:3,
+        backgroundColor:'#fff',
+        borderTopLeftRadius:15,
+        borderTopRightRadius:15
     },
     part:{
         flex:1,
+    },
+    profileText:{
+        color:'lightgray',
+    },
+    profileName:{
+        color:'#fff',
+        fontWeight:'bold',
+        fontSize:20
+    },  
+    editButton:{
+        backgroundColor:'#005796',
+        width:50,
+        height:50,
+        alignSelf:'flex-end',
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:15,
+        borderColor:'#004b82',
+        borderWidth:2,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 5,
+
+        elevation: 5,
+    },
+    profileButton:{
+        borderColor:'#eeeeee',
+        borderBottomWidth:1,
+        width:'100%',
+        padding:15,
+        paddingVertical:20,
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
+    profileButtonText:{
+        fontSize:16,
+        fontWeight:'500',
+    },
+    row:{
+        flexDirection:'row',
     }
 });

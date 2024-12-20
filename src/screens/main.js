@@ -63,7 +63,7 @@ const Main = ({ user }) => {
 
     return (
         <SafeAreaView style={styles.appContainer}>
-            <Text style={styles.header}>Ana sayfa</Text>
+            <Text style={styles.header}>Gösterge</Text>
             <ScrollView>
                 <View style={styles.statusContent}>
                     <Text style={styles.header2}>Sayaç Durumları</Text>

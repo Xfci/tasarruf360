@@ -1,13 +1,16 @@
-import { Image, Text, View, Button } from 'react-native'
+import { Image, Text, View, Button, TouchableOpacity } from 'react-native'
 import { styles } from '../../style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { type } from './main';
 import { useNavigation } from '@react-navigation/native';
-import { EvilIcons } from 'react-native-vector-icons/';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import React, { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Profile = ({ user }) => {
+    const [showEditing, setShowEditing] = useState(false);
     const navigation = useNavigation();
 
     const selectImage = () => {
@@ -20,7 +23,7 @@ const Profile = ({ user }) => {
 
     if (type == "google") {
         return (
-            <View style={styles.container}>
+            <View style={styles.appContainer}>
                 <View style={styles.porfileContainer}>
                     <Image style={{ width: 100, height: 100, marginRight: 20, borderRadius: 100 }} source={{ uri: user.user.picture }} />
                 </View>
@@ -69,30 +72,114 @@ const Profile = ({ user }) => {
         )
     } else {
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={[styles.appContainer, { backgroundColor: '#0089ec' }]}>
+                <Text style={[styles.header, { color: 'white', marginBottom: 0 }]}>Ayarlar</Text>
                 <View style={styles.porfileContainer}>
-                    <View style={styles.part}>
-                        <Image style={{width:150,height:150,borderRadius:100}} source={{uri:'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}}></Image>
+                    <View style={[styles.part, { flex: 0.75 }]}>
+                        <Image style={{ width: 100, height: 100, borderRadius: '100%', alignSelf: 'center' }} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }}></Image>
                     </View>
                     <View style={styles.part}>
-                        <View style={{ flexDirection: "column", justifyContent: "space-around" }}>
-                            <Text>
-                                Kullanıcı Adı : {user.user}
-                            </Text>
-                        </View>                    
+                        <Text style={styles.profileText}>
+                            Merhaba,
+                        </Text>
+                        <Text style={styles.profileName}>
+                            {user.user}
+                        </Text>
+                    </View>
+                    <View style={[styles.part, [styles.part, { flex: 0.5 }]]}>
+                        <TouchableOpacity style={styles.editButton} onPress={() => setShowEditing(!showEditing)}>
+                            {
+                                !showEditing
+                                    ? <MaterialCommunityIcons name="pencil" size={30} color="#fff" style={{ alignSelf: 'center' }} />
+                                    : <MaterialCommunityIcons name="close" size={30} color="red" style={{ alignSelf: 'center' }} />}
+                        </TouchableOpacity>
                     </View>
                 </View>
-
                 <View style={styles.profileContent}>
-                    <Button
-                        title='Oturumu kapat'
-                        onPress={async () => {
-                            await AsyncStorage.removeItem("@kullanici");
-                            navigation.replace("login");
-                        }}
-                    />
+                    {
+                        !showEditing ?
+                            <ScrollView>
+                                <TouchableOpacity style={[styles.profileButton, , { paddingTop: 0 }]}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="key-outline" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>İzinler</Text>
+                                    </View>
+                                    <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.profileButton}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="lock-outline" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Gizlilik</Text>
+                                    </View>
+                                    <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.profileButton}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="bell-outline" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Bildirimler</Text>
+                                    </View>
+                                    <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.profileButton}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="link-variant" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Bağlantılar</Text>
+                                    </View>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="google" size={16} color="" style={{ borderWidth: 1, borderRadius: 5, padding: 2, marginRight: 5 }} />
+                                        <MaterialCommunityIcons name="apple" size={16} color="black" style={{ borderWidth: 1, borderRadius: 5, padding: 2, marginRight: 5 }} />
+                                        <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.profileButton, { borderTopWidth: 5 }]}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="crown-outline" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Abonelikler</Text>
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={{ borderWidth: 1, borderRadius: 5, padding: 2, marginRight: 5, fontSize: 10 }} >Kişisel</Text>
+                                        <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.profileButton}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="book-open-page-variant-outline" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Haklarım</Text>
+                                    </View>
+                                    <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.profileButton, { borderTopWidth: 5 }]}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="shopping-outline" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Cihaz satın al</Text>
+                                    </View>
+                                    <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.profileButton}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="hand-heart-outline" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Bağış yap</Text>
+                                    </View>
+                                    <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.profileButton}>
+                                    <View style={styles.row}>
+                                        <MaterialCommunityIcons name="headset" size={20} color="black" style={styles.icon} />
+                                        <Text style={styles.profileButtonText}>Destek</Text>
+                                    </View>
+                                    <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.profileButton, { borderTopWidth: 5 }]} onPress={async () => {
+                                    await AsyncStorage.removeItem("@kullanici");
+                                    navigation.replace("login");
+                                }}>
+                                    <Text style={{ color: 'red', fontSize: 16 }} >Oturumu kapat</Text>
+                                </TouchableOpacity>
+                            </ScrollView>
+                            : <Text>EDİTİNG</Text> // buraya edit ekranı gelicek
+                    }
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 }
