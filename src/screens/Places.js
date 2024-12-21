@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { styles } from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -9,16 +9,12 @@ const Places = () => {
         <SafeAreaView style={styles.appContainer}>
             <Text style={styles.header}>Mekanlar</Text>
             <ScrollView>
-                <View style={styles.imageContainer}>
-                    {/* Görsel */}
-                    <Image
-                        source={{ uri: 'https://via.placeholder.com/300' }}
-                        style={styles.image}
-                    />
-                    {/* Opaklık Efekti */}
-                    <View style={styles.opacityOverlay} />
+                <View style={styles.statusContent}>
+                    <Text style={styles.header2}>Sayaç Durumları</Text>
+                    <TouchableOpacity style={styles.item}>
+                        <Text>deneme</Text>
+                    </TouchableOpacity>
                 </View>
-
             </ScrollView>
         </SafeAreaView>
     )
