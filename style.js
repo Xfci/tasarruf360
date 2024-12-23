@@ -120,10 +120,11 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#fff',
         borderRadius: 15,
-        padding: 10,
         marginVertical: 5,
         borderColor:'#f1f1f1',
-        borderWidth:2
+        borderWidth:2,
+        padding:10,
+        
     },
     itemIcon: {
         flex: 1,
@@ -198,8 +199,9 @@ export const styles = StyleSheet.create({
         marginBottom: 3
     },
     porfileContainer:{
+        marginVertical:20,
         flex:1,
-        backgroundColor:'#0089ec',
+        backgroundColor:'#eee',
         borderEndEndRadius:50,
         paddingHorizontal:10,
         alignItems:'center',
@@ -216,22 +218,21 @@ export const styles = StyleSheet.create({
         flex:1,
     },
     profileText:{
-        color:'lightgray',
+        color:'darkgray',
     },
     profileName:{
-        color:'#fff',
         fontWeight:'bold',
         fontSize:20
     },  
     editButton:{
-        backgroundColor:'#005796',
+        backgroundColor:'#a6a6a6',
         width:50,
         height:50,
         alignSelf:'flex-end',
         justifyContent:'center',
         alignItems:'center',
         borderRadius:15,
-        borderColor:'#004b82',
+        borderColor:'#828282',
         borderWidth:2,
         shadowColor: "#000",
         shadowOffset: {
@@ -258,5 +259,36 @@ export const styles = StyleSheet.create({
     },
     row:{
         flexDirection:'row',
+    },
+    plan:{
+        flex:1,
+        borderWidth:5,
+        borderColor:'#0084e0',
+        borderRadius:30,
+        margin:10,
+        alignItems:'center',
+        backgroundColor:'#fff'
+    },
+    planHeader:{
+        width:'70%',
+        backgroundColor:'#0095fe',
+        borderBottomLeftRadius:100,
+        borderBottomRightRadius:100,
+        alignItems:'center'
+    },
+    planHeaderText:{
+        color:'#fff',
+        fontSize:20,
+        fontWeight:800,
+        margin:20
+    },
+    activePlan:{
+        position:'absolute',
+        alignSelf:'flex-start',
+        backgroundColor:'#c92222',
+        borderBottomRightRadius:15,
+        borderTopLeftRadius:25,
+        padding:10,
+        zIndex:1
     }
 });

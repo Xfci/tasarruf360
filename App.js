@@ -16,6 +16,9 @@ import step2 from './src/screens/steps/step2';
 import step3 from './src/screens/steps/step3';
 import webview from './src/screens/steps/webview';
 import device from './src/screens/Device';
+import subscription from './src/screens/SettingPage';
+import addplace from './src/screens/addPlace';
+
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -34,6 +37,8 @@ export default function App() {
         <Stack.Screen name='step3' component={step3} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='webview' component={webview} options={{ headerShown: true, headerBackTitle: "", headerTintColor: 'black', title: 'Bağlan', ...TransitionPresets.ModalTransition }} />
         <Stack.Screen name='device' component={device} options={{ headerShown: false, headerBackTitle: "", headerTintColor: 'black', headerShadowVisible: false, title: 'Cihazım', ...TransitionPresets.SlideFromRightIOS }} />
+        <Stack.Screen name='subscription' component={subscription} options={{ headerShown: true, headerBackTitle: "",  headerTintColor: 'black', title: 'Planlar', ...TransitionPresets.SlideFromRightIOS }} />
+        <Stack.Screen name='addplace' component={addplace} options={{ headerShown: true, headerBackTitle: "", headerTintColor: 'black',headerShadowVisible: false, title: 'Mekan Ekle', ...TransitionPresets.ModalTransition }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
