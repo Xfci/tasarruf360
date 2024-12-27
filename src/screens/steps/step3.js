@@ -6,7 +6,6 @@ import { path } from '../myDevices';
 import * as ImagePicker from 'expo-image-picker';
 import TextRecognition from '@react-native-ml-kit/text-recognition';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LottieView from 'lottie-react-native';
 
 
 export default function Step2() {
@@ -144,17 +143,7 @@ export default function Step2() {
             </View>
 
             <View style={[styles.content, { justifyContent: 'flex-end' }]}>
-                <LottieView
-                    autoPlay
-                    ref={animation}
-                    style={{
-                        width: '100%',
-                        height: 250,
-                        margin: 20
-                    }}
-                    // Find more Lottie files at https://lottiefiles.com/featured
-                    source={require('../../../assets/images/device.json')}
-                />
+                
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => adressControl()}>
@@ -167,7 +156,9 @@ export default function Step2() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20
+        padding: 20,
+        maxWidth:1000,
+        alignSelf:'center'
     },
     content: {
         flex: 1,

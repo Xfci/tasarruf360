@@ -104,99 +104,102 @@ const RegisterPage = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: '#ffd02c' }]}>
-      <BottomModal
-        description={"Hesap aktivasyon maili e-posta adresinize gönderilmiştir 📥. Lütfen hesabınızı aktif ediniz."}
-        image={require('../../assets/images/banner4.jpeg')}
-        visibleState={modalVisible}
-        functionModal={true}
-        onClose={() => { setModalVisible(false), navigation.navigate('login'); }}
-      />
-      <View style={{ backgroundColor: '#fff', flex: 1, justifyContent: 'center' }}>
-        <Text style={[styles.header, { textAlign: 'center' }]}>Üye Kayıt 🖐️</Text>
-      </View>
+      <View style={styles.loginContainer}>
 
-      <View
-        style={[styles.content, { borderBottomRightRadius: 30, borderBottomLeftRadius: 30, paddingBottom: 25 }]}>
-        <View style={styles.inputWrapper}>
+        <BottomModal
+          description={"Hesap aktivasyon maili e-posta adresinize gönderilmiştir 📥. Lütfen hesabınızı aktif ediniz."}
+          image={require('../../assets/images/banner4.jpeg')}
+          visibleState={modalVisible}
+          functionModal={true}
+          onClose={() => { setModalVisible(false), navigation.navigate('login'); }}
+        />
+        <View style={{ backgroundColor: '#fff', flex: 1, justifyContent: 'center' }}>
+          <Text style={[styles.header, { textAlign: 'center' }]}>Üye Kayıt 🖐️</Text>
+        </View>
 
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
-            <TextInput
-              onChangeText={(value) => { setEmail(value) }}
-              style={styles.textInput}
-              placeholder="Email"
-              keyboardType="email-address"
-            />
-          </View>
+        <View
+          style={[styles.content, { borderBottomRightRadius: 30, borderBottomLeftRadius: 30, paddingBottom: 25 }]}>
+          <View style={styles.inputWrapper}>
 
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
-            <TextInput
-              onChangeText={(value) => { setPassword(value) }}
-              style={styles.textInput}
-              placeholder="Şifre"
-              secureTextEntry={!passwordVisible} // Şifre görünürlüğü
-            />
-            <TouchableOpacity
-              onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
-            >
-              <MaterialCommunityIcons
-                name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
-                size={24}
-                color="#888"
+            <View style={styles.inputContainer}>
+              <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+              <TextInput
+                onChangeText={(value) => { setEmail(value) }}
+                style={styles.textInput}
+                placeholder="Email"
+                keyboardType="email-address"
               />
-            </TouchableOpacity>
-          </View>
+            </View>
 
-          <View style={styles.inputContainer}>
-            <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
-            <TextInput
-              onChangeText={(value) => { setConfirm(value) }}
-              style={styles.textInput}
-              placeholder="Şifre tekrar"
-              secureTextEntry={!passwordConfirmVisible} // Şifre görünürlüğü
-            />
-            <TouchableOpacity
-              onPress={() => setPasswordConfirmVisible(!passwordConfirmVisible)} // Şifre görünürlüğünü değiştir
-            >
-              <MaterialCommunityIcons
-                name={passwordConfirmVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
-                size={24}
-                color="#888"
+            <View style={styles.inputContainer}>
+              <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
+              <TextInput
+                onChangeText={(value) => { setPassword(value) }}
+                style={styles.textInput}
+                placeholder="Şifre"
+                secureTextEntry={!passwordVisible} // Şifre görünürlüğü
               />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.errorText}>{errorMessage}</Text>
+              <TouchableOpacity
+                onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
+              >
+                <MaterialCommunityIcons
+                  name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
+                  size={24}
+                  color="#888"
+                />
+              </TouchableOpacity>
+            </View>
 
-          {
-            loading ?
-              <View style={[styles.buttonOutline, { color: '#dead10' }]}>
-                <ActivityIndicator color={'#fff'} />
-              </View>
-              :
-              <Pressable style={[styles.buttonOutline, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
-                <Text style={[styles.buttonText, { color: '#dead10' }]}>Kayıt Ol</Text>
-              </Pressable>
-          }
-          <View style={[styles.alt]}>
-            <Text>Zaten hesabın var mı? </Text>
-            <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.goBack()}>
-              <Text style={styles.navigateLink}>Giriş yap.</Text>
-            </TouchableOpacity>
+            <View style={styles.inputContainer}>
+              <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
+              <TextInput
+                onChangeText={(value) => { setConfirm(value) }}
+                style={styles.textInput}
+                placeholder="Şifre tekrar"
+                secureTextEntry={!passwordConfirmVisible} // Şifre görünürlüğü
+              />
+              <TouchableOpacity
+                onPress={() => setPasswordConfirmVisible(!passwordConfirmVisible)} // Şifre görünürlüğünü değiştir
+              >
+                <MaterialCommunityIcons
+                  name={passwordConfirmVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
+                  size={24}
+                  color="#888"
+                />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.errorText}>{errorMessage}</Text>
+
+            {
+              loading ?
+                <View style={[styles.buttonOutline, { color: '#dead10' }]}>
+                  <ActivityIndicator color={'#fff'} />
+                </View>
+                :
+                <Pressable style={[styles.buttonOutline, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
+                  <Text style={[styles.buttonText, { color: '#dead10' }]}>Kayıt Ol</Text>
+                </Pressable>
+            }
+            <View style={[styles.alt]}>
+              <Text>Zaten hesabın var mı? </Text>
+              <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.goBack()}>
+                <Text style={styles.navigateLink}>Giriş yap.</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[styles.bannerImage]}>
-          <SvgUri
-            width="100%"
-            height="100%"
-            uri="https://www.btasoftware.com/images/banner2.svg"
-          />
-        </View>
-      </TouchableWithoutFeedback>
-      <StatusBar barStyle={'dark-content'} />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={[styles.bannerImage]}>
+            <SvgUri
+              width="100%"
+              height="100%"
+              uri="https://www.btasoftware.com/images/banner2.svg"
+            />
+          </View>
+        </TouchableWithoutFeedback>
+        <StatusBar barStyle={'dark-content'} />
+      </View>
     </SafeAreaView>
   )
 }

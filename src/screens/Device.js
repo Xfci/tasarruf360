@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Switch, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, AlertIOS } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Switch, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, AlertIOS,StatusBar } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -25,7 +25,7 @@ export default function Device({ route }) {
                     setDurum(value.ledDurum);
                     setParlaklik(value.parlaklik);
                 } catch (error) {
-                    
+
                 }
             });
             return () => listener();
@@ -164,10 +164,9 @@ export default function Device({ route }) {
                                         <Text>2020 kw</Text>
                                     </View>
                                     <View style={styles.wrapper}>
-                                        <Text style={styles.text}>İstenen</Text>
+                                        <Text style={[styles.text, { flex: 2 }]}>İstenen (kw)</Text>
                                         <View style={styles.textInput}>
                                             <TextInput placeholder='1000' />
-                                            <Text>kw</Text>
                                         </View>
                                     </View>
                                 </>
@@ -217,13 +216,15 @@ export default function Device({ route }) {
                     </View>
                 </View>
             </ScrollView>
+            <StatusBar barStyle={'dark-content'} />
+
         </KeyboardAvoidingView >
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     header: {
         gap: 4,
@@ -266,7 +267,8 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         marginBottom: 30,
-        maxWidth: 600
+        maxWidth: 600,
+        alignSelf: 'center'
     },
     wrapper: {
         flexDirection: 'row',
@@ -290,7 +292,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: 'gray',
         borderWidth: 1,
-        width: 100,
+        flex: 1,
         height: 45,
         flexDirection: 'row',
         justifyContent: 'space-between',

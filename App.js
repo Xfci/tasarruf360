@@ -28,8 +28,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}>
-        <Stack.Screen name='login' component={LoginPage} />
-        <Stack.Screen name='register' component={RegisterPage} />
+        <Stack.Screen name='login' component={LoginPage} options={{title:'Hoşgeldiniz | Giriş Yap'}}/>
+        <Stack.Screen name='register' component={RegisterPage} options={{title:'Üye ol'}}/>
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
         <Stack.Screen name='main' component={TabScreen} options={{ title: 'Ana Sayfa' }} />
         <Stack.Screen name='step1' component={step1} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />

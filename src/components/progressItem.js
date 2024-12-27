@@ -9,7 +9,7 @@ export const Item = ({ title, icon, color, unit, value, value2 }) => {
         return (
             <View style={styles.item}>
                 <View style={styles.itemIcon}>
-                    <MaterialCommunityIcons name={icon} size={60} color={color} style={styles.icon} />
+                    <MaterialCommunityIcons name={icon} size={60} color={color} style={[styles.icon,{alignSelf:'center'}]} />
                 </View>
                 <View style={styles.itemContent}>
                     <View style={styles.itemHeaderContainer}>

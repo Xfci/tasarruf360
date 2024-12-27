@@ -3,7 +3,6 @@ import React from 'react'
 import { useRef, useEffect } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-import LottieView from 'lottie-react-native';
 
 
 export default function Step1() {
@@ -13,15 +12,7 @@ export default function Step1() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <LottieView
-                    autoPlay
-                    ref={animation}
-                    style={{
-                        width: 200,
-                        height: 200,
-                    }}
-                    source={require('../../../assets/images/step1.json')}
-                />
+                
                 <Text style={styles.text}>Cihazın üzerindeki ekrandaki adımları takip edin cihazının internet bağlantısını gerçekleştirin.</Text>
             </View>
 
@@ -35,7 +26,9 @@ export default function Step1() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20
+        padding: 20,
+        maxWidth:1000,
+        alignSelf:'center'
     },
     content: {
         flex: 1,
@@ -48,7 +41,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
+        alignSelf:'center',
         width: '100%',
+        maxWidth:1000,
         height: 50,
         backgroundColor: '#f2bd11',
         borderRadius: 35,

@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Platform, Linking } from 'react-native'
 import React from 'react'
 import { useRef } from 'react';
-import LottieView from 'lottie-react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -23,17 +22,6 @@ export default function Step3() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <LottieView
-                    autoPlay
-                    ref={animation}
-                    style={{
-                        width: 200,
-                        height: 200,
-                        margin: 20
-                    }}
-                    // Find more Lottie files at https://lottiefiles.com/featured
-                    source={require('../../../assets/images/wifi.json')}
-                />
                 <Text style={styles.text}>İnternete bağlanmak için önce cihaza bağlanmanız gerekir. Cihaz üzerindeki Wi-Fi adresine bağlanın ve devam edin. Bağlantı tamamlandıktan sonra cihazınızı ekleyin.</Text>
                 <TouchableOpacity onPress={goSettings} >
                     <Text style={styles.link}>Ayarlara Git.</Text>
@@ -45,7 +33,7 @@ export default function Step3() {
                 <Text style={styles.buttonText}>Bağlantı Paneli</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('step3')}>
-                <Text style={styles.buttonText}>devam</Text>
+                <Text style={styles.buttonText}>Devam</Text>
             </TouchableOpacity>
         </View>
     )
@@ -54,9 +42,9 @@ export default function Step3() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20
+        padding: 20,
+        maxWidth:1000,
+        alignSelf:'center'
     },
     content: {
         flex: 1,
@@ -80,7 +68,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonWifi: {
+        alignSelf:'center',
         width: '100%',
+        maxWidth:1000,
         height: 50,
         backgroundColor: '#0089ec',
         borderRadius: 35,

@@ -5,6 +5,14 @@ export const styles = StyleSheet.create({
         flex:1,
         height: '100%',
         width: '100%',
+        alignSelf:'center'
+    },
+    loginContainer:{
+        flex:1,
+        height: '100%',
+        width: '100%',
+        alignSelf:'center',
+        maxWidth:1000
     },
     banner: {
         width: "100%",
@@ -66,14 +74,6 @@ export const styles = StyleSheet.create({
 
     bannerImage: {
         flex: 2,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.15,
-        shadowRadius: 5,
-        elevation: 5,
     },
     content: {
         flex: 3,
@@ -81,7 +81,7 @@ export const styles = StyleSheet.create({
         paddingTop:25,
         justifyContent: 'space-around',
         backgroundColor: '#fff',
-        zIndex: 1
+        zIndex: 1,
     },
     contentBottom: {
         flex: 1.5,
@@ -97,7 +97,6 @@ export const styles = StyleSheet.create({
         borderRadius: 15,
         paddingHorizontal: 15,
         width: '100%',
-        maxWidth: 600,
         marginBottom: 30,
     },
     icon: {
@@ -112,6 +111,7 @@ export const styles = StyleSheet.create({
         flex: 1, // Bu, input öğelerinin arasındaki alanı eşit şekilde dağıtmak için kullanılır
         justifyContent: 'space-between', // Öğeler arasındaki mesafeyi eşitler
         flexDirection: 'column',
+        alignContent:'center'
     },
     errorText: {
         color: 'red',

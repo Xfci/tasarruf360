@@ -209,112 +209,114 @@ const LoginPage = ({ navigation }) => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: '#b2e7f9' }]}>
-      <BottomModal
-        description={"Eğer kayıtlı ise şifre sıfırlama bağlantısı e-mail adresinize gönderildi 📥."}
-        image={require('../../assets/images/banner3.jpeg')}
-        visibleState={modalVisible}
-        onClose={() => setModalVisible(false)}
-      />
+      <View style={styles.loginContainer}>
+        <BottomModal
+          description={"Eğer kayıtlı ise şifre sıfırlama bağlantısı e-mail adresinize gönderildi 📥."}
+          image={require('../../assets/images/banner3.jpeg')}
+          visibleState={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
 
-      <BottomModal
-        description={"Hesabınız aktive edilmemiş ❌. Aktivasyon işlemini tamamlayıp tekrar deneyiniz."}
-        image={require('../../assets/images/banner4.jpeg')}
-        visibleState={modalActiveVisible}
-        functionModal={true}
-        onClose={() => setModalActiveVisible(false)}
-      />
+        <BottomModal
+          description={"Hesabınız aktive edilmemiş ❌. Aktivasyon işlemini tamamlayıp tekrar deneyiniz."}
+          image={require('../../assets/images/banner4.jpeg')}
+          visibleState={modalActiveVisible}
+          functionModal={true}
+          onClose={() => setModalActiveVisible(false)}
+        />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 5 }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.bannerImage}>
-            <SvgUri
-              width="100%"
-              height="100%"
-              uri="https://www.btasoftware.com/images/banner1.svg"
-            />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 5 }}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.bannerImage}>
+              <SvgUri
+                width="100%"
+                height="100%"
+                uri="https://www.btasoftware.com/images/banner1.svg"
+              />
 
-          </View>
-        </TouchableWithoutFeedback>
-
-
-        <View style={[styles.content,{borderTopLeftRadius: 30, borderTopRightRadius: 30}]}>
-          <Text style={styles.header}>Hoşgeldiniz 👋</Text>
-
-          <View style={styles.inputWrapper}>
-            <View>
-              <View style={styles.inputContainer}>
-                <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
-                <TextInput
-                  onChangeText={(value) => { setEmail(value) }}
-                  style={styles.textInput}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                />
-              </View>
-              <View>
-                <View style={[styles.inputContainer, { marginBottom: 10 }]}>
-                  <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
-                  <TextInput
-                    onChangeText={(value) => { setPassword(value) }}
-                    style={styles.textInput}
-                    placeholder="Şifre"
-                    secureTextEntry={!passwordVisible} // Şifre görünürlüğü
-                  />
-                  <TouchableOpacity
-                    onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
-                  >
-                    <MaterialCommunityIcons
-                      name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
-                      size={24}
-                      color="#888"
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={[styles.alt, { justifyContent: 'space-between' }]}>
-                  <Text style={styles.errorText}>{errorMessage}</Text>
-                  <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
-                    <Text>Şifremi Unuttum</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
             </View>
-            {
-              loading ?
-                <View style={styles.button}>
-                  <ActivityIndicator color={'#fff'} />
+          </TouchableWithoutFeedback>
+
+
+          <View style={[styles.content, { borderTopLeftRadius: 30, borderTopRightRadius: 30 }]}>
+            <Text style={styles.header}>Hoşgeldiniz 👋</Text>
+            <View style={styles.inputWrapper}>
+              <View>
+                <View style={styles.inputContainer}>
+                  <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+                  <TextInput
+                    onChangeText={(value) => { setEmail(value) }}
+                    style={styles.textInput}
+                    placeholder="Email"
+                    keyboardType="email-address"
+                  />
                 </View>
-                :
-                <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
-                  <Text style={styles.buttonText}>Giriş Yap</Text>
-                </Pressable>
-            }
+                <View>
+                  <View style={[styles.inputContainer, { marginBottom: 10 }]}>
+                    <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
+                    <TextInput
+                      onChangeText={(value) => { setPassword(value) }}
+                      style={styles.textInput}
+                      placeholder="Şifre"
+                      secureTextEntry={!passwordVisible} // Şifre görünürlüğü
+                    />
+                    <TouchableOpacity
+                      onPress={() => setPasswordVisible(!passwordVisible)} // Şifre görünürlüğünü değiştir
+                    >
+                      <MaterialCommunityIcons
+                        name={passwordVisible ? 'eye' : 'eye-off'} // Duruma göre ikon
+                        size={24}
+                        color="#888"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={[styles.alt, { justifyContent: 'space-between' }]}>
+                    <Text style={styles.errorText}>{errorMessage}</Text>
+                    <TouchableOpacity style={styles.link} onPress={() => { resetPassword(email) }}>
+                      <Text>Şifremi Unuttum</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+              {
+                loading ?
+                  <View style={styles.button}>
+                    <ActivityIndicator color={'#fff'} />
+                  </View>
+                  :
+                  <Pressable style={styles.button} onPress={() => { signInWithEmail(email, password) }}>
+                    <Text style={styles.buttonText}>Giriş Yap</Text>
+                  </Pressable>
+              }
+            </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
 
-      <View style={styles.contentBottom}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          <View>
-            <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
+        <View style={styles.contentBottom}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{ width: 50, textAlign: 'center' }}>YA DA</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           </View>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-        </View>
 
-        <TouchableOpacity style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
-          <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
-          <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
-        </TouchableOpacity>
-
-        <View style={styles.alt}>
-          <Text>Hesabın yok mu? </Text>
-          <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
-            <Text style={styles.navigateLink}>Üye ol.</Text>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#e4e7eb', flexDirection: 'row' }]} onPress={() => { promptAsync() }}>
+            <Image source={require('../../assets/images/google.png')} style={{ height: 24, width: 24, marginRight: 15 }} />
+            <Text style={[styles.buttonText, { color: '#697381', fontWeight: '500' }]}>Google ile devam et</Text>
           </TouchableOpacity>
+
+          <View style={styles.alt}>
+            <Text>Hesabın yok mu? </Text>
+            <TouchableOpacity style={styles.navigateLink} onPress={() => navigation.navigate('register')}>
+              <Text style={styles.navigateLink}>Üye ol.</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        <StatusBar barStyle={'dark-content'} />
       </View>
-      <StatusBar barStyle={'dark-content'} />
     </SafeAreaView >
   )
 }

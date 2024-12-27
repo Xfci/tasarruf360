@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { SvgUri } from 'react-native-svg';
+
 
 const addPlace = () => {
     const navigation = useNavigation();
@@ -15,12 +17,34 @@ const addPlace = () => {
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.textInput} placeholder='Mekanım' value={name} onChangeText={(value) => setName(value)} />
                 </View>
-                <Text>MAC adresi</Text>
+                <Text>Kapak Görseli</Text>
+                <View style={styles.bigView}>
+                    <View>
+                        <Image
+                            style={{
+                                width: 100,
+                                height: 100,
+                            }}
+                            source={{
+                                uri: 'https://www.btasoftware.com/images/addImage.png',
+                            }}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity style={styles.buttonAdd}>
+                            <Text style={styles.buttonText}>Ekle</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <MaterialCommunityIcons name="delete-forever-outline" size={30} color="red" />
+                        </TouchableOpacity>
+                    </View>
 
+                </View>
+                <Text>Konum</Text>
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.textInput} placeholder='' />
                     <TouchableOpacity onPress={() => { showAlert() }}>
-                        <MaterialCommunityIcons name="camera-enhance-outline" size={30} color="#B0B0B0" />
+                        <MaterialCommunityIcons name="map-marker-outline" size={30} color="darkred" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -77,11 +101,28 @@ const styles = StyleSheet.create({
         borderRadius: 35,
         justifyContent: 'center'
     },
+    buttonAdd: {
+        width: 100,
+        height: 30,
+        backgroundColor: '#0089ec',
+        borderRadius: 35,
+        justifyContent: 'center'
+    },
     buttonText: {
         color: '#fff',
         textAlign: 'center',
         fontSize: 16,
         fontWeight: 'bold'
+    },
+    bigView: {
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 15,
+        paddingHorizontal: 15,
+        width: '100%',
+        maxWidth: 600,
+        marginBottom: 10,
+        padding: 20
     }
 })
 

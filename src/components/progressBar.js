@@ -46,7 +46,7 @@ const ProgressBar = ({
               key={index}
               style={[
                 styles.stripe,
-                { left: index * 15, width: 10, backgroundColor: darkerColor },
+                { left: index * 40, width: 20, backgroundColor: darkerColor },
               ]}
             />
           ))}
