@@ -1,13 +1,67 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { firebase, db, ref, get } from '../../config'
 import { SvgUri } from 'react-native-svg';
+import * as ImagePicker from 'expo-image-picker';
 
 
-const addPlace = () => {
+const AddPlace = () => {
     const navigation = useNavigation();
     const [name, setName] = useState();
+    const [photo, setPhoto] = useState(null);
+
+    const showAlert = () => {
+        Alert.alert(
+            "Fotoğrafınızı Seçin", // Başlık
+            "Bir işlem seçin:", // Mesaj
+            [
+                {
+                    text: "Fotoğraf çekmek", // 1. seçenek
+                    onPress: () => pickImageWithPhoto()
+                },
+                {
+                    text: "Galeriden seçmek", // 2. seçenek
+                    onPress: () => pickImageWithGallery()
+                }
+            ],
+            { cancelable: false } // İptal edilemez
+        );
+    };
+
+    const pickImageWithPhoto = async () => {
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert('Kamera izni gerekiyor!');
+            return;
+        }
+        const result = await ImagePicker.launchCameraAsync({
+            ediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 1,
+            base64: true
+        });
+        if (!result.canceled) {
+            setPhoto(result.assets[0]);
+        }
+    };
+
+    const pickImageWithGallery = async () => {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert('Kamera izni gerekiyor!');
+            return;
+        }
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 1,
+        });
+        if (!result.canceled) {
+            setPhoto(result.assets[0]);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -31,7 +85,7 @@ const addPlace = () => {
                         />
                     </View>
                     <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.buttonAdd}>
+                        <TouchableOpacity style={styles.buttonAdd} onPress={() => showAlert()}>
                             <Text style={styles.buttonText}>Ekle</Text>
                         </TouchableOpacity>
                         <TouchableOpacity>
@@ -43,7 +97,7 @@ const addPlace = () => {
                 <Text>Konum</Text>
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.textInput} placeholder='' />
-                    <TouchableOpacity onPress={() => { showAlert() }}>
+                    <TouchableOpacity>
                         <MaterialCommunityIcons name="map-marker-outline" size={30} color="darkred" />
                     </TouchableOpacity>
                 </View>
@@ -126,4 +180,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default addPlace
+export default AddPlace

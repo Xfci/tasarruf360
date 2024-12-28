@@ -7,7 +7,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { BarChart } from 'react-native-gifted-charts';
 import { Item } from '../components/progressItem';
 import tinycolor from 'tinycolor2';
-import SegmentedControl from '@react-native-segmented-control/segmented-control';
 
 export var path; //database yolu
 export var type; //giriş türünü tutar
@@ -93,7 +92,7 @@ const Main = ({ user }) => {
                     />
                 </View>
             </ScrollView>
-            <StatusBar barStyle={'dark-content'} />
+            <StatusBar barStyle={'light-content'} />
         </SafeAreaView>
     )
 }

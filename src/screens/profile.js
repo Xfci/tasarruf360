@@ -77,7 +77,7 @@ const Profile = ({ user }) => {
                 <Text style={[styles.header, { marginBottom: 0 }]}>Ayarlar</Text>
                     <View style={styles.porfileContainer}>
                         <View style={[styles.part, { flex: 0.75 }]}>
-                            <Image style={{ width: 100, height: 100, borderRadius: '100%', alignSelf: 'center' }} source={require('../../assets/user.jpg')}></Image>
+                            <Image style={{ width: 100, height: 100, borderRadius: 100, alignSelf: 'center' }} source={require('../../assets/user.jpg')}></Image>
                         </View>
                         <View style={styles.part}>
                             <Text style={styles.profileText}>

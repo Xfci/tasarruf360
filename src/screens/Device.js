@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Switch, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, AlertIOS,StatusBar } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Switch, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, AlertIOS, StatusBar } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -70,9 +70,9 @@ export default function Device({ route }) {
         navigation.goBack();
     };
 
-    const led = () => {
+    const led = (x) => {
         firebase.database().ref(`espDevice/${data.mac}/`).set({
-            ledDurum: durum == 0 ? 1 : 0,
+            ledDurum: x,
             parlaklik: parlaklik,
             state: data.state,
             SSID: data.SSID
@@ -87,6 +87,16 @@ export default function Device({ route }) {
             SSID: data.SSID
         });
     }
+
+    useEffect(() => {
+        if (durum != undefined && parlaklik != undefined) {
+            if (isEnabled) {
+                led(1);
+            }else{
+                led(0);
+            }
+        }
+    }, [isEnabled])
 
     return (
         <KeyboardAvoidingView
@@ -120,25 +130,6 @@ export default function Device({ route }) {
                             data.tur == "ışık" ?
                                 <>
                                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <TouchableOpacity onPress={() => { led() }} activeOpacity={0.5} >
-                                            {
-                                                durum == 0 ?
-                                                    <>
-                                                        <MaterialCommunityIcons name="lightbulb-off" size={60} color="black" />
-                                                        <Text style={{ color: "black", fontWeight: 'bold', fontSize: 18 }}>
-                                                            Ledi Aç
-                                                        </Text>
-                                                    </> :
-                                                    durum == 1 ?
-                                                        <>
-                                                            <MaterialCommunityIcons name="lightbulb-on" size={60} color="black" />
-                                                            <Text style={{ color: "black", fontWeight: 'bold', fontSize: 18 }}>
-                                                                Ledi Kapat
-                                                            </Text>
-                                                        </>
-                                                        : null
-                                            }
-                                        </TouchableOpacity>
                                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                                             <Text style={{ color: "black", fontWeight: 'bold', fontSize: 18 }}>
                                                 parlaklık:
@@ -216,7 +207,7 @@ export default function Device({ route }) {
                     </View>
                 </View>
             </ScrollView>
-            <StatusBar barStyle={'dark-content'} />
+            <StatusBar barStyle={'light-content'} />
 
         </KeyboardAvoidingView >
     )

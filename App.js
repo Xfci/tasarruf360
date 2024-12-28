@@ -18,6 +18,7 @@ import webview from './src/screens/steps/webview';
 import device from './src/screens/Device';
 import subscription from './src/screens/SettingPage';
 import addplace from './src/screens/addPlace';
+import { StatusBar } from 'react-native';
 
 
 const Stack = createStackNavigator();
@@ -40,6 +41,7 @@ export default function App() {
         <Stack.Screen name='subscription' component={subscription} options={{ headerShown: true, headerBackTitle: "",  headerTintColor: 'black', title: 'Planlar', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='addplace' component={addplace} options={{ headerShown: true, headerBackTitle: "", headerTintColor: 'black',headerShadowVisible: false, title: 'Mekan Ekle', ...TransitionPresets.ModalTransition }} />
       </Stack.Navigator>
+      <StatusBar barStyle={'light-content'}/>
     </NavigationContainer>
   );
 }
