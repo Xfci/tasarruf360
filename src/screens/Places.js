@@ -1,17 +1,20 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
 import { styles } from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons/';
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, use } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { firebase, db, ref, get, onValue } from '../../config'
 import { userId } from './main';
 
 const Places = () => {
     const [placeName, setPlaceName] = useState([]);
-    const [location,setLocation] = useState([]);
-    const [floorName,setFloorName] = useState([]);
+    const [location, setLocation] = useState([]);
+    const [admins, setAdmins] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [devices, setDevices] = useState([]);
+    const [data, setData] = useState();
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -23,8 +26,9 @@ const Places = () => {
                 if (userId == element.key) {
                     element.forEach(element => {
                         placeNameArray.push(element.key);
+                        locationArray.push(element.val().konum);
                         setPlaceName(placeNameArray);
-                        //console.log(element.val().konum);
+                        setLocation(locationArray);
                     });
                 }
             });
@@ -33,21 +37,62 @@ const Places = () => {
     }, []);
 
     useEffect(() => {
+        var adminsArray = [];
+        var userArray = [];
         for (let i = 0; i < placeName.length; i++) {
-            const dbref = ref(db, `places/${userId}/${placeName[i]}/floors`);
+            const dbref = ref(db, `places/${userId}/${placeName[i]}/users`);
             const listener = onValue(dbref, (snapshot) => {
-                var floorNameArray = [];
                 snapshot.forEach(element => {
                     const key = element.key;
                     const value = element.val();
-                    console.log(value);
-                    floorNameArray.push(key);
-                    setFloorName(floorNameArray);
+                    if (key == "admins") {
+                        adminsArray.push(value.length);
+                        setAdmins(adminsArray);
+                    }
+                    if (key == "user") {
+                        userArray.push(value.length);
+                        setUsers(userArray);
+                    }
                 });
             });
-            return () => listener();
         }
-    }, [placeName]);
+    }, [placeName,location]);
+
+    useEffect(() => {
+        const data = [];
+        for (let i = 0; i < placeName.length; i++) {
+            data.push({ title: placeName[i], location: location[i] ? location[i] : "yok", admins: admins[i] ? admins[i] : "yok", users: users[i] ? users[i] : "yok" });
+        }
+        setData(data);
+    }, [placeName, location, admins, users])
+
+    function yaz() {
+        console.log(data);
+    }
+
+    const renderItem = ({ item }) => {
+        return (
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]}>
+                <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
+                    <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
+                </View>
+                <View style={{ flex: 1, padding: 10, justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: 16, textAlign: 'right', fontWeight: 700 }}>{item.title}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end' }}>
+                            <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1 }} />
+                            <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -13 }} />
+                            <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -25 }} />
+                        </View>
+                        <View style={{ alignSelf: 'flex-end' }}>
+                            <Text style={{ textAlign: 'right' }} >Yönetici: {item.admins}</Text>
+                            <Text style={{ textAlign: 'right' }}>Kullanıcı: {item.users}</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
 
     return (
         <SafeAreaView style={styles.appContainer}>
@@ -80,12 +125,14 @@ const Places = () => {
                             </View>
                         </View>
                     </TouchableOpacity>
+
+                    <FlatList data={data} renderItem={renderItem} scrollEnabled={false} />
                 </View>
                 <View style={styles.statusContent}>
                     { /*<Text style={styles.emptyTitle}>Yetkili olduğun mekan yok.</Text> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.header2}>Yetkili olduğun mekanlar</Text>
-                        <TouchableOpacity onPress={() => console.log(floorName)}>
+                        <TouchableOpacity onPress={() => yaz()}>
                             <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
                         </TouchableOpacity>
                     </View>
