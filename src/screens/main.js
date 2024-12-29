@@ -10,6 +10,7 @@ import tinycolor from 'tinycolor2';
 
 export var path; //database yolu
 export var type; //giriş türünü tutar
+export var userId;
 
 const Main = ({ user }) => {
     const screenWidth = Dimensions.get('window').width;
@@ -30,13 +31,17 @@ const Main = ({ user }) => {
         if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
             path = 'userInfo/' + user.user + '/';
             type = "kullanici"
+            userId = user.user;
         } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
             path = 'userInfo/' + user.userData.id + '/';
             type = "eposta"
+            userId = user.userData.id;
         } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
             path = 'userInfo/' + user.user.id + '/';
             type = "google"
+            userId = user.user.id;
         }
+
     }
 
     useEffect(() => {

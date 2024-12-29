@@ -3,11 +3,51 @@ import { styles } from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons/';
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { firebase, db, ref, get, onValue } from '../../config'
+import { userId } from './main';
 
 const Places = () => {
+    const [placeName, setPlaceName] = useState([]);
+    const [location,setLocation] = useState([]);
+    const [floorName,setFloorName] = useState([]);
     const navigation = useNavigation();
+
+    useEffect(() => {
+        const dbref = ref(db, `places/`);
+        const listener = onValue(dbref, (snapshot) => {
+            var placeNameArray = [];
+            var locationArray = [];
+            snapshot.forEach(element => {
+                if (userId == element.key) {
+                    element.forEach(element => {
+                        placeNameArray.push(element.key);
+                        setPlaceName(placeNameArray);
+                        //console.log(element.val().konum);
+                    });
+                }
+            });
+        });
+        return () => listener();
+    }, []);
+
+    useEffect(() => {
+        for (let i = 0; i < placeName.length; i++) {
+            const dbref = ref(db, `places/${userId}/${placeName[i]}/floors`);
+            const listener = onValue(dbref, (snapshot) => {
+                var floorNameArray = [];
+                snapshot.forEach(element => {
+                    const key = element.key;
+                    const value = element.val();
+                    console.log(value);
+                    floorNameArray.push(key);
+                    setFloorName(floorNameArray);
+                });
+            });
+            return () => listener();
+        }
+    }, [placeName]);
 
     return (
         <SafeAreaView style={styles.appContainer}>
@@ -45,7 +85,7 @@ const Places = () => {
                     { /*<Text style={styles.emptyTitle}>Yetkili olduğun mekan yok.</Text> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.header2}>Yetkili olduğun mekanlar</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => console.log(floorName)}>
                             <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
                         </TouchableOpacity>
                     </View>

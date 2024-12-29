@@ -19,6 +19,11 @@ export default function Step3() {
         }
     };
 
+    const openBrowser = () => {
+        const url = 'http://192.168.4.1/';
+        Linking.openURL(url);
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.content}>
@@ -28,7 +33,7 @@ export default function Step3() {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.buttonWifi} onPress={() => navigation.navigate('webview')}>
+            <TouchableOpacity style={styles.buttonWifi} onPress={openBrowser}>
                 <MaterialCommunityIcons name="wifi" size={24} color="#fff" style={{ marginRight: 10 }} />
                 <Text style={styles.buttonText}>Bağlantı Paneli</Text>
             </TouchableOpacity>
@@ -43,8 +48,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        maxWidth:1000,
-        alignSelf:'center'
+        maxWidth: 1000,
+        alignSelf: 'center'
     },
     content: {
         flex: 1,
@@ -68,17 +73,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonWifi: {
-        alignSelf:'center',
+        alignSelf: 'center',
         width: '100%',
-        maxWidth:1000,
+        maxWidth: 1000,
         height: 50,
         backgroundColor: '#0089ec',
         borderRadius: 35,
         justifyContent: 'center',
         marginBottom: 20,
-        flexDirection:'row',
-        alignItems:'center'
-        
+        flexDirection: 'row',
+        alignItems: 'center'
+
     },
     buttonText: {
         color: '#fff',

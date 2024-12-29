@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } fro
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { firebase, db, ref, get } from '../../config'
+import { firebase, db, ref, get, onValue } from '../../config'
 import { SvgUri } from 'react-native-svg';
 import * as ImagePicker from 'expo-image-picker';
 

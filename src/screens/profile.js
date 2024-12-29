@@ -1,4 +1,4 @@
-import { Image, Text, View, Button, TouchableOpacity } from 'react-native'
+import { Image, Text, View, Button, TouchableOpacity,Dimensions } from 'react-native'
 import { styles } from '../../style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { type } from './main';
@@ -10,8 +10,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const Profile = ({ user }) => {
-    const [showEditing, setShowEditing] = useState(false);
+    const [settingType, setSettingType] = useState('');
     const navigation = useNavigation();
+    const height = Dimensions.get('screen').height;
 
     const selectImage = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
@@ -20,6 +21,115 @@ const Profile = ({ user }) => {
             }
         });
     };
+
+
+    const Sub = () => {
+        return (
+            <ScrollView style={[styles.appContainer,{height:height / 1.45}]}>
+                <View style={styles.plan}>
+                    <View style={styles.activePlan}>
+                        <Text style={{ color: '#ebb734', fontWeight: 500 }}>Aktif Plan</Text>
+                    </View>
+                    <View style={styles.planHeader}>
+                        <Text style={styles.planHeaderText}>Kişisel</Text>
+                    </View>
+                    <Text style={[styles.planHeaderText, { color: '#0084e0' }]}>Bedava</Text>
+                    <View style={{ marginBottom: 20 }}>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>Sınırsız cihaz ekleme hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>1 mekan yönetim hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>1 mekan ekleme hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="close" size={25} color="red" style={styles.icon} />
+                            <Text style={{}}>Paylaşımsız kullanım.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="close" size={25} color="red" style={styles.icon} />
+                            <Text style={{}}>Reklamlı uygulama.</Text>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={[styles.plan, { borderColor: '#dba904' }]}>
+                    <View style={[styles.planHeader, { backgroundColor: '#f2bd11' }]}>
+                        <Text style={[styles.planHeaderText, {}]}>Aile Paketi</Text>
+                    </View>
+                    <Text style={[styles.planHeaderText, { color: '#dba904' }]}>59 TL</Text>
+                    <View style={{ marginBottom: 20 }}>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>Sınırsız cihaz ekleme hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>1 mekan yönetim hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>1 mekan ekleme hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>1 mekan paylaşma hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="close" size={25} color="red" style={styles.icon} />
+                            <Text style={{}}>Reklamlı uygulama.</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity style={[styles.buttonOutline, { width: '70%', borderColor: '#f2bd11', marginBottom: 20, flexDirection: 'row' }]}>
+                        <Text style={{ color: '#f2bd11', fontSize: 16, fontWeight: '600' }}>Plana Geçiş Yap</Text>
+                        <MaterialCommunityIcons name="greater-than" size={20} color="#f2bd11" />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={[styles.plan, { borderColor: '#01a600' }]}>
+                    <View style={[styles.planHeader, { backgroundColor: '#01c800' }]}>
+                        <Text style={[styles.planHeaderText]}>Kurumsal</Text>
+                    </View>
+                    <Text style={[styles.planHeaderText, { color: '#01a600' }]}>129 TL</Text>
+                    <View style={{ marginBottom: 20 }}>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>Sınırsız cihaz ekleme hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>Sınırsız mekan yönetim hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>5 mekan ekleme hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>Mekan paylaşma hakkı.</Text>
+                        </View>
+                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
+                            <Text style={{}}>Reklamsız uygulama.</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity style={[styles.buttonOutline, { width: '70%', borderColor: '#01c800', marginBottom: 20, flexDirection: 'row' }]}>
+                        <Text style={{ color: '#01c800', fontSize: 16, fontWeight: '600' }}>Plana Geçiş Yap</Text>
+                        <MaterialCommunityIcons name="greater-than" size={20} color="#01c800" />
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={[styles.buttonOutline, { width: '70%', borderColor: '#01c800', marginBottom: 20, flexDirection: 'row' }]} onPress={() => setSettingType('')}>
+                        <Text style={{ color: '#01c800', fontSize: 16, fontWeight: '600' }}>Ayarlara Dön</Text>
+                        <MaterialCommunityIcons name="greater-than" size={20} color="#01c800" />
+                </TouchableOpacity>
+            </ScrollView>
+        )
+    }
 
     if (type == "google") {
         return (
@@ -74,7 +184,7 @@ const Profile = ({ user }) => {
         return (
             <SafeAreaView style={[styles.appContainer, { backgroundColor: '#eee' }]}>
                 <ScrollView>
-                <Text style={[styles.header, { marginBottom: 0 }]}>Ayarlar</Text>
+                    <Text style={[styles.header, { marginBottom: 0 }]}>Ayarlar</Text>
                     <View style={styles.porfileContainer}>
                         <View style={[styles.part, { flex: 0.75 }]}>
                             <Image style={{ width: 100, height: 100, borderRadius: 100, alignSelf: 'center' }} source={require('../../assets/user.jpg')}></Image>
@@ -88,17 +198,18 @@ const Profile = ({ user }) => {
                             </Text>
                         </View>
                         <View style={[styles.part, [styles.part, { flex: 0.5 }]]}>
-                            <TouchableOpacity style={styles.editButton} onPress={() => setShowEditing(!showEditing)}>
+                            <TouchableOpacity style={styles.editButton} onPress={() => setSettingType(settingType == 'edit' ? '' : 'edit')}>
                                 {
-                                    !showEditing
-                                        ? <MaterialCommunityIcons name="pencil" size={30} color="#fff" style={{ alignSelf: 'center' }} />
-                                        : <MaterialCommunityIcons name="close" size={30} color="red" style={{ alignSelf: 'center' }} />}
+                                    settingType == 'edit'
+                                        ? <MaterialCommunityIcons name="close" size={30} color="red" style={{ alignSelf: 'center' }} />
+                                        : <MaterialCommunityIcons name="pencil" size={30} color="#fff" style={{ alignSelf: 'center' }} />
+                                }
                             </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.profileContent}>
                         {
-                            !showEditing ?
+                            settingType == '' ?
                                 <View>
                                     <TouchableOpacity style={[styles.profileButton, , { paddingTop: 0 }]}>
                                         <View style={styles.row}>
@@ -132,7 +243,7 @@ const Profile = ({ user }) => {
                                             <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={[styles.profileButton, { borderTopWidth: 5 }]} onPress={() => navigation.navigate('subscription')}>
+                                    <TouchableOpacity style={[styles.profileButton, { borderTopWidth: 5 }]} onPress={() => setSettingType(settingType == '' ? 'sub' : '')}>
                                         <View style={styles.row}>
                                             <MaterialCommunityIcons name="crown-outline" size={20} color="black" style={styles.icon} />
                                             <Text style={styles.profileButtonText}>Abonelikler</Text>
@@ -170,17 +281,18 @@ const Profile = ({ user }) => {
                                         </View>
                                         <MaterialCommunityIcons name="greater-than" size={20} color="#eee" />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={[styles.profileButton, { borderTopWidth: 5,borderBottomWidth:11 }]} onPress={async () => {
+                                    <TouchableOpacity style={[styles.profileButton, { borderTopWidth: 5, borderBottomWidth: 11 }]} onPress={async () => {
                                         await AsyncStorage.removeItem("@kullanici");
                                         navigation.replace("login");
                                     }}>
                                         <Text style={{ color: 'red', fontSize: 16 }} >Oturumu kapat</Text>
                                     </TouchableOpacity>
-                                </View>
-                                : <Text>EDİTİNG</Text> // buraya edit ekranı gelicek
+                                </View> :
+                                settingType == 'sub' ?
+                                    <Sub /> : settingType == 'edit' ? <Text>edit</Text> : null
                         }
                     </View>
-                    </ScrollView>
+                </ScrollView>
             </SafeAreaView>
         )
     }
