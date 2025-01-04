@@ -27,8 +27,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        maxWidth:1000,
-        alignSelf:'center'
+        maxWidth: 600,
+        alignSelf:'center',
+        width: '100%',
+        height: '100%',
     },
     content: {
         flex: 1,
@@ -41,9 +43,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
-        alignSelf:'center',
-        width: '100%',
-        maxWidth:1000,
         height: 50,
         backgroundColor: '#f2bd11',
         borderRadius: 35,

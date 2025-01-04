@@ -25,7 +25,7 @@ const Profile = ({ user }) => {
 
     const Sub = () => {
         return (
-            <ScrollView style={[styles.appContainer,{height:height / 1.45}]}>
+            <ScrollView style={[styles.appContainer,{height:height / 1.45,paddingHorizontal:10}]}>
                 <View style={styles.plan}>
                     <View style={styles.activePlan}>
                         <Text style={{ color: '#ebb734', fontWeight: 500 }}>Aktif Plan</Text>
@@ -35,23 +35,23 @@ const Profile = ({ user }) => {
                     </View>
                     <Text style={[styles.planHeaderText, { color: '#0084e0' }]}>Bedava</Text>
                     <View style={{ marginBottom: 20 }}>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>Sınırsız cihaz ekleme hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>1 mekan yönetim hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{  flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>1 mekan ekleme hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="close" size={25} color="red" style={styles.icon} />
                             <Text style={{}}>Paylaşımsız kullanım.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="close" size={25} color="red" style={styles.icon} />
                             <Text style={{}}>Reklamlı uygulama.</Text>
                         </View>
@@ -64,23 +64,23 @@ const Profile = ({ user }) => {
                     </View>
                     <Text style={[styles.planHeaderText, { color: '#dba904' }]}>59 TL</Text>
                     <View style={{ marginBottom: 20 }}>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>Sınırsız cihaz ekleme hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>1 mekan yönetim hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>1 mekan ekleme hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>1 mekan paylaşma hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="close" size={25} color="red" style={styles.icon} />
                             <Text style={{}}>Reklamlı uygulama.</Text>
                         </View>
@@ -97,23 +97,23 @@ const Profile = ({ user }) => {
                     </View>
                     <Text style={[styles.planHeaderText, { color: '#01a600' }]}>129 TL</Text>
                     <View style={{ marginBottom: 20 }}>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>Sınırsız cihaz ekleme hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>Sınırsız mekan yönetim hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>5 mekan ekleme hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>Mekan paylaşma hakkı.</Text>
                         </View>
-                        <View style={{ width: '70%', flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <MaterialCommunityIcons name="check-all" size={25} color="#1fab54" style={styles.icon} />
                             <Text style={{}}>Reklamsız uygulama.</Text>
                         </View>
@@ -123,7 +123,7 @@ const Profile = ({ user }) => {
                         <MaterialCommunityIcons name="greater-than" size={20} color="#01c800" />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={[styles.buttonOutline, { width: '70%', borderColor: '#01c800', marginBottom: 20, flexDirection: 'row' }]} onPress={() => setSettingType('')}>
+                <TouchableOpacity style={[styles.buttonOutline, { width: '100%', borderColor: '#01c800', marginBottom: 20, flexDirection: 'row' }]} onPress={() => setSettingType('')}>
                         <Text style={{ color: '#01c800', fontSize: 16, fontWeight: '600' }}>Ayarlara Dön</Text>
                         <MaterialCommunityIcons name="greater-than" size={20} color="#01c800" />
                 </TouchableOpacity>
@@ -164,7 +164,6 @@ const Profile = ({ user }) => {
         return (
             <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', borderWidth: 2, borderColor: "black", padding: 20, marginBottom: 10, borderRadius: 15 }}>
-                    <EvilIcons style={{ width: 100, height: 100, borderRadius: 100 }} name="user" size={100} color="black" />
                     <View style={{ flexDirection: "column", justifyContent: "space-around" }}>
                         <Text>
                             E-MAİL : {user.userData.email}

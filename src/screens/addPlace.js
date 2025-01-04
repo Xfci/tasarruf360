@@ -11,6 +11,7 @@ const AddPlace = () => {
     const navigation = useNavigation();
     const [name, setName] = useState();
     const [photo, setPhoto] = useState(null);
+    const [floorName, setFloorName] = useState();
 
     const showAlert = () => {
         Alert.alert(
@@ -96,9 +97,17 @@ const AddPlace = () => {
                 </View>
                 <Text>Konum</Text>
                 <View style={styles.inputContainer}>
-                    <TextInput style={styles.textInput} placeholder='' />
+                    <TextInput style={styles.textInput} placeholder='Adres' />
                     <TouchableOpacity>
                         <MaterialCommunityIcons name="map-marker-outline" size={30} color="darkred" />
+                    </TouchableOpacity>
+                </View>
+
+                <Text>Kat Ekle</Text>
+                <View style={styles.inputContainer}>
+                    <TextInput style={styles.textInput} placeholder='Kat 1' value={floorName} onChangeText={(value) => setFloorName(value)} />
+                    <TouchableOpacity>
+                        <MaterialCommunityIcons name="layers-plus" size={30} color="darkred" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -117,7 +126,12 @@ const AddPlace = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20
+        padding: 20,
+        maxWidth: 600,
+        alignSelf:'center',
+        width: '100%',
+        height: '100%',
+
     },
     content: {
         flex: 1,
@@ -136,7 +150,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         paddingHorizontal: 15,
         width: '100%',
-        maxWidth: 600,
         marginBottom: 10
     },
     textInput: {

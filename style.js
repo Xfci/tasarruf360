@@ -261,6 +261,10 @@ export const styles = StyleSheet.create({
         flexDirection:'row',
     },
     plan:{
+        maxWidth:500,
+        alignSelf:'center',
+        width:'100%',
+        height:'100%',
         flex:1,
         borderWidth:5,
         borderColor:'#0084e0',
