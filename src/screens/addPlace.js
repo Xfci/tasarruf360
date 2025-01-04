@@ -3,15 +3,29 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { firebase, db, ref, get, onValue } from '../../config'
-import { SvgUri } from 'react-native-svg';
 import * as ImagePicker from 'expo-image-picker';
+import { userId } from './main';
+import * as Location from "expo-location";
 
 
 const AddPlace = () => {
     const navigation = useNavigation();
     const [name, setName] = useState();
     const [photo, setPhoto] = useState(null);
-    const [floorName, setFloorName] = useState();
+    const [location, setLocation] = useState();
+    const id = userId;
+
+    function createKey() {
+        var a = '';
+        for (let i = 0; i < 3; i++) {
+            if (i == 2) {
+                a += Math.random().toString(36).substring(2, 5).toUpperCase();
+                break;
+            }
+            a += `${Math.random().toString(36).substring(2, 5).toUpperCase()}-`
+        }
+        return a;
+    }
 
     const showAlert = () => {
         Alert.alert(
@@ -64,6 +78,61 @@ const AddPlace = () => {
         }
     };
 
+    async function createPlace() {
+        var createCode = createKey();
+        var devam = true;
+        if (name && location) {
+            const dbref = ref(db, 'places/');
+            const snapshot = await get(dbref);
+            snapshot.forEach(element => {
+                element.forEach(element => {
+                    const code = element.val().code;
+                    const key = element.key;
+                    if (name == key) {
+                        console.log(name, key);
+                        devam == false;
+                    }
+                    if (createCode == code) {
+                        createCode = createKey();
+                    }
+                });
+            });
+            if (devam) {
+                await firebase.database().ref(`places/${id}/${name}/`).set({
+                    location: location,
+                    code: createCode
+                });
+            } else {
+                console.log("Hata aynı isimde birden fazla yapı bulundu!");
+                devam = true;
+            }
+        }
+    }
+
+    const selectLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+            alert("Konum izni reddedildi.");
+            return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+
+        let reverseGeocode = await Location.reverseGeocodeAsync({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+        });
+
+        if (reverseGeocode.length > 0) {
+            const place = reverseGeocode[0];
+            const formattedName = `${place.formattedAddress}`;
+            //const formattedName = `${place.region || "Şehir bilinmiyor"}/${place.subregion || "Bölge bilinmiyor"}/${place.district || "Mahalle bilinmiyor"}/${place.street || "Sokak bilinmiyor"}/${place.streetNumber}`;
+            setLocation(formattedName);
+        } else {
+            alert("Konum bilgisi alınamadı.");
+        }
+    };
+
     return (
         <View style={styles.container}>
 
@@ -97,17 +166,9 @@ const AddPlace = () => {
                 </View>
                 <Text>Konum</Text>
                 <View style={styles.inputContainer}>
-                    <TextInput style={styles.textInput} placeholder='Adres' />
-                    <TouchableOpacity>
+                    <TextInput style={styles.textInput} placeholder='Adres' value={location} onChangeText={(value) => setLocation(value)} />
+                    <TouchableOpacity onPress={() => {selectLocation()}}>
                         <MaterialCommunityIcons name="map-marker-outline" size={30} color="darkred" />
-                    </TouchableOpacity>
-                </View>
-
-                <Text>Kat Ekle</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput style={styles.textInput} placeholder='Kat 1' value={floorName} onChangeText={(value) => setFloorName(value)} />
-                    <TouchableOpacity>
-                        <MaterialCommunityIcons name="layers-plus" size={30} color="darkred" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -116,7 +177,7 @@ const AddPlace = () => {
 
             </View>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => { createPlace() }}>
                 <Text style={styles.buttonText}>Devam</Text>
             </TouchableOpacity>
         </View>
@@ -128,7 +189,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         maxWidth: 600,
-        alignSelf:'center',
+        alignSelf: 'center',
         width: '100%',
         height: '100%',
 

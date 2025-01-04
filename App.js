@@ -17,6 +17,7 @@ import step3 from './src/screens/steps/step3';
 import device from './src/screens/Device';
 import addplace from './src/screens/addPlace';
 import { StatusBar } from 'react-native';
+import Deneme from './src/screens/deneme';
 
 
 const Stack = createStackNavigator();
@@ -30,6 +31,7 @@ export default function App() {
         <Stack.Screen name='login' component={LoginPage} options={{title:'Hoşgeldiniz | Giriş Yap'}}/>
         <Stack.Screen name='register' component={RegisterPage} options={{title:'Üye ol'}}/>
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
+        <Stack.Screen name='deneme' component={Deneme} />
         <Stack.Screen name='main' component={TabScreen} options={{ title: 'Ana Sayfa' }} />
         <Stack.Screen name='step1' component={step1} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step2' component={step2} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
