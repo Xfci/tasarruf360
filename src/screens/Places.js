@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions, StatusBar } from 'react-native'
 import { styles } from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -23,6 +23,8 @@ const Places = () => {
         const listener = onValue(dbref, (snapshot) => {
             var placeNameArray = [];
             var locationArray = [];
+            var adminArray = [];
+            var userArray = [];
             snapshot.forEach(element => {
                 if (userId == element.key) {
                     element.forEach(element => {
@@ -30,6 +32,16 @@ const Places = () => {
                         locationArray.push(element.val().konum);
                         setPlaceName(placeNameArray);
                         setLocation(locationArray);
+                        element.forEach(element => {
+                            const value = element.val();
+                            const key = element.key;
+                            if (key == "users") {
+                                userArray.push(value.user.length);
+                                adminArray.push(value.admin.length);
+                                setAdmins(adminArray);
+                                setUsers(userArray);
+                            }
+                        });
                     });
                 }
             });
@@ -38,34 +50,13 @@ const Places = () => {
     }, []);
 
     useEffect(() => {
-        var adminArray = [];
-        var userArray = [];
-        setAdmins('');
-        setUsers('');
-        const dbref = ref(db, `places/`);
-        const listener = onValue(dbref, (snapshot) => {
-            snapshot.forEach(element => {
-                element.forEach(element => {
-                    element.forEach(element => {
-                        const key = element.key;
-                        const value = element.val();
-                        if (key == "users") {
-                            adminArray.push(value.admin?.length);
-                            userArray.push(value.user?.length);
-                            setAdmins(adminArray);
-                            setUsers(userArray);
-                        }
-                    });
-                });
-            });
-        });
-        return () => listener();
-    }, [placeName]);
-
-    useEffect(() => {
         const data = [];
-        for (let i = 0; i < placeName.length; i++) {
-            data.push({ title: placeName[i], location: location[i] ? location[i] : "yok", admins: admins[i] ? admins[i] : "yok", users: users[i] ? users[i] : "yok" });
+        try {
+            for (let i = 0; i < placeName.length; i++) {
+                data.push({ title: placeName[i], admins: admins[i], users: users[i] - 1 == 0 ? "yok" : users[i] - 1 });
+            }
+        } catch (error) {
+            console.log(error);
         }
         setData(data);
     }, [placeName, location, admins, users]);
@@ -102,7 +93,7 @@ const Places = () => {
         <SafeAreaView style={styles.appContainer}>
             <Text style={styles.header}>Mekanlar</Text>
             <ScrollView>
-                <View style={[styles.statusContent, { height: height / 3 }]}>
+                <View style={[styles.statusContent, { height: height / 2 }]}>
                     { /*<Text style={styles.emptyTitle}>Sana ait mekan yok.</Text> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.header2}>Benim mekanlarım</Text>
@@ -110,7 +101,7 @@ const Places = () => {
                             <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
                         </TouchableOpacity>
                     </View>
-                    <ScrollView>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]}>
                             <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                                 <Image source={require('../../assets/images/okul.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
@@ -162,6 +153,7 @@ const Places = () => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            <StatusBar barStyle={'dark-content'}/>
         </SafeAreaView>
     )
 }

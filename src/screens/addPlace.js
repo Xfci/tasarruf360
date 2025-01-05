@@ -100,8 +100,17 @@ const AddPlace = () => {
             if (devam) {
                 await firebase.database().ref(`places/${id}/${name}/`).set({
                     location: location,
-                    code: createCode
+                    code: createCode,
+                    users:{
+                        admin:{
+                            0:userId
+                        },
+                        user:{
+                            0:"yok"
+                        }
+                    }
                 });
+                navigation.goBack();
             } else {
                 console.log("Hata aynı isimde birden fazla yapı bulundu!");
                 devam = true;
