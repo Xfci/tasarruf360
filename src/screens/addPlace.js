@@ -29,19 +29,19 @@ const AddPlace = () => {
 
     const showAlert = () => {
         Alert.alert(
-            "Fotoğrafınızı Seçin", // Başlık
-            "Bir işlem seçin:", // Mesaj
+            "Fotoğrafınızı Seçin",
+            "Bir işlem seçin:",
             [
                 {
-                    text: "Fotoğraf çekmek", // 1. seçenek
+                    text: "Fotoğraf çekmek",
                     onPress: () => pickImageWithPhoto()
                 },
                 {
-                    text: "Galeriden seçmek", // 2. seçenek
+                    text: "Galeriden seçmek",
                     onPress: () => pickImageWithGallery()
                 }
             ],
-            { cancelable: false } // İptal edilemez
+            { cancelable: false }
         );
     };
 
@@ -90,7 +90,7 @@ const AddPlace = () => {
                     const key = element.key;
                     if (name == key) {
                         console.log(name, key);
-                        devam == false;
+                        devam = false;
                     }
                     if (createCode == code) {
                         createCode = createKey();

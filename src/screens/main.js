@@ -97,7 +97,7 @@ const Main = ({ user }) => {
                     />
                 </View>
             </ScrollView>
-            <StatusBar barStyle={'light-content'} />
+            <StatusBar barStyle={'dark-content'} />
         </SafeAreaView>
     )
 }
