@@ -82,12 +82,15 @@ const Places = () => {
     };
 
     function deletePlace(item) {
-        
+        console.log(item);
+        firebase.database().ref(`places/${userId}/${item.title}`).remove().then(()=>{
+            Alert.alert("Uyarı","Silmek istediğiniz mekan başarıyla silinmiştir");
+        })
     }
-
+    
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]}>
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={()=> {navigation.navigate('place',item.title)}}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                     <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>

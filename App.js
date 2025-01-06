@@ -17,6 +17,7 @@ import step3 from './src/screens/steps/step3';
 import device from './src/screens/Device';
 import addplace from './src/screens/addPlace';
 import { StatusBar } from 'react-native';
+import Place from './src/screens/place';
 
 
 const Stack = createStackNavigator();
@@ -36,6 +37,7 @@ export default function App() {
         <Stack.Screen name='step3' component={step3} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='device' component={device} options={{ headerShown: false, headerBackTitle: "", headerTintColor: 'black', headerShadowVisible: false, title: 'Cihazım', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='addplace' component={addplace} options={{ headerShown: true, headerBackTitle: "", headerTintColor: 'black',headerShadowVisible: false, title: 'Mekan Ekle', ...TransitionPresets.ModalTransition }} />
+        <Stack.Screen name='place' component={Place} />
       </Stack.Navigator>
       <StatusBar barStyle={'light-content'}/>
     </NavigationContainer>
