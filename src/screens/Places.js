@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, FlatList, Dimensions, Alert } from 'react-native'
+import { View, Text, Image, TouchableOpacity, FlatList, Dimensions, Alert,StatusBar } from 'react-native'
 import { styles } from '../../style';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -131,7 +131,7 @@ const Places = () => {
         for (let i = 0; i < adminControl.length; i++) {
             if (adminControl[i] == item.title) {
                 return (
-                    <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onLongPress={() => { showAlert(item) }}>
+                    <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onLongPress={() => { showAlert(item) }} onPress={() => { navigation.navigate('place', item.title) }}>
                         <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                             <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                         </View>
@@ -218,6 +218,7 @@ const Places = () => {
                     <FlatList data={data} renderItem={renderItemAdmin} scrollEnabled={false} />
                 </View>
             </ScrollView>
+            <StatusBar barStyle={'dark-content'}/>
         </SafeAreaView>
     )
 }

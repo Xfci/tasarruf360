@@ -207,8 +207,7 @@ export default function Device({ route }) {
                     </View>
                 </View>
             </ScrollView>
-            <StatusBar barStyle={'light-content'} />
-
+            <StatusBar barStyle={'dark-content'} />
         </KeyboardAvoidingView >
     )
 }

@@ -198,8 +198,8 @@ const RegisterPage = ({ navigation, route }) => {
             />
           </View>
         </TouchableWithoutFeedback>
-        <StatusBar barStyle={'dark-content'} />
       </View>
+      <StatusBar barStyle={'dark-content'} />
     </SafeAreaView>
   )
 }

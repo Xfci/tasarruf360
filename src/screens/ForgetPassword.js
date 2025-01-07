@@ -10,6 +10,7 @@ const ForgetPassword = () => {
                 <Text style={styles.header}>Şifre Sıfırlama</Text>
                 <TextInput style={styles.input} placeholder='e-mail' autoComplete='email' inputMode='email' />
             </View>
+            <StatusBar barStyle={'dark-content'}/>
         </View>
     )
 }

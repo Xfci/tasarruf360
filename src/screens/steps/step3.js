@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, StatusBar } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { firebase, db, ref, get } from '../../../config'
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import TextRecognition from '@react-native-ml-kit/text-recognition';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { fetchUserData } from '../../scripts/fetchUserData';
+import { path } from '../myDevices';
 
 
 export default function Step2() {
@@ -15,19 +15,6 @@ export default function Step2() {
     const [photo, setPhoto] = useState(null);
     const [data, setData] = useState([]);
     const animation = useRef(null);
-    var path;
-
-    useEffect(() => {
-        const getData = async () => {
-            const id = await fetchUserData();
-            setData(id);
-        }
-        getData();
-    }, []);
-
-    useEffect(() => {
-        path = `userInfo/${data[0]}/`;
-    }, [data]);
 
     const showAlert = () => {
         Alert.alert(
@@ -112,7 +99,7 @@ export default function Step2() {
             }
         });
         if (!devam) {
-            createAdress();
+            createAdress(path);
         } else {
             setAdress("");
             setName("");
@@ -163,6 +150,7 @@ export default function Step2() {
             <TouchableOpacity style={styles.button} onPress={() => adressControl()}>
                 <Text style={styles.buttonText}>Devam</Text>
             </TouchableOpacity>
+            <StatusBar barStyle={'dark-content'} />
         </View>
     )
 }

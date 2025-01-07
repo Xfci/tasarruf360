@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity,StatusBar } from 'react-native'
 import React from 'react'
 import { useRef, useEffect } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,13 +12,14 @@ export default function Step1() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                
+
                 <Text style={styles.text}>Cihazın üzerindeki ekrandaki adımları takip edin cihazının internet bağlantısını gerçekleştirin.</Text>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('step2')}>
                 <Text style={styles.buttonText}>Devam</Text>
             </TouchableOpacity>
+            <StatusBar barStyle={'dark-content'} />
         </View>
     )
 }
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         maxWidth: 600,
-        alignSelf:'center',
+        alignSelf: 'center',
         width: '100%',
         height: '100%',
     },

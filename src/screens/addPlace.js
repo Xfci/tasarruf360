@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, StatusBar } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
@@ -197,6 +197,7 @@ const AddPlace = () => {
             <TouchableOpacity style={styles.button} onPress={() => { createPlace() }}>
                 <Text style={styles.buttonText}>Devam</Text>
             </TouchableOpacity>
+            <StatusBar barStyle={'dark-content'} />
         </View>
     )
 }

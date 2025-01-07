@@ -44,7 +44,7 @@ const LoginPage = ({ navigation }) => {
       await getUserInfo(response.authentication.accessToken);
     } else {
       setUserInfo(user);
-      navigation.replace("main", { user });
+      navigation.replace("main");
     }
   }
 
@@ -93,7 +93,7 @@ const LoginPage = ({ navigation }) => {
     const checkUser = async () => {
       const userData = await fetchUserData();
       if (userData) {
-        navigation.replace('main', { userData, tur: "eposta" });
+        navigation.replace('main');
       }
     };
     checkUser();
@@ -125,7 +125,7 @@ const LoginPage = ({ navigation }) => {
         const jsonValue = JSON.stringify(userData);
         await AsyncStorage.setItem("@userData", jsonValue);
         setState(true);
-        navigation.replace('main', { userData, tur: "eposta" });
+        navigation.replace('main');
       } else {
         console.log("HATA EPOSTA ONAYLANMADI");
         setModalActiveVisible(true);
@@ -149,7 +149,7 @@ const LoginPage = ({ navigation }) => {
       const kullanici = await fetchUser();
       if (kullanici) {
         const user = kullanici;
-        navigation.replace('main', { user, tur: "kullanici" });
+        navigation.replace('main');
       }
     };
     checkUser();
@@ -180,7 +180,7 @@ const LoginPage = ({ navigation }) => {
           const jsonValue = JSON.stringify(name);
           AsyncStorage.setItem("@kullanici", jsonValue);
           setLoading(false);
-          navigation.replace('main', { user, tur: "kullanici" });
+          navigation.replace('main');
         }
       });
     });

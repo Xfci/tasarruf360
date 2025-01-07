@@ -13,6 +13,8 @@ import { KeyboardState } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { fetchUserData } from '../scripts/fetchUserData';
 
+export var path;
+
 const Devices = ({ user }) => {
     const [adress, setAdress] = useState();
     const [name, setName] = useState();
@@ -26,7 +28,6 @@ const Devices = ({ user }) => {
     const [sayac, setSayac] = useState();
     const modalizeRef = useRef(null);
     const [data, setData] = useState([]);
-    var path;
 
     const navigation = useNavigation();
 
@@ -244,6 +245,7 @@ const Devices = ({ user }) => {
                     <Text style={styles.emptyTitle}>Pasif cihaz bulunamamıştır.</Text>
                 </View>
             </ScrollView>
+            <StatusBar barStyle={'dark-content'}/>
         </SafeAreaView>
     )
 }

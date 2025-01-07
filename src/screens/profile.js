@@ -1,4 +1,4 @@
-import { Image, Text, View, Button, TouchableOpacity, Dimensions } from 'react-native'
+import { Image, Text, View, TouchableOpacity, Dimensions, StatusBar } from 'react-native'
 import { styles } from '../../style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { type } from './main';
@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { fetchUserData } from '../scripts/fetchUserData';
 
-const Profile = ({ user }) => {
+const Profile = () => {
     const [settingType, setSettingType] = useState('');
     const [data, setData] = useState([]);
     const navigation = useNavigation();
@@ -259,6 +259,7 @@ const Profile = ({ user }) => {
                         }
                     </View>
                 </ScrollView>
+                <StatusBar barStyle={'dark-content'} />
             </SafeAreaView>
         )
     } else if (data[1] == "eposta") {
@@ -371,6 +372,7 @@ const Profile = ({ user }) => {
                         }
                     </View>
                 </ScrollView>
+                <StatusBar barStyle={'dark-content'} />
             </SafeAreaView>
         )
     } else if (data[1] == "kullanici") {
@@ -483,6 +485,7 @@ const Profile = ({ user }) => {
                         }
                     </View>
                 </ScrollView>
+                <StatusBar barStyle={'dark-content'} />
             </SafeAreaView>
         )
     }
