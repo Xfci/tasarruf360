@@ -7,12 +7,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { BarChart } from 'react-native-gifted-charts';
 import { Item } from '../components/progressItem';
 import tinycolor from 'tinycolor2';
+import { fetchUserData } from '../scripts/fetchUserData';
 
 export var path; //database yolu
 export var type; //giriş türünü tutar
 export var userId;
 
-const Main = ({ user }) => {
+const Main = () => {
     const screenWidth = Dimensions.get('window').width;
 
     const [electric, setElectric] = useState(0);
@@ -27,22 +28,21 @@ const Main = ({ user }) => {
     const [wateState, setWaterState] = useState();
     const [gasState, setGasState] = useState();
 
-    if (!path) {
-        if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
-            path = 'userInfo/' + user.user + '/';
-            type = "kullanici"
-            userId = user.user;
-        } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
-            path = 'userInfo/' + user.userData.id + '/';
-            type = "eposta"
-            userId = user.userData.id;
-        } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
-            path = 'userInfo/' + user.user.id + '/';
-            type = "google"
-            userId = user.user.id;
-        }
+    const [data, setData] = useState([]);
 
-    }
+    useEffect(() => {
+        const getData = async () => {
+            const id = await fetchUserData();
+            setData(id);
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        path = `userInfo/${data[0]}/`;
+        type = data[1]
+        userId = data[0];
+    }, [data]);
 
     useEffect(() => {
         const dbref = ref(db, path + 'sayac/');
@@ -66,7 +66,7 @@ const Main = ({ user }) => {
             });
         });
         return () => listen();
-    }, []);
+    }, [data]);
 
     return (
         <SafeAreaView style={styles.appContainer}>
@@ -78,13 +78,12 @@ const Main = ({ user }) => {
                     <Item title="Su" icon="water" color='#09d1fb' unit="L" value={water} value2={usedWater} />
                     <Item title="Doğalgaz" icon="fire" color="gray" unit="m³" value={gas} value2={usedGas} />
                 </View>
-
                 <View style={styles.statusContent}>
                     <Text style={styles.header2}>Özetler</Text>
                     <BarChart
                         isAnimated
                         data={[{ value: usedElectric, frontColor: tinycolor('#f2bd11').darken(10).toString(), gradientColor: '#f2bd11', label: "Elektrik" }, { value: usedWater, frontColor: tinycolor('#09d1fb').darken(10).toString(), gradientColor: '#09d1fb', label: "Su" }, { value: usedGas, frontColor: tinycolor('gray').darken(10).toString(), gradientColor: 'gray', label: "Gaz" }]}
-                        width={screenWidth*0.7}
+                        width={screenWidth * 0.7}
                         minHeight={5}
                         barBorderRadius={3}
                         noOfSections={5}

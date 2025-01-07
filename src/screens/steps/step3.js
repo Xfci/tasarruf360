@@ -2,10 +2,10 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'reac
 import React, { useEffect, useState, useRef } from 'react'
 import { firebase, db, ref, get } from '../../../config'
 import { useNavigation } from '@react-navigation/native';
-import { path } from '../myDevices';
 import * as ImagePicker from 'expo-image-picker';
 import TextRecognition from '@react-native-ml-kit/text-recognition';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { fetchUserData } from '../../scripts/fetchUserData';
 
 
 export default function Step2() {
@@ -13,7 +13,21 @@ export default function Step2() {
     const [adress, setAdress] = useState(null);
     const navigation = useNavigation();
     const [photo, setPhoto] = useState(null);
+    const [data, setData] = useState([]);
     const animation = useRef(null);
+    var path;
+
+    useEffect(() => {
+        const getData = async () => {
+            const id = await fetchUserData();
+            setData(id);
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        path = `userInfo/${data[0]}/`;
+    }, [data]);
 
     const showAlert = () => {
         Alert.alert(
@@ -143,7 +157,7 @@ export default function Step2() {
             </View>
 
             <View style={[styles.content, { justifyContent: 'flex-end' }]}>
-                
+
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => adressControl()}>
@@ -158,7 +172,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         maxWidth: 600,
-        alignSelf:'center',
+        alignSelf: 'center',
         width: '100%',
         height: '100%',
     },

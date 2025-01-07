@@ -11,8 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { DrawerLayoutAndroid, ScrollView } from 'react-native-gesture-handler';
 import { KeyboardState } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-
-export var path;
+import { fetchUserData } from '../scripts/fetchUserData';
 
 const Devices = ({ user }) => {
     const [adress, setAdress] = useState();
@@ -26,6 +25,8 @@ const Devices = ({ user }) => {
     const [lightData, setLightData] = useState();
     const [sayac, setSayac] = useState();
     const modalizeRef = useRef(null);
+    const [data, setData] = useState([]);
+    var path;
 
     const navigation = useNavigation();
 
@@ -36,16 +37,18 @@ const Devices = ({ user }) => {
         modalizeRef.current?.open();
     };
 
-
-    if (!path) {
-        if (user.tur == "kullanici") { //Eğer kullanıcı girişi ise giriş türünü kullanici database yolunu da kullanıcıya göre ayarlar
-            path = `userInfo/${user.user}/`;
-        } else if (user.tur == "eposta") { //Eğer eposta girişi ise giriş türünü eposta database yolunu da id bilgisine göre ayarlar
-            path = `userInfo/${user.userData.id}/`;
-        } else { //Eğer google girişi ise giriş türünü google database yolunu da emaile göre ayarlar
-            path = `userInfo/${user.user.id}/`;
+    useEffect(() => {
+        const getData = async () => {
+            const id = await fetchUserData();
+            setData(id);
         }
-    }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        path = `userInfo/${data[0]}/`;
+    }, [data]);
+
 
     useEffect(() => {
         const dbref = ref(db, `${path}/sayac`);
@@ -55,13 +58,13 @@ const Devices = ({ user }) => {
                 const key = element.key;
                 const value = element.val();
                 if (value.state == true) {
-                    data.push({ title: key == "electric" ? "Elektrik şalteri" : key == "water" ? "Su vanası" : key == "gas" ? "Gaz vanası" : null, mac: value.mac,state:value.state,ssid:value.SSID });
+                    data.push({ title: key == "electric" ? "Elektrik şalteri" : key == "water" ? "Su vanası" : key == "gas" ? "Gaz vanası" : null, mac: value.mac, state: value.state, ssid: value.SSID });
                 }
             });
             setSayac(data);
         });
         return () => listener();
-    }, []);
+    }, [data]);
 
     //////////////////////////////////////////////////////////////
     // Gösterilecek hiç cihaz verisi yok ise değişkenleri boşalt//
@@ -72,7 +75,7 @@ const Devices = ({ user }) => {
             setParlaklik("");
             setLightData([]);
         }
-    }, [deviceAdress, deviceName]);
+    }, [deviceAdress, deviceName,data]);
 
     ////////////////////////////////////////////////////////
     // durum ve parlaklık verilerini değişkenlere aktarır //
@@ -102,7 +105,7 @@ const Devices = ({ user }) => {
             });
             return () => listener();
         }
-    }, [deviceName, deviceAdress]);
+    }, [deviceName, deviceAdress,data]);
 
     function control(k) {
         var a = false;
@@ -121,11 +124,11 @@ const Devices = ({ user }) => {
         if (deviceAdress && deviceName && durum && parlaklik) {
             var data = [];
             for (let i = 0; i < deviceName.length; i++) {
-                data.push({ title: deviceName[i], mac: deviceAdress[i], durum: durum[i], parlaklik: parlaklik[i],SSID:SSID[i],state:state[i] });
+                data.push({ title: deviceName[i], mac: deviceAdress[i], durum: durum[i], parlaklik: parlaklik[i], SSID: SSID[i], state: state[i] });
                 setLightData(data);
             }
         }
-    }, [durum, parlaklik])
+    }, [durum, parlaklik,data])
 
     /////////////////////////////////////////////////////////////////
     // Kayıtlı olan cihaz bilgilerini kullanıcının hesabından çeker//
@@ -145,19 +148,19 @@ const Devices = ({ user }) => {
             setDeviceAdress(deviceAdressArray);
         });
         return () => listener();
-    }, []);
+    }, [data]);
 
     const renderLightItem = ({ item }) => {
 
         function git() {
             const data = {
-                title:item.title,
-                SSID:item.SSID,
-                mac:item.mac,
-                state:item.state,
-                tur:"ışık"
+                title: item.title,
+                SSID: item.SSID,
+                mac: item.mac,
+                state: item.state,
+                tur: "ışık"
             }
-            navigation.navigate('device',data);
+            navigation.navigate('device', data);
         }
 
         return (
@@ -179,14 +182,14 @@ const Devices = ({ user }) => {
     const renderSayacItem = ({ item }) => {
         function git() {
             const data = {
-                title:item.title,
-                SSID:item.ssid,
-                mac:item.mac,
-                state:item.state,
-                tur:"sayac"
+                title: item.title,
+                SSID: item.ssid,
+                mac: item.mac,
+                state: item.state,
+                tur: "sayac"
             }
             console.log(item);
-            navigation.navigate('device',data);
+            navigation.navigate('device', data);
         }
         return (
             <TouchableOpacity style={styles.item} onPress={() => git(item)}>

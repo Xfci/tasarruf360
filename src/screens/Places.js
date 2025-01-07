@@ -6,7 +6,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons/';
 import React, { useEffect, useState, useRef, use } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { firebase, db, ref, get, onValue } from '../../config'
-import { userId } from './main';
+import { fetchUserData } from '../scripts/fetchUserData';
+
 
 const Places = () => {
     const [placeName, setPlaceName] = useState([]);
@@ -16,6 +17,20 @@ const Places = () => {
     const [adminControl, setAdminControl] = useState([]);
     const navigation = useNavigation();
     const height = Dimensions.get('screen').height;
+    var userId;
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        const getData = async () => {
+            const data = await fetchUserData();
+            setUserData(data)
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        userId = userData[0];
+    }, [userData])
 
     useEffect(() => {
         const dbref = ref(db, `places/`);
@@ -51,7 +66,7 @@ const Places = () => {
             });
         });
         return () => listener();
-    }, []);
+    }, [userData]);
 
     useEffect(() => {
         const data = [];
@@ -63,7 +78,7 @@ const Places = () => {
             console.log(error);
         }
         setData(data);
-    }, [placeName, admins, users]);
+    }, [placeName, admins, users,userData]);
 
     const showAlert = (item) => {
         Alert.alert(
@@ -83,14 +98,14 @@ const Places = () => {
 
     function deletePlace(item) {
         console.log(item);
-        firebase.database().ref(`places/${userId}/${item.title}`).remove().then(()=>{
-            Alert.alert("Uyarı","Silmek istediğiniz mekan başarıyla silinmiştir");
+        firebase.database().ref(`places/${userId}/${item.title}`).remove().then(() => {
+            Alert.alert("Uyarı", "Silmek istediğiniz mekan başarıyla silinmiştir");
         })
     }
-    
+
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={()=> {navigation.navigate('place',item.title)}}>
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', item.title) }}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                     <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>
