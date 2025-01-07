@@ -17,7 +17,6 @@ const BottomModal = ({ description, image, visibleState, functionModal, email, p
                 return hesap - 1;
             });
         }, 1000);
-        // Temizlik işlemi
         return () => clearInterval(interval);
     }, [running]);
 
@@ -33,7 +32,6 @@ const BottomModal = ({ description, image, visibleState, functionModal, email, p
             transparent={true}
             visible={visibleState}
             onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
                 setModalVisible(!visibleState);
             }}>
             <View style={styles.shadow}></View>

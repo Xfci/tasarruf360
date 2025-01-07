@@ -4,8 +4,8 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { firebase, db, ref, get, onValue } from '../../config'
 import * as ImagePicker from 'expo-image-picker';
-import { userId } from './main';
 import * as Location from "expo-location";
+import { fetchUserData } from '../scripts/fetchUserData';
 
 
 const AddPlace = () => {
@@ -13,7 +13,15 @@ const AddPlace = () => {
     const [name, setName] = useState();
     const [photo, setPhoto] = useState(null);
     const [location, setLocation] = useState();
-    const id = userId;
+    const [id, setUID] = useState();
+
+    useEffect(() => {
+        const getData = async () => {
+            const id = await fetchUserData();
+            setUID(id);
+        };
+        getData();
+    }, []);
 
     function createKey() {
         var a = '';
@@ -101,12 +109,12 @@ const AddPlace = () => {
                 await firebase.database().ref(`places/${id}/${name}/`).set({
                     location: location,
                     code: createCode,
-                    users:{
-                        admin:{
-                            0:userId
+                    users: {
+                        admin: {
+                            0: id
                         },
-                        user:{
-                            0:"yok"
+                        user: {
+                            0: "yok"
                         }
                     }
                 });
@@ -176,7 +184,7 @@ const AddPlace = () => {
                 <Text>Konum</Text>
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.textInput} placeholder='Adres' value={location} onChangeText={(value) => setLocation(value)} />
-                    <TouchableOpacity onPress={() => {selectLocation()}}>
+                    <TouchableOpacity onPress={() => { selectLocation() }}>
                         <MaterialCommunityIcons name="map-marker-outline" size={30} color="darkred" />
                     </TouchableOpacity>
                 </View>

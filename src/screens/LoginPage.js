@@ -93,7 +93,6 @@ const LoginPage = ({ navigation }) => {
     const checkUser = async () => {
       const userData = await fetchUserData();
       if (userData) {
-        console.log(userData);
         navigation.replace('main', { userData, tur: "eposta" });
       }
     };
@@ -149,7 +148,6 @@ const LoginPage = ({ navigation }) => {
     const checkUser = async () => {
       const kullanici = await fetchUser();
       if (kullanici) {
-        console.log(kullanici);
         const user = kullanici;
         navigation.replace('main', { user, tur: "kullanici" });
       }
