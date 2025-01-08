@@ -13,6 +13,7 @@ export const fetchUserData = async () => {
         return [data.id,"eposta",data.email.toString().replace("@gmail.com","")];
     }
     if (withUser != null) {
-        return [JSON.parse(withUser),"kullanici"];
+        const data = JSON.parse(withUser);
+        return [data.id,"kullanici",data.name];
     }
 };

@@ -46,10 +46,12 @@ const Main = () => {
 
     useEffect(() => {
         const dbref = ref(db, path + 'sayac/');
+        console.log(path)
         const listen = onValue(dbref, (snapshot) => {
             snapshot.forEach(element => {
                 const baslik = element.key;
-                const deger = element.val()
+                const deger = element.val();
+
                 if (baslik == "electric") {
                     setElectric(deger.electric);
                     setUsedElectric(deger.usedElectric);

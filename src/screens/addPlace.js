@@ -6,6 +6,7 @@ import { firebase, db, ref, get, onValue } from '../../config'
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from "expo-location";
 import { fetchUserData } from '../scripts/fetchUserData';
+import { createKey } from '../scripts/createKey';
 
 
 const AddPlace = () => {
@@ -17,23 +18,11 @@ const AddPlace = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const id = await fetchUserData();
-            setUID(id);
+            const data = await fetchUserData();
+            setUID(data[0]);
         };
         getData();
     }, []);
-
-    function createKey() {
-        var a = '';
-        for (let i = 0; i < 3; i++) {
-            if (i == 2) {
-                a += Math.random().toString(36).substring(2, 5).toUpperCase();
-                break;
-            }
-            a += `${Math.random().toString(36).substring(2, 5).toUpperCase()}-`
-        }
-        return a;
-    }
 
     const showAlert = () => {
         Alert.alert(

@@ -13,18 +13,26 @@ const RegisterPage = ({ navigation, route }) => {
   const [password, setPassword] = useState(null);
   const [confirm, setConfirm] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [id, setId] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
   const [errorMessage, setErrors] = useState(""); // Hataları tutmak için state
+  const [key,setKey] = useState();
 
   //kullanıcıların en son ki id'sini veri tabanından çeker ve 1 ekler
   useEffect(() => {
+    function createKey() {
+      return Math.random().toString(36).substring(2, 25).toUpperCase();
+    }
+
+    var key = createKey();
     const dbref = ref(db, 'users/');
     const dinle = onValue(dbref, (snapshot) => {
       snapshot.forEach(element => {
-        setId(parseInt(element.key) + 1);
+        const controlKey = element.key;
+        if (key != controlKey) {
+          setKey(key);
+        }
       });
     });
     return () => dinle();
@@ -83,11 +91,11 @@ const RegisterPage = ({ navigation, route }) => {
         }
       });
       if (control) {
-        await firebase.database().ref('users/' + id).set({
+        await firebase.database().ref('users/' + key).set({
           name: email,
           password: password
         });
-        await firebase.database().ref('userInfo/' + email).set({
+        await firebase.database().ref('userInfo/' + key).set({
           sayac
         });
         setLoading(false);

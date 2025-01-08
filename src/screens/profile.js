@@ -389,7 +389,7 @@ const Profile = () => {
                                 Merhaba,
                             </Text>
                             <Text style={styles.profileName}>
-                                {data[0]}
+                                {data[2]}
                             </Text>
                         </View>
                         <View style={[styles.part, [styles.part, { flex: 0.5 }]]}>

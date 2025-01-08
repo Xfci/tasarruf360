@@ -27,19 +27,19 @@ const Tabs = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+      <StatusBar barStyle={'dark-content'} />
       <Stack.Navigator screenOptions={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}>
-        <Stack.Screen name='login' component={LoginPage} options={{title:'Hoşgeldiniz | Giriş Yap'}}/>
-        <Stack.Screen name='register' component={RegisterPage} options={{title:'Üye ol'}}/>
+        <Stack.Screen name='login' component={LoginPage} options={{ title: 'Hoşgeldiniz | Giriş Yap' }} />
+        <Stack.Screen name='register' component={RegisterPage} options={{ title: 'Üye ol' }} />
         <Stack.Screen name='ForgetPassword' component={ForgetPassword} />
         <Stack.Screen name='main' component={TabScreen} options={{ title: 'Ana Sayfa' }} />
         <Stack.Screen name='step1' component={step1} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step2' component={step2} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='step3' component={step3} options={{ headerShown: true, headerBackTitle: "", title: 'Cihaz Ekle', ...TransitionPresets.SlideFromRightIOS }} />
         <Stack.Screen name='device' component={device} options={{ headerShown: false, headerBackTitle: "", headerTintColor: 'black', headerShadowVisible: false, title: 'Cihazım', ...TransitionPresets.SlideFromRightIOS }} />
-        <Stack.Screen name='addplace' component={addplace} options={{ headerShown: true, headerBackTitle: "", headerTintColor: 'black',headerShadowVisible: false, title: 'Mekan Ekle', ...TransitionPresets.ModalTransition }} />
+        <Stack.Screen name='addplace' component={addplace} options={{ headerShown: true, headerBackTitle: "", headerTintColor: 'black', headerShadowVisible: false, title: 'Mekan Ekle', ...TransitionPresets.ModalTransition }} />
         <Stack.Screen name='place' component={Place} />
       </Stack.Navigator>
-      <StatusBar barStyle={'light-content'}/>
     </NavigationContainer>
   );
 }

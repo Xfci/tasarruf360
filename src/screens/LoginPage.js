@@ -175,9 +175,13 @@ const LoginPage = ({ navigation }) => {
       snapshot.forEach(element => {
         const name = element.val().name;
         const pass = element.val().password;
-        const user = name
+        const id = element.key;
         if (email == name && password == pass) {
-          const jsonValue = JSON.stringify(name);
+          const user = {
+            id:id,
+            name:name
+          }
+          const jsonValue = JSON.stringify(user);
           AsyncStorage.setItem("@kullanici", jsonValue);
           setLoading(false);
           navigation.replace('main');
