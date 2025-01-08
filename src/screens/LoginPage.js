@@ -78,12 +78,17 @@ const LoginPage = ({ navigation }) => {
         }
       });
       if (control) {
+        var nickname = user.email.toString().replace("@gmail.com","");
         await firebase.database().ref('userInfo/' + user.id).set({
           sayac
         });
+        await firebase.database().ref('users/' + user.id).set({
+          name: user.email,
+          nickname: nickname
+        });
       }
       setUserInfo(user);
-      navigation.replace("main", { user });
+      navigation.replace("main");
     } catch (error) {
       console.log(error);
     }
@@ -178,8 +183,8 @@ const LoginPage = ({ navigation }) => {
         const id = element.key;
         if (email == name && password == pass) {
           const user = {
-            id:id,
-            name:name
+            id: id,
+            name: name
           }
           const jsonValue = JSON.stringify(user);
           AsyncStorage.setItem("@kullanici", jsonValue);

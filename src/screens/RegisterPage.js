@@ -17,7 +17,8 @@ const RegisterPage = ({ navigation, route }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
   const [errorMessage, setErrors] = useState(""); // Hataları tutmak için state
-  const [key,setKey] = useState();
+  const [nickname, setNickname] = useState();
+  const [key, setKey] = useState();
 
   //kullanıcıların en son ki id'sini veri tabanından çeker ve 1 ekler
   useEffect(() => {
@@ -39,15 +40,33 @@ const RegisterPage = ({ navigation, route }) => {
   }, []);
 
   //firebase üzerinden e-posta ile kayıt işlemi
-  async function signUpWithEmail(email, password, confirm) {
+  async function signUpWithEmail(email, password, confirm, nickname) {
+    var control = true;
     setLoading(true);
-    if (password == confirm) {
+    const dbrefUsers = ref(db, 'users/');
+    const snapshotUsers = await get(dbrefUsers);
+    snapshotUsers.forEach(element => {
+      element.forEach(element => {
+        const key = element.key;
+        const value = element.val();
+        if (key == 'nickname') {
+          if (nickname == value)
+            control = false;
+        }
+      });
+    });
+    if (password == confirm && nickname && control) {
       try {
         const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
         setErrors(null);
         setLoading(false);
         await firebase.database().ref('userInfo/' + user.user.uid).set({
           sayac
+        });
+        await firebase.database().ref('users/' + user.user.uid).set({
+          name: email,
+          password: password,
+          nickname: nickname
         });
         await user.user.sendEmailVerification().then(() => {
           console.log("email doğrulaması gönderildi!");
@@ -62,7 +81,7 @@ const RegisterPage = ({ navigation, route }) => {
         //eğer email girilmedi ise kullanıcı adı ve şifre ile kayıt gönderildi
 
         error == "FirebaseError: Firebase: The email address is badly formatted. (auth/invalid-email)." ?
-          signUpWithName(email, password) : null
+          signUpWithName(email, password, nickname) : null
 
         //şifre 6 karakter olmalı
         error == "FirebaseError: Firebase: Password should be at least 6 characters (auth/weak-password)." ?
@@ -72,14 +91,20 @@ const RegisterPage = ({ navigation, route }) => {
           setErrors("Bu hesap zaten kullanılıyor. Giriş yapınız.") : null
         //   aynı hesap zaten var
       }
-    } else {
+    } else if (password != confirm) {
       setLoading(false);
       setErrors("Şifreler uyuşmuyor.");
+    } else if (!nickname && !email && !password) {
+      setLoading(false);
+      setErrors("Bütün alanları doldurmanız gerekmektedir.");
+    } else if (!control) {
+      setLoading(false);
+      setErrors("Aynı takma isimden 2 tane oluşturulamaz.");
     }
   }
 
   //kullanıcı adı ve şifre ile realtime database "users" başlığının altında kayıt yapıyor
-  async function signUpWithName(email, password) {
+  async function signUpWithName(email, password, nickname) {
     var control = true;
     setLoading(true);
     try {
@@ -90,10 +115,26 @@ const RegisterPage = ({ navigation, route }) => {
           control = false;
         }
       });
+      const dbrefUsers = ref(db, 'users/');
+      const snapshotUsers = await get(dbrefUsers);
+      snapshotUsers.forEach(element => {
+        element.forEach(element => {
+          const key = element.key;
+          const value = element.val();
+          if (key == 'name') {
+            if (email == value)
+              control = false;
+          } else if (key == 'nickname') {
+            if (nickname == value)
+              control = false;
+          }
+        });
+      });
       if (control) {
         await firebase.database().ref('users/' + key).set({
           name: email,
-          password: password
+          password: password,
+          nickname: nickname
         });
         await firebase.database().ref('userInfo/' + key).set({
           sayac
@@ -101,12 +142,11 @@ const RegisterPage = ({ navigation, route }) => {
         setLoading(false);
         navigation.navigate('login');
       } else {
-        console.log("böyle bir kullanıcı zaten var");
         setLoading(false);
+        setErrors("Aynı kullanıcı adı veya takma isimden 2 tane oluşturulamaz");
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
     }
   }
 
@@ -135,6 +175,16 @@ const RegisterPage = ({ navigation, route }) => {
                 onChangeText={(value) => { setEmail(value) }}
                 style={styles.textInput}
                 placeholder="Email"
+                keyboardType="email-address"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+              <TextInput
+                onChangeText={(value) => { setNickname(value) }}
+                style={styles.textInput}
+                placeholder="Takma Ad"
                 keyboardType="email-address"
               />
             </View>
@@ -184,7 +234,7 @@ const RegisterPage = ({ navigation, route }) => {
                   <ActivityIndicator color={'#fff'} />
                 </View>
                 :
-                <Pressable style={[styles.buttonOutline, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm) }}>
+                <Pressable style={[styles.buttonOutline, { marginTop: 20 }]} onPress={() => { signUpWithEmail(email, password, confirm, nickname) }}>
                   <Text style={[styles.buttonText, { color: '#dead10' }]}>Kayıt Ol</Text>
                 </Pressable>
             }

@@ -152,7 +152,6 @@ const Devices = ({ user }) => {
     }, [data]);
 
     const renderLightItem = ({ item }) => {
-
         function git() {
             const data = {
                 title: item.title,
