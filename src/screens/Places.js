@@ -23,6 +23,11 @@ const Places = () => {
     const [userId, setUserId] = useState();
     const [loading, setLoading] = useState(true);
 
+    const [joinedData, setJoinedData] = useState([]);
+    const [joinedAdmin, setJoinedAdmin] = useState([]);
+    const [joinedPlace, setJoinedPlace] = useState([]);
+    const [joinedPlaceName,setJoinedPlaceName] = useState([]);
+
     useEffect(() => {
         const getData = async () => {
             const data = await fetchUserData();
@@ -41,35 +46,72 @@ const Places = () => {
             var placeNameArray = [];
             var adminArray = [];
             var userArray = [];
-            var adminControlArray = [];
             snapshot.forEach(element => {
                 if (userId == element.key) {
                     element.forEach(element => {
                         const place = element.key;
-                        placeNameArray.push(element.key);
-                        setPlaceName(placeNameArray);
-                        element.forEach(element => {
-                            const value = element.val();
-                            const key = element.key;
-                            if (key == "users") {
-                                userArray.push(value.user.length);
-                                adminArray.push(value.admin.length);
-                                setAdmins(adminArray);
-                                setUsers(userArray);
-                                for (let i = 0; i < value.admin.length; i++) {
-                                    if (value.admin[i] == userId) {
-                                        adminControlArray.push(place);
-                                    }
+                        if (place != 'joined') {
+                            placeNameArray.push(element.key);
+                            setPlaceName(placeNameArray);
+                            element.forEach(element => {
+                                const value = element.val();
+                                const key = element.key;
+                                if (key == "users") {
+                                    userArray.push(value.user.length);
+                                    adminArray.push(value.admin.length);
+                                    setAdmins(adminArray);
+                                    setUsers(userArray);
                                 }
-                                setAdminControl(adminControlArray);
-                            }
-                        });
+                            });
+                        }
                     });
                 }
             });
         });
         return () => listener();
     }, [userData, userId]);
+
+    useEffect(() => {
+        const dbref = ref(db, `places/`);
+        const listener = onValue(dbref, (snapshot) => {
+            var joinedAdminArray = [];
+            var joinedPlaceArray = [];
+            snapshot.forEach(element => {
+                if (userId == element.key) {
+                    element.forEach(element => {
+                        const place = element.key;
+                        if (place == 'joined') {
+                            element.forEach(element => {
+                                console.log('değişti');
+                                const value = element.val();
+                                joinedAdminArray.push(value.admin);
+                                joinedPlaceArray.push(value.placeName);
+                                setJoinedAdmin(joinedAdminArray);
+                                setJoinedPlace(joinedPlaceArray);
+                            });
+                        }
+                    });
+                }
+            });
+        });
+        return () => listener();
+    }, [userData, userId]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            for (let i = 0; i < joinedAdmin.length; i++) {
+                var joinedPlaceNameArray = [];
+                const dbref = ref(db, `places/${joinedAdmin[i]}/${joinedPlace[i]}`);
+                const snapshot = await get(dbref);
+                snapshot.forEach(element => {
+                    const value = element.val();
+                    const key = element.key;
+                });
+            }
+        }
+        fetchData();
+    }, [joinedAdmin, joinedPlace]);
+    
 
     useEffect(() => {
         const data = [];
@@ -100,24 +142,6 @@ const Places = () => {
         );
     };
 
-    const showAlertNavigation = () => {
-        Alert.alert(
-            "Ne yapmak istersiniz?",
-            "Yeni bir mekan oluşturabilir veya var olan mekana katılabilirsiniz",
-            [
-                {
-                    text: "Varolan bir mekana katıl",
-                    onPress: () => setInvitation(true)
-
-                },
-                {
-                    text: "Yeni bir mekan oluştur",
-                    onPress: () => navigation.navigate('addplace')
-                }
-            ],
-        );
-    };
-
     async function control() {
         const dbref = ref(db, `places/${userId}/`);
         const snapshot = await get(dbref);
@@ -138,7 +162,7 @@ const Places = () => {
     }
 
     async function dbJoin(placeName) {
-        var path, id, devam = true;
+        var path, id = 0, devam = true, addmin, place, idUser = 0;
         if (placeName != undefined) {
             const dbref = ref(db, 'places/');
             const snapshot = await get(dbref);
@@ -146,14 +170,31 @@ const Places = () => {
                 const admin = element.key;
                 element.forEach(element => {
                     const key = element.key;
+                    const value = element.val();
                     if (placeName == key) {
-                        path = `places/${admin}/${placeName}/users/user/`;
-                        id = element.val().users.user.length;
-                        for (let i = 0; i < id; i++) {
-                            if (userId == element.val().users.user[i]) {
-                                devam = false;
+                        path = `places/${admin}/${placeName}/users/jail/`;
+                        addmin = admin;
+                        place = key;
+                        if (value.users.jail != undefined) {
+                            id = element.val().users.jail.length;
+                            for (let i = 0; i < id; i++) {
+                                if (userId == element.val().users.jail[i]) {
+                                    devam = false;
+                                }
                             }
                         }
+                        element.forEach(element => {
+                            id = 0;
+                            if (element.key == 'users') {
+                                element.forEach(element => {
+                                    if (element.key == 'jail') {
+                                        element.forEach(element => {
+                                            id = parseInt(element.key) + 1;
+                                        });
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             });
@@ -166,24 +207,51 @@ const Places = () => {
                     const key = element.key;
                     const value = element.val();
                     if (code == value.code) {
-                        path = `places/${admin}/${key}/users/user/`;
-                        id = element.val().users.user.length;
-                        for (let i = 0; i < id; i++) {
-                            if (userId == element.val().users.user[i]) {
-                                devam = false;
+                        path = `places/${admin}/${key}/users/jail/`;
+                        addmin = admin;
+                        place = key;
+                        if (value.users.jail != undefined) {
+                            id = element.val().users.jail.length;
+                            for (let i = 0; i < id; i++) {
+                                if (userId == element.val().users.jail[i]) {
+                                    devam = false;
+                                }
                             }
                         }
+                        element.forEach(element => {
+                            id = 0;
+                            if (element.key == 'users') {
+                                element.forEach(element => {
+                                    if (element.key == 'jail') {
+                                        element.forEach(element => {
+                                            id = parseInt(element.key) + 1;
+                                        });
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             });
         }
 
+        const dbref = ref(db, `places/${userId}/joined/`);
+        const snapshot = await get(dbref);
+        snapshot.forEach(element => {
+            idUser = parseInt(element.key) + 1;
+        });
+
         if (devam) {
             await firebase.database().ref(path + id).set((
                 userId
             ));
-            Alert.alert('Uyarı', 'Davet kodu ile başarı ile mekana kayıt yaptınız!');
+            await firebase.database().ref(`places/${userId}/joined/${idUser}`).set({
+                admin: addmin,
+                placeName: place
+            });
+            Alert.alert('Uyarı', 'Davet kodu ile mekana kayıt yaptınız (yetkiniz sınırlıdır,mekanın yöneticilerinden biri yetkinizi ayarlayana kadar bu mekan içindeki cihazlar hakkında bilgi alamayacaksınız)!');
             setCode();
+            setInvitation();
         } else {
             Alert.alert('Uyarı', 'Girmek istediğiniz mekanda zaten kaydınız bulunuyor!');
         }
@@ -247,35 +315,6 @@ const Places = () => {
         )
     }
 
-    const renderItemAdmin = ({ item }) => {
-        for (let i = 0; i < adminControl.length; i++) {
-            if (adminControl[i] == item.title) {
-                return (
-                    <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onLongPress={() => { showAlertDelete(item) }} onPress={() => { navigation.navigate('place', item.title) }}>
-                        <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
-                            <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
-                        </View>
-                        <View style={{ flex: 1, padding: 10, justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: 16, textAlign: 'right', fontWeight: 700 }}>{item.title}</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end' }}>
-                                    <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1 }} />
-                                    <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -13 }} />
-                                    <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -25 }} />
-                                </View>
-                                <View style={{ alignSelf: 'flex-end' }}>
-                                    <Text style={{ textAlign: 'right' }} >Yönetici: {item.admins}</Text>
-                                    <Text style={{ textAlign: 'right' }}>Kullanıcı: {item.users}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                )
-            }
-        }
-
-    }
-
     if (loading || data == undefined) {
         return (
             <SafeAreaView style={[styles.appContainer, { height: '100%' }]}>
@@ -296,7 +335,7 @@ const Places = () => {
                         <View style={styles.statusContent}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <Text style={styles.header2}>Benim mekanlarım</Text>
-                                <TouchableOpacity onPress={() => showAlertNavigation()}>
+                                <TouchableOpacity onPress={() => navigation.navigate('addplace')}>
                                     <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
                                 </TouchableOpacity>
                             </View>
@@ -304,9 +343,12 @@ const Places = () => {
                         </View>
                         <View style={styles.statusContent}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={styles.header2}>Yetkili olduğum mekanlar</Text>
+                                <Text style={styles.header2}>Katılmış olduğum mekanlar</Text>
+                                <TouchableOpacity onPress={() => setInvitation(true)}>
+                                    <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
+                                </TouchableOpacity>
                             </View>
-                            <FlatList data={data} renderItem={renderItemAdmin} scrollEnabled={false} />
+                            {/*<FlatList data={data} renderItem={renderItemAdmin} scrollEnabled={false} />*/}
                         </View>
                     </ScrollView>
                     :
@@ -405,6 +447,19 @@ const style = StyleSheet.create({
                                 </View>
                             </TouchableOpacity>
 
+
+                            element.forEach(element => {
+                            if (element.key == 'users') {
+                                element.forEach(element => {
+                                    if (element.key == 'user') {
+                                        element.forEach(element => {
+                                            console.log(element.key)
+                                            id = parseInt(element.key) + 1;
+                                        });
+                                    }
+                                });
+                            }
+                        });
                             */
 
 export default Places

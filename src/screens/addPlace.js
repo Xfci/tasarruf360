@@ -78,7 +78,7 @@ const AddPlace = () => {
     async function createPlace() {
         var createCode = createKey();
         var devam = true;
-        if (name && location) {
+        if (name && location && name != 'joined') {
             const dbref = ref(db, 'places/');
             const snapshot = await get(dbref);
             snapshot.forEach(element => {
