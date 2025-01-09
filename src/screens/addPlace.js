@@ -99,11 +99,14 @@ const AddPlace = () => {
                     location: location,
                     code: createCode,
                     users: {
+                        founder:{
+                            0:id
+                        },
                         admin: {
-                            0: id
+                            0: 'yok'
                         },
                         user: {
-                            0: "yok"
+                            0: 'yok'
                         }
                     }
                 });

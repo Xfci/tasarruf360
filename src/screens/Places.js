@@ -25,8 +25,9 @@ const Places = () => {
 
     const [joinedData, setJoinedData] = useState([]);
     const [joinedAdmin, setJoinedAdmin] = useState([]);
+    const [joinedAdminGet, setJoinedAdminGet] = useState([]);
+    const [joinedUser, setJoinedUser] = useState([]);
     const [joinedPlace, setJoinedPlace] = useState([]);
-    const [joinedPlaceName,setJoinedPlaceName] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
@@ -46,6 +47,8 @@ const Places = () => {
             var placeNameArray = [];
             var adminArray = [];
             var userArray = [];
+            var joinedAdminArray = [];
+            var joinedPlaceArray = [];
             snapshot.forEach(element => {
                 if (userId == element.key) {
                     element.forEach(element => {
@@ -63,26 +66,8 @@ const Places = () => {
                                     setUsers(userArray);
                                 }
                             });
-                        }
-                    });
-                }
-            });
-        });
-        return () => listener();
-    }, [userData, userId]);
-
-    useEffect(() => {
-        const dbref = ref(db, `places/`);
-        const listener = onValue(dbref, (snapshot) => {
-            var joinedAdminArray = [];
-            var joinedPlaceArray = [];
-            snapshot.forEach(element => {
-                if (userId == element.key) {
-                    element.forEach(element => {
-                        const place = element.key;
-                        if (place == 'joined') {
+                        } else {
                             element.forEach(element => {
-                                console.log('değişti');
                                 const value = element.val();
                                 joinedAdminArray.push(value.admin);
                                 joinedPlaceArray.push(value.placeName);
@@ -98,26 +83,71 @@ const Places = () => {
     }, [userData, userId]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            for (let i = 0; i < joinedAdmin.length; i++) {
-                var joinedPlaceNameArray = [];
-                const dbref = ref(db, `places/${joinedAdmin[i]}/${joinedPlace[i]}`);
-                const snapshot = await get(dbref);
+        var joinedAdminArray = [];
+        var joinedUserArray = [];
+        var durum;
+        for (let i = 0; i < joinedAdmin.length; i++) {
+            const dbref = ref(db, `places/${joinedAdmin[i]}/${joinedPlace[i]}`);
+            const listener = onValue(dbref, (snapshot) => {
                 snapshot.forEach(element => {
-                    const value = element.val();
                     const key = element.key;
+                    if (key == 'users') {
+                        element.forEach(element => {
+                            const value = element.val();
+                            for (let i = 0; i < value.length; i++) {
+                                if (userId == value[i]) {
+                                    durum = true;
+                                }
+                            }
+                        });
+                    }
                 });
-            }
+                if (durum) {
+                    snapshot.forEach(element => {
+                        const key = element.key;
+                        if (key == 'users') {
+                            element.forEach(element => {
+                                const key = element.key;
+                                const value = element.val();
+                                if (key == 'admin') {
+                                    joinedAdminArray.push(value.length);
+                                } else if (key == 'user') {
+                                    joinedUserArray.push(value.length);
+                                }
+                            });
+                        }
+                        setJoinedAdminGet(joinedAdminArray);
+                        setJoinedUser(joinedUserArray);
+                    });
+                } else {
+                    setJoinedAdminGet();
+                    setJoinedUser();
+                    joinedPlace[i] = '';
+                }
+                return () => listener();
+            });
         }
-        fetchData();
     }, [joinedAdmin, joinedPlace]);
-    
+
+    useEffect(() => {
+        try {
+            const data = [];
+            for (let i = 0; i < joinedPlace.length; i++) {
+                if (joinedPlace[i] != '') {
+                    data.push({ title: joinedPlace[i], admins: joinedAdminGet[i] - 1 == 0 ? 'yok' : joinedAdmin[i] - 1, users: joinedUser[i] - 1 == 0 ? "yok" : joinedUser[i] - 1 });
+                }
+            }
+            setJoinedData(data);
+        } catch (error) {
+            console.log(error)
+        }
+    }, [joinedAdminGet, joinedUser]);
 
     useEffect(() => {
         const data = [];
         try {
             for (let i = 0; i < placeName.length; i++) {
-                data.push({ title: placeName[i], admins: admins[i], users: users[i] - 1 == 0 ? "yok" : users[i] - 1 });
+                data.push({ title: placeName[i], admins: admins[i] - 1 == 0 ? 'yok' : admins[i] - 1, users: users[i] - 1 == 0 ? "yok" : users[i] - 1 });
             }
         } catch (error) {
             console.log(error);
@@ -168,6 +198,7 @@ const Places = () => {
             const snapshot = await get(dbref);
             snapshot.forEach(element => {
                 const admin = element.key;
+                console.log(admin)
                 element.forEach(element => {
                     const key = element.key;
                     const value = element.val();
@@ -293,6 +324,31 @@ const Places = () => {
 
     const renderItem = ({ item }) => {
         return (
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', item.title) }} onLongPress={() => showAlertDelete(item)}>
+                <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
+                    <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
+                </View>
+                <View style={{ flex: 1, padding: 10, justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: 16, textAlign: 'right', fontWeight: 700 }}>{item.title}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end' }}>
+                            <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1 }} />
+                            <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -13 }} />
+                            <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -25 }} />
+                        </View>
+                        <View style={{ alignSelf: 'flex-end' }}>
+                            <Text style={{ textAlign: 'right' }}>Kurucu: 1</Text>
+                            <Text style={{ textAlign: 'right' }}>Yönetici: {item.admins}</Text>
+                            <Text style={{ textAlign: 'right' }}>Kullanıcı: {item.users}</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    const renderItemInvited = ({ item }) => {
+        return (
             <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', item.title) }}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                     <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
@@ -306,7 +362,8 @@ const Places = () => {
                             <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -25 }} />
                         </View>
                         <View style={{ alignSelf: 'flex-end' }}>
-                            <Text style={{ textAlign: 'right' }} >Yönetici: {item.admins}</Text>
+                            <Text style={{ textAlign: 'right' }}>Kurucu: 1</Text>
+                            <Text style={{ textAlign: 'right' }}>Yönetici: {item.admins}</Text>
                             <Text style={{ textAlign: 'right' }}>Kullanıcı: {item.users}</Text>
                         </View>
                     </View>
@@ -348,7 +405,7 @@ const Places = () => {
                                     <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
                                 </TouchableOpacity>
                             </View>
-                            {/*<FlatList data={data} renderItem={renderItemAdmin} scrollEnabled={false} />*/}
+                            <FlatList data={joinedData} renderItem={renderItemInvited} scrollEnabled={false} />
                         </View>
                     </ScrollView>
                     :
