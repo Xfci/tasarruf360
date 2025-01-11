@@ -71,11 +71,19 @@ const Places = () => {
                                 const value = element.val();
                                 joinedAdminArray.push(value.admin);
                                 joinedPlaceArray.push(value.placeName);
-                                setJoinedAdmin(joinedAdminArray);
-                                setJoinedPlace(joinedPlaceArray);
                             });
                         }
+                        setJoinedAdmin(joinedAdminArray);
+                        setJoinedPlace(joinedPlaceArray);
+                        setJoinedData(joinedAdminArray);
                     });
+                } else {
+                    setPlaceName(placeNameArray);
+                    setAdmins(adminArray);
+                    setUsers(userArray);
+                    setJoinedAdmin(joinedAdminArray);
+                    setJoinedPlace(joinedPlaceArray);
+                    setJoinedData(joinedAdminArray);
                 }
             });
         });
@@ -349,7 +357,7 @@ const Places = () => {
 
     const renderItemInvited = ({ item }) => {
         return (
-            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', item.title) }}>
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', {title:item.title,type:"invate"}) }}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                     <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>
@@ -372,7 +380,7 @@ const Places = () => {
         )
     }
 
-    if (loading || data == undefined) {
+    if (loading || data == undefined || joinedData == undefined) {
         return (
             <SafeAreaView style={[styles.appContainer, { height: '100%' }]}>
                 <Text style={styles.header}>Mekanlar</Text>

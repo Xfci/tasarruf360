@@ -1,11 +1,12 @@
-import { Text, SafeAreaView, StatusBar } from 'react-native'
+import { Text, SafeAreaView, StatusBar, InputAccessoryView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { firebase, db, ref, get, onValue, set } from '../../config'
 import { fetchUserData } from '../scripts/fetchUserData';
 import { styles } from '../../style';
 
 const Place = ({ route }) => {
-    const placeName = route.params;
+    const placeName = route.params.title;
+    const type = route.params.type;
     const [data, setData] = useState([]);
     const [code, setCode] = useState();
 
@@ -18,17 +19,34 @@ const Place = ({ route }) => {
     }, []);
 
     useEffect(() => {
-        const dbref = ref(db, `places/${data[0]}/${placeName}/`);
-        const listener = onValue(dbref, (snapshot) => {
-            snapshot.forEach(element => {
-                const key = element.key;
-                const value = element.val();
-                if (key == "code") {
-                    setCode(value);
-                }
+        if (type == "founder") {
+            const dbref = ref(db, `places/${data[0]}/${placeName}/`);
+            const listener = onValue(dbref, (snapshot) => {
+                snapshot.forEach(element => {
+                    const key = element.key;
+                    const value = element.val();
+                    if (key == "code") {
+                        setCode(value);
+                    }
+                });
             });
-        });
-        return () => listener();
+            return () => listener();
+        } else {
+            const dbref = ref(db, `places/`);
+            const listener = onValue(dbref, (snapshot) => {
+                snapshot.forEach(element => {
+                    element.forEach(element => {
+                        const key = element.key;
+                        const value = element.val();
+                        if (key == placeName) {
+                            setCode(value.code)
+                        }
+                    });
+                });
+            });
+            return () => listener();
+        }
+
     }, [data]);
 
     return (
