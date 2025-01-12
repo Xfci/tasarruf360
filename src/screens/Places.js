@@ -422,7 +422,10 @@ const Places = () => {
                                     <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
                                 </TouchableOpacity>
                             </View>
-                            <FlatList data={data} renderItem={renderItem} scrollEnabled={false} />
+                            {data[0] ?
+                                <FlatList data={data} renderItem={renderItem} scrollEnabled={false} /> :
+                                <Text style={styles.emptyTitle}>Mekan bulunamadı.</Text>
+                            }
                         </View>
                         <View style={styles.statusContent}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -433,7 +436,7 @@ const Places = () => {
                             </View>
                             {joinedData[0] ?
                                 <FlatList data={joinedData} renderItem={renderItemInvited} scrollEnabled={false} /> :
-                                <Text style={styles.emptyTitle}>Mekan bulunamamıştır.</Text>
+                                <Text style={styles.emptyTitle}>Mekan bulunamadı.</Text>
                             }
 
                         </View>
