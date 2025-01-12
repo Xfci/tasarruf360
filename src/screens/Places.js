@@ -357,7 +357,7 @@ const Places = () => {
 
     const renderItemInvited = ({ item }) => {
         return (
-            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', {title:item.title,type:"invate"}) }}>
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', {title:item.title,type:"invate",id:userId}) }}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                     <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>

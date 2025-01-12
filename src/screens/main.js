@@ -46,7 +46,6 @@ const Main = () => {
 
     useEffect(() => {
         const dbref = ref(db, path + 'sayac/');
-        console.log(path)
         const listen = onValue(dbref, (snapshot) => {
             snapshot.forEach(element => {
                 const baslik = element.key;
