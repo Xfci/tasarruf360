@@ -169,7 +169,7 @@ const RegisterPage = ({ navigation, route }) => {
           style={[styles.content, { borderBottomRightRadius: 30, borderBottomLeftRadius: 30, paddingBottom: 25 }]}>
           <View style={styles.inputWrapper}>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer,{marginBottom:0}]}>
               <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
               <TextInput
                 onChangeText={(value) => { setEmail(value) }}
@@ -179,17 +179,17 @@ const RegisterPage = ({ navigation, route }) => {
               />
             </View>
 
-            <View style={styles.inputContainer}>
-              <MaterialCommunityIcons name="email-outline" size={24} color="#B0B0B0" style={styles.icon} />
+            <View style={[styles.inputContainer,{marginBottom:0}]}>
+              <MaterialCommunityIcons name="account-tie" size={24} color="#B0B0B0" style={styles.icon} />
               <TextInput
                 onChangeText={(value) => { setNickname(value) }}
                 style={styles.textInput}
-                placeholder="Takma Ad"
+                placeholder="Kullanıcı Adı"
                 keyboardType="email-address"
               />
             </View>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer,{marginBottom:0}]}>
               <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
               <TextInput
                 onChangeText={(value) => { setPassword(value) }}
@@ -208,7 +208,7 @@ const RegisterPage = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer,{marginBottom:0}]}>
               <MaterialCommunityIcons name="lock-outline" size={24} color="#B0B0B0" style={styles.icon} />
               <TextInput
                 onChangeText={(value) => { setConfirm(value) }}

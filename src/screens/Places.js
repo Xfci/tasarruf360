@@ -142,7 +142,7 @@ const Places = () => {
             const data = [];
             for (let i = 0; i < joinedPlace.length; i++) {
                 if (joinedPlace[i] != '') {
-                    data.push({ title: joinedPlace[i], admins: joinedAdminGet[i] - 1 == 0 ? 'yok' : joinedAdmin[i] - 1, users: joinedUser[i] - 1 == 0 ? "yok" : joinedUser[i] - 1 });
+                    data.push({ title: joinedPlace[i], admins: joinedAdminGet[i] - 1 == 0 ? '0' : joinedAdmin[i] - 1, users: joinedUser[i] - 1 == 0 ? "0" : joinedUser[i] - 1 });
                 }
             }
             setJoinedData(data);
@@ -155,7 +155,7 @@ const Places = () => {
         const data = [];
         try {
             for (let i = 0; i < placeName.length; i++) {
-                data.push({ title: placeName[i], admins: admins[i] - 1 == 0 ? 'yok' : admins[i] - 1, users: users[i] - 1 == 0 ? "yok" : users[i] - 1 });
+                data.push({ title: placeName[i], admins: admins[i] - 1 == 0 ? '0' : admins[i] - 1, users: users[i] - 1 == 0 ? "0" : users[i] - 1 });
             }
         } catch (error) {
             console.log(error);
@@ -195,7 +195,7 @@ const Places = () => {
     function deletePlace(item) {
         firebase.database().ref(`places/${userId}/${item.title}`).remove().then(() => {
             control();
-            Alert.alert("Uyarı", "Silmek istediğiniz mekan başarıyla silinmiştir");
+            Alert.alert("Uyarı", "Mekan başarıyla silinmiştir");
         })
     }
 
@@ -334,7 +334,7 @@ const Places = () => {
         return (
             <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', item.title) }} onLongPress={() => showAlertDelete(item)}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
-                    <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
+                    <Image source={require('../../assets/images/kurum.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>
                 <View style={{ flex: 1, padding: 10, justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 16, textAlign: 'right', fontWeight: 700 }}>{item.title}</Text>
@@ -345,7 +345,6 @@ const Places = () => {
                             <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -25 }} />
                         </View>
                         <View style={{ alignSelf: 'flex-end' }}>
-                            <Text style={{ textAlign: 'right' }}>Kurucu: 1</Text>
                             <Text style={{ textAlign: 'right' }}>Yönetici: {item.admins}</Text>
                             <Text style={{ textAlign: 'right' }}>Kullanıcı: {item.users}</Text>
                         </View>
@@ -359,7 +358,7 @@ const Places = () => {
         return (
             <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', {title:item.title,type:"invate",id:userId}) }}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
-                    <Image source={require('../../assets/images/bina.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
+                    <Image source={require('../../assets/images/kurum.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>
                 <View style={{ flex: 1, padding: 10, justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 16, textAlign: 'right', fontWeight: 700 }}>{item.title}</Text>
@@ -367,7 +366,6 @@ const Places = () => {
                         <View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-end' }}>
                             <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1 }} />
                             <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -13 }} />
-                            <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -25 }} />
                         </View>
                         <View style={{ alignSelf: 'flex-end' }}>
                             <Text style={{ textAlign: 'right' }}>Kurucu: 1</Text>
@@ -414,6 +412,7 @@ const Places = () => {
                                 </TouchableOpacity>
                             </View>
                             <FlatList data={joinedData} renderItem={renderItemInvited} scrollEnabled={false} />
+                            <Text style={styles.emptyTitle}>Mekan bulunamamıştır.</Text>
                         </View>
                     </ScrollView>
                     :

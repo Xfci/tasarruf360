@@ -83,7 +83,7 @@ const Main = () => {
                     <Text style={styles.header2}>Özetler</Text>
                     <BarChart
                         isAnimated
-                        data={[{ value: usedElectric, frontColor: tinycolor('#f2bd11').darken(10).toString(), gradientColor: '#f2bd11', label: "Elektrik" }, { value: usedWater, frontColor: tinycolor('#09d1fb').darken(10).toString(), gradientColor: '#09d1fb', label: "Su" }, { value: usedGas, frontColor: tinycolor('gray').darken(10).toString(), gradientColor: 'gray', label: "Gaz" }]}
+                        data={[{ value: usedElectric, frontColor: tinycolor('#f2bd11').darken(10).toString(), gradientColor: '#f2bd11', label: "Elektrik" }, { value: usedWater/25, frontColor: tinycolor('#09d1fb').darken(10).toString(), gradientColor: '#09d1fb', label: "Su" }, { value: usedGas, frontColor: tinycolor('gray').darken(10).toString(), gradientColor: 'gray', label: "Gaz" }]}
                         width={screenWidth * 0.7}
                         minHeight={5}
                         barBorderRadius={3}
@@ -93,7 +93,7 @@ const Main = () => {
                         xAxisLabelTextStyle={{ color: 'gray' }}
                         yAxisTextStyle={{ color: 'gray' }}
                         showGradient={true}
-                        spacing={120}
+                        spacing={60}
                     />
                 </View>
             </ScrollView>
