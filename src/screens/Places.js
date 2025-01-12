@@ -29,6 +29,8 @@ const Places = () => {
     const [joinedUser, setJoinedUser] = useState([]);
     const [joinedPlace, setJoinedPlace] = useState([]);
 
+    const [deleteId, setDeleteId] = useState();
+
     useEffect(() => {
         const getData = async () => {
             const data = await fetchUserData();
@@ -124,10 +126,15 @@ const Places = () => {
                                 }
                             });
                         }
-                        setJoinedAdminGet(joinedAdminArray);
-                        setJoinedUser(joinedUserArray);
+                        try {
+                            setJoinedAdminGet(joinedAdminArray);
+                            setJoinedUser(joinedUserArray);
+                        } catch (error) {
+                            console.log(error);
+                        }
                     });
                 } else {
+                    firebase.database().ref(`places/${userId}/joined/${idControl(joinedAdmin[i])}`).remove();
                     setJoinedAdminGet();
                     setJoinedUser();
                     joinedPlace[i] = '';
@@ -136,6 +143,21 @@ const Places = () => {
             });
         }
     }, [joinedAdmin, joinedPlace]);
+
+    function idControl(admin) {
+        var a;
+        const dbref = ref(db, `places/${userId}/joined`);
+        const listener = onValue(dbref, (snapshot) => {
+            snapshot.forEach(element => {
+                const key = element.key;
+                const value = element.val();
+                if (admin == value.admin) {
+                    a = key;
+                }
+            });
+        });
+        return a;
+    }
 
     useEffect(() => {
         try {
@@ -355,7 +377,7 @@ const Places = () => {
 
     const renderItemInvited = ({ item }) => {
         return (
-            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', {title:item.title,type:"invate",id:userId}) }}>
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', { title: item.title, type: "invate", id: userId }) }}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                     <Image source={require('../../assets/images/kurum.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>
@@ -367,7 +389,6 @@ const Places = () => {
                             <Image source={require('../../assets/user.jpg')} style={{ height: 30, width: 30, borderRadius: 100, borderColor: '#fff', borderWidth: 1, left: -13 }} />
                         </View>
                         <View style={{ alignSelf: 'flex-end' }}>
-                            <Text style={{ textAlign: 'right' }}>Kurucu: 1</Text>
                             <Text style={{ textAlign: 'right' }}>Yönetici: {item.admins}</Text>
                             <Text style={{ textAlign: 'right' }}>Kullanıcı: {item.users}</Text>
                         </View>
@@ -410,8 +431,11 @@ const Places = () => {
                                     <MaterialCommunityIcons name="plus-circle" size={30} color="#0089ec" />
                                 </TouchableOpacity>
                             </View>
-                            <FlatList data={joinedData} renderItem={renderItemInvited} scrollEnabled={false} />
-                            <Text style={styles.emptyTitle}>Mekan bulunamamıştır.</Text>
+                            {joinedData[0] ?
+                                <FlatList data={joinedData} renderItem={renderItemInvited} scrollEnabled={false} /> :
+                                <Text style={styles.emptyTitle}>Mekan bulunamamıştır.</Text>
+                            }
+
                         </View>
                     </ScrollView>
                     :
