@@ -279,7 +279,6 @@ const Places = () => {
         snapshot.forEach(element => {
             idUser = parseInt(element.key) + 1;
         });
-
         if (devam) {
             await firebase.database().ref(path + id).set((
                 userId

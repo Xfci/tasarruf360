@@ -10,10 +10,10 @@ export const fetchUserData = async () => {
     }
     if (withPosta != null) {
         const data = JSON.parse(withPosta);
-        return [data.id,"eposta",data.email.toString().replace("@gmail.com","")];
+        return [data.id,"eposta",data.name];
     }
     if (withUser != null) {
         const data = JSON.parse(withUser);
-        return [data.id,"kullanici",data.name];
+        return [data.id,"kullanici",data.nickname];
     }
 };

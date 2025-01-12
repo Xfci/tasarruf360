@@ -78,7 +78,7 @@ const LoginPage = ({ navigation }) => {
         }
       });
       if (control) {
-        var nickname = user.email.toString().replace("@gmail.com","");
+        var nickname = user.email.toString().replace("@gmail.com", "");
         await firebase.database().ref('userInfo/' + user.id).set({
           sayac
         });
@@ -119,11 +119,22 @@ const LoginPage = ({ navigation }) => {
   //firebase üzerinden e-posta ile giriş işlemin
   async function signInWithEmail(email, password) {
     setLoading(true);
+    var nickname;
     try {
       const user = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const dbref = ref(db, 'users/');
+      const snapshot = await get(dbref);
+      snapshot.forEach(element => {
+        const email = element.val().name;
+        if (user.user.email == email) {
+          nickname = element.val().nickname;
+        }
+      });
+      console.log(nickname)
       const userData = {
         email: user.user.email,
         id: user.user.uid,
+        name:nickname
       }
       setErrors(null);
       if (user.user.emailVerified != false) {
@@ -180,12 +191,15 @@ const LoginPage = ({ navigation }) => {
       snapshot.forEach(element => {
         const name = element.val().name;
         const pass = element.val().password;
+        const nick = element.val().nickname;
         const id = element.key;
         if (email == name && password == pass) {
           const user = {
             id: id,
-            name: name
+            name: name,
+            nickname: nick
           }
+          console.log(nick)
           const jsonValue = JSON.stringify(user);
           AsyncStorage.setItem("@kullanici", jsonValue);
           setLoading(false);
