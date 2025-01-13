@@ -90,13 +90,13 @@ export default function Device({ route }) {
 
     useEffect(() => {
         if (durum != undefined && parlaklik != undefined) {
-            if (isEnabled) {
-                led(1);
+            if (durum) {
+                setIsEnabled(true);
             }else{
-                led(0);
+                setIsEnabled(false);
             }
         }
-    }, [isEnabled])
+    }, [isEnabled,durum,parlaklik])
 
     return (
         <KeyboardAvoidingView
