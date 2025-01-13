@@ -71,7 +71,7 @@ const Place = ({ route }) => {
                         const key = element.key;
                         const value = element.val();
                         if (key == placeName) {
-                            devam = control(value);
+                            devam = control(value); 
                             devam2 = true;
                             if (devam) {
                                 setCode(value.code)

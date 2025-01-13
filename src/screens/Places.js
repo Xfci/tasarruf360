@@ -353,7 +353,7 @@ const Places = () => {
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', item.title) }} onLongPress={() => showAlertDelete(item)}>
+            <TouchableOpacity style={[styles.item, { height: 150, borderColor: 'gray', padding: 0, backgroundColor: '#f5f5f5' }]} onPress={() => { navigation.navigate('place', { title: item.title, type: "founder", id: userId }) }} onLongPress={() => showAlertDelete(item)}>
                 <View style={{ flex: 1, backgroundColor: 'gray', borderRadius: 15 }}>
                     <Image source={require('../../assets/images/kurum.jpg')} style={{ height: '100%', width: '100%', borderBottomLeftRadius: 15, borderTopLeftRadius: 15 }} />
                 </View>
