@@ -76,7 +76,7 @@ const Devices = ({ user }) => {
             setParlaklik("");
             setLightData([]);
         }
-    }, [deviceAdress, deviceName,data]);
+    }, [deviceAdress, deviceName, data]);
 
     ////////////////////////////////////////////////////////
     // durum ve parlaklık verilerini değişkenlere aktarır //
@@ -106,7 +106,7 @@ const Devices = ({ user }) => {
             });
             return () => listener();
         }
-    }, [deviceName, deviceAdress,data]);
+    }, [deviceName, deviceAdress, data]);
 
     function control(k) {
         var a = false;
@@ -129,7 +129,7 @@ const Devices = ({ user }) => {
                 setLightData(data);
             }
         }
-    }, [durum, parlaklik,data])
+    }, [durum, parlaklik, data])
 
     /////////////////////////////////////////////////////////////////
     // Kayıtlı olan cihaz bilgilerini kullanıcının hesabından çeker//
@@ -220,8 +220,9 @@ const Devices = ({ user }) => {
             <ScrollView>
                 <View style={styles.statusContent}>
                     <Image source={require('../../assets/images/add-device.png')} style={{ height: 100, width: 120, alignSelf: 'center', margin: 10 }} />
-                    <TouchableOpacity style={[styles.button, { marginBottom: 10 }]} onPress={() => navigation.navigate('step1')}>
-                        <Text style={styles.appButtonText}>Cihaz Ekle</Text>
+                    <TouchableOpacity style={[styles.button, { marginBottom: 10, flexDirection: 'row' }]} onPress={() => navigation.navigate('step1')}>
+                        <Text style={styles.appButtonText}>Cihaz Ekle </Text>
+                        <MaterialCommunityIcons name="plus-circle" size={24} color={'white'} />
                     </TouchableOpacity>
                 </View>
 
@@ -244,7 +245,7 @@ const Devices = ({ user }) => {
                     <Text style={styles.emptyTitle}>Pasif cihaz bulunamamıştır.</Text>
                 </View>
             </ScrollView>
-            <StatusBar barStyle={'dark-content'}/>
+            <StatusBar barStyle={'dark-content'} />
         </SafeAreaView>
     )
 }

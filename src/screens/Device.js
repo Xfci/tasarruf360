@@ -215,6 +215,10 @@ export default function Device({ route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height:'100%',
+        width:'100%',
+        maxWidth:1000,
+        alignSelf:'center'
     },
     header: {
         gap: 4,
@@ -235,7 +239,8 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 20,
-        fontWeight: '600'
+        fontWeight: '600',
+        textAlign:'center'
     },
     macTitle: {
         color: 'gray'

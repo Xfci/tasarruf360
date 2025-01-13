@@ -99,8 +99,8 @@ const AddPlace = () => {
                     location: location,
                     code: createCode,
                     users: {
-                        founder:{
-                            0:id
+                        founder: {
+                            0: id
                         },
                         admin: {
                             0: 'yok'
@@ -173,11 +173,12 @@ const AddPlace = () => {
                     </View>
 
                 </View>
+                
                 <Text>Konum</Text>
                 <View style={styles.inputContainer}>
                     <TextInput style={styles.textInput} placeholder='Adres' value={location} onChangeText={(value) => setLocation(value)} />
                     <TouchableOpacity onPress={() => { selectLocation() }}>
-                        <MaterialCommunityIcons name="map-marker-outline" size={30} color="darkred" />
+                        <MaterialCommunityIcons name="map-marker-account-outline" size={30} color="darkred" />
                     </TouchableOpacity>
                 </View>
             </View>
