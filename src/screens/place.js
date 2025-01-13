@@ -131,7 +131,7 @@ const Place = ({ route }) => {
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
-            <ScrollView>
+            <ScrollView  style={{height:10}} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <TouchableOpacity style={{ alignSelf: 'flex-start', marginLeft: 10 }} onPress={() => navigation.goBack()}>
                         <MaterialCommunityIcons name="close" size={40} />

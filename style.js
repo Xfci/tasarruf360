@@ -128,6 +128,7 @@ export const styles = StyleSheet.create({
     },
     itemIcon: {
         flex: 1,
+        alignItems:'center'
     },
     itemContent: {
         flex: 4,
