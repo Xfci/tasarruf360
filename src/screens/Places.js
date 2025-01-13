@@ -442,16 +442,16 @@ const Places = () => {
                         </View>
                     </ScrollView>
                     :
-                    <View style={styles.statusContent}>
-                        <Text>Davet Kodu</Text>
+                    <View style={[styles.statusContent, { marginVertical: 'auto' }]}>
+                        <View style={{flexDirection:'row',justifyContent:'space-between',paddingVertical:10}}>
+                            <Text style={{ fontSize: 18, fontWeight: 700,marginVertical:'auto' }}>Davet Kodu</Text>
+                            <MaterialCommunityIcons name="close" size={30} color="black" onPress={() => { setInvitation(false) }}/>
+                        </View>
                         <View style={style.inputContainer}>
-                            <TextInput style={style.textInput} placeholder='Davet Kodu' value={code} onChangeText={(value) => setCode(value)} />
+                            <TextInput style={style.textInput} placeholder='AAA-AAA-AAA' value={code} onChangeText={(value) => setCode(value)} />
                         </View>
                         <TouchableOpacity style={style.button} onPress={() => { joinPlace() }}>
-                            <Text style={style.buttonText}>Davet Kodu İle Mekana Katıl</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.button} onPress={() => { setInvitation(false) }}>
-                            <Text style={style.buttonText}>İptal</Text>
+                            <Text style={style.buttonText}>Mekana Katıl</Text>
                         </TouchableOpacity>
                     </View>
             }
@@ -465,7 +465,7 @@ const style = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'lightgray',
+        backgroundColor: '#eee',
         borderRadius: 15,
         paddingHorizontal: 15,
         width: '100%',
