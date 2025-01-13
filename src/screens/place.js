@@ -40,6 +40,11 @@ const Place = ({ route }) => {
     const navigation = useNavigation();
     const [data, setData] = useState([]);
     const [code, setCode] = useState();
+    const [location, setLocation] = useState();
+    const [user, setUser] = useState();
+    const [admin, setAdmin] = useState();
+    const [jail, setJail] = useState();
+    const [founder, setFounder] = useState();
     const [permision, setPermision] = useState();
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -81,18 +86,58 @@ const Place = ({ route }) => {
         return a;
     }
 
+    async function fetchUserName(id) {
+        for (let i = 0; i < id.length; i++) {
+            const dbref = ref(db, `users/${id[i]}`);
+            const snapshot = await get(dbref);
+            snapshot.forEach(element => {
+                //console.log(element.val());
+            });
+        }
+    }
+
     useEffect(() => {
+        var userArray = [];
+        var adminArray = [];
+        var jailArray = [];
+        var founder;
         if (type == "founder") {
             const dbref = ref(db, `places/${data[0]}/${placeName}/`);
             const listener = onValue(dbref, (snapshot) => {
                 snapshot.forEach(element => {
                     const key = element.key;
                     const value = element.val();
-                    if (key == "code") {
+                    if (key == 'code') {
                         setCode(value);
+                    }
+                    if (key == 'location') {
+                        setLocation(value);
+                    }
+                    if (key == 'users') {
+                        if (value.user[1] != undefined) {
+                            for (let i = 0; i < value.user.length; i++) {
+                                value.user[i] != 'yok' ?
+                                    userArray.push(value.user[i]) :
+                                    null
+                            }
+                        }
+                        if (value.admin[1] != undefined) {
+                            for (let i = 0; i < value.admin.length; i++) {
+                                value.admin[i] != 'yok' ?
+                                    adminArray.push(value.admin[i]) :
+                                    null
+                            }
+                        }
+                        if (value.jail) {
+                            for (let i = 0; i < value.jail.length; i++) {
+                                jailArray.push(value.jail[i]);
+                            }
+                        }
+                        founder = value.founder[0];
                     }
                 });
             });
+            fetchUserName(userArray);
             return () => listener();
         } else {
             var devam = true, devam2 = true;
@@ -107,6 +152,7 @@ const Place = ({ route }) => {
                             devam2 = true;
                             if (devam) {
                                 setCode(value.code)
+                                console.log(value)
                             } else {
                                 Alert.alert('Uyarı', 'İşlem yapmak istediğiniz mekan kurucu tarafından silinmiştir!')
                                 navigation.replace("main");
@@ -126,12 +172,11 @@ const Place = ({ route }) => {
 
     }, [data]);
 
-
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
-            <ScrollView  style={{height:10}} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+            <ScrollView style={{ height: 10 }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <TouchableOpacity style={{ alignSelf: 'flex-start', marginLeft: 10 }} onPress={() => navigation.goBack()}>
                         <MaterialCommunityIcons name="close" size={40} />
@@ -206,7 +251,7 @@ const Place = ({ route }) => {
                                     <MaterialCommunityIcons name="plus-box" size={26} color="#0089ec" />
                                 </TouchableOpacity>
                             </View>
-                            
+
                         </View>
 
 
@@ -216,10 +261,9 @@ const Place = ({ route }) => {
                             <View style={{ borderRadius: 10, borderWidth: 1, borderColor: 'black', paddingBottom: 10 }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5, backgroundColor: '#eee', borderRadius: 5, marginHorizontal: 10, marginTop: 10 }}>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Image source={require('../../assets/user.jpg')} style={{ width: 35, height: 35, borderRadius: '100%' }}></Image>
+                                        <Image source={require('../../assets/user.jpg')} style={{ width: 35, height: 35, borderRadius: 35 }}></Image>
                                         <Text style={{ marginVertical: 'auto', marginHorizontal: 5 }}>ADMİN</Text>
                                     </View>
-
                                     <SelectCountry
                                         style={styles.dropdown}
                                         selectedTextStyle={styles.selectedTextStyle}
@@ -250,7 +294,7 @@ const Place = ({ route }) => {
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5, backgroundColor: '#eee', borderRadius: 5, marginHorizontal: 10, marginTop: 10 }}>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Image source={require('../../assets/user.jpg')} style={{ width: 35, height: 35, borderRadius: '100%' }}></Image>
+                                        <Image source={require('../../assets/user.jpg')} style={{ width: 35, height: 35, borderRadius: 35 }}></Image>
                                         <Text style={{ marginVertical: 'auto', marginHorizontal: 5 }}>Kenan</Text>
                                     </View>
                                     <SelectCountry
